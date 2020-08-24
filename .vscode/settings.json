@@ -12,6 +12,7 @@
         "Enum",
         "script",
         "UDim2",
-        "Instance"
+        "Instance",
+        "tick"
     ]
 }

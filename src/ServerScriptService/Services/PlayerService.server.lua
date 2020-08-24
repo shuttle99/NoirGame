@@ -55,9 +55,6 @@ game.Players.PlayerAdded:Connect(function(plr)
 		cashStat.Value = val
 	end)
 
-	dataObj.Visits:Increment(1)
-	print(dataObj.Visits:Get())
-
 	connection2 = plr.CharacterAdded:Connect(function(char)
 		char.Humanoid.Died:Connect(function()
 			fireDeath(plr)

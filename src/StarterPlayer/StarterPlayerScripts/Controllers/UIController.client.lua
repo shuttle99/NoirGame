@@ -136,8 +136,19 @@ end)
 
 --// Code UI
 local codes = require(UIComponents:WaitForChild("CodeUI"))
+local disableCodeUI = uiEvents:WaitForChild("DisableCodeUI")
+local enableCodeUI = uiEvents:WaitForChild("EnableCodeUI")
 
 local codeUI = codes.new(plr)
+
+--// Code Events
+disableCodeUI.OnClientEvent:Connect(function()
+	codeUI:Disable()
+end)
+
+enableCodeUI.OnClientEvent:Connect(function()
+	codeUI:Enable()
+end)
 
 --// Experience events
 exp.new(plr)

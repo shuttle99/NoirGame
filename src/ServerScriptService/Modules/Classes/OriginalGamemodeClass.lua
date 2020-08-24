@@ -42,6 +42,8 @@ local updateSpectate = uiEvents.UpdateSpectate
 local loadEvent = uiEvents.LoadEvent
 local disableShop = uiEvents.DisableShop
 local enableShop = uiEvents.EnableShop
+local enableCodesUI = uiEvents.EnableCodeUI
+local disableCodesUI = uiEvents.DisableCodeUI
 
 --[[ Variables to access data
 	self -
@@ -96,6 +98,7 @@ function originalModeClass.new()
 	disableShop:FireAllClients()
 	disableInventory:FireAllClients()
 	disableSpectate:FireAllClients()
+	disableCodesUI:FireAllClients()
 
 	--//Get Players
 	local plrs = game.Players:GetPlayers()
@@ -245,7 +248,7 @@ function originalModeClass:StartRound()
 		enableInventory:FireClient(plr)
 		enableSpectate:FireClient(plr, self.spectateList)
 		enableShop:FireClient(plr)
-		enableShop:FireClient(plr)
+		enableCodesUI:FireClient(plr))
 		--// Remove player from current spectate list
 		updateSpectate:FireAllClients(plr)
 		--// Clear player's backpack
@@ -307,6 +310,7 @@ function originalModeClass:EndRound(winCondition)
 	--// Enable UI for the player
 	game.ReplicatedStorage.UIComponents.UIEvents.EnableShop:FireAllClients()
 	enableInventory:FireAllClients()
+	enableCodesUI:FireAllClients()
 	disableSpectate:FireAllClients()
 	--// Give players rewards and reset them
 	for _, v in pairs(game.Players:GetPlayers()) do
