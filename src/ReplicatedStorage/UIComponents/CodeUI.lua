@@ -69,4 +69,14 @@ function codeUI:Hide()
     self.ui.Visible = false
 end
 
+function codeUI:Disable()
+    self:Hide()
+    self.button.Parent = nil
+end
+
+function codeUI:Enable()
+    self:Show()
+    self.button.Parent = self.PlayerGui.GameUI
+end
+
 return codeUI
