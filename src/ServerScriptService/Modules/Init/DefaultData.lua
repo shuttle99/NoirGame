@@ -12,7 +12,7 @@ return {
 	Level = 1,
 	Experience = 0,
 	Tickets = 0,
-	CodesRedeemed = {},
+	CodesRedeemed1 = {},
 	
 	VisitCount = 0,
 }

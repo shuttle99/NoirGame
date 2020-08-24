@@ -23,11 +23,11 @@ end
 
 local function checkForCodeRedeemed(plr, code)
     local plrDataStore = data:Get(plr)
-    if not table.find(plrDataStore.CodesRedeemed:Get(), code) then
+    if not table.find(plrDataStore.CodesRedeemed1:Get(), code) then
         print("Code is not found in the datastore")
-        local CodeData = plrDataStore.CodesRedeemed:Get()
+        local CodeData = plrDataStore.CodesRedeemed1:Get()
         table.insert(CodeData, code)
-        plrDataStore.CodesRedeemed:Set(CodeData)
+        plrDataStore.CodesRedeemed1:Set(CodeData)
         return false
     else return true
     end
