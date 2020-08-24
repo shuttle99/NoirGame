@@ -103,13 +103,13 @@ function shop.new(plr)
                         end)
 
                         --// Handle clicks on the purchase PurchasePage
-                        purchasePage.InfoFrame.PurchaseButton.MouseButton1Click:Connect(function()
+                        self._maid:GiveTask(purchasePage.InfoFrame.PurchaseButton.MouseButton1Click:Connect(function()
                             if events.ItemPurchase:InvokeServer(i, itemName) then
                                 local clonePanel = invPanel:Clone()
                                 clonePanel.Parent = self.plr.PlayerGui.GameUI.InventoryFrame.InventoryBG[i]
                                 viewport.new(itemModels[itemName], clonePanel.ViewportFrame, true)
                             end
-                        end)
+                        end))
                     else
                         MarketplaceService:PromptGamePassPurchase(plr, category[itemName].Gamepass)
                     end
@@ -132,9 +132,9 @@ function shop:Init()
                 viewport.new(game.ReplicatedStorage.ItemModels[item], newPanel.ViewportFrame, true)
                 shopPanels[item] =  newPanel
             end
-            tab.MouseButton1Click:Connect(function()
+            self._maid:GiveTask(tab.MouseButton1Click:Connect(function()
                 tabs[tab.Name]()
-            end)
+            end))
         end
     end
 
