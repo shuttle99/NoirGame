@@ -1,0 +1,17 @@
+{
+    "git.ignoreLimitWarning": true,
+    "Lua.diagnostics.globals": [
+        "Random",
+        "game",
+        "wait",
+        "CFrame",
+        "workspace",
+        "Vector3",
+        "Vector2",
+        "TweenInfo",
+        "Enum",
+        "script",
+        "UDim2",
+        "Instance"
+    ]
+}
