@@ -14,5 +14,5 @@ return {
 	Tickets = 0,
 	CodesRedeemed1 = {},
 	
-	VisitCount = 0,
+	Visits = 0,
 }
