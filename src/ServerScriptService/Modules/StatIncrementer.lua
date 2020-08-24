@@ -23,7 +23,7 @@ function statIncrementer:GiveCoins(amt, plr)
     local plrDataStore = ds:Get(plr)
     if plr:FindFirstChild("VIP") then
         plrDataStore.Cash:Increment(amt * 2)
-    else 
+    else
         plrDataStore.Cash:Increment(amt)
     end
 end

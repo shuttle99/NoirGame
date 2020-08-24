@@ -42,6 +42,9 @@ local codesTable = {
         --// Init the datastore
         local plrData = data:Get(plr)
         checkForItem(plr, "CheekyStab")
+    end,
+    ["TWIISTED"] = function(plr)
+        print("Code twisted has been removed")
     end
 }
 

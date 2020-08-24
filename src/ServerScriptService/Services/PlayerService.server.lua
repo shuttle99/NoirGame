@@ -8,6 +8,8 @@ local statIncrementer = require(game.ServerScriptService.Modules.StatIncrementer
 local connection1
 local connection2
 
+local devProducts = require(game.ServerScriptService.Modules.DevProducts)
+
 local function fireDeath(plr)
 	deathEvent:Fire(plr)
 end
