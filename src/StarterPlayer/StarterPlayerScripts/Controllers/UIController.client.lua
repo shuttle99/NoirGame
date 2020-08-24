@@ -72,11 +72,19 @@ local inventoryPanel = UIComponents:WaitForChild("InventoryPanel")
 --// Shop Init
 local newInventory = inventory.new(plr)
 
+--// CameraEvent
+local fixFOV = uiEvents:WaitForChild("FixFOV")
+
 --// Shop Inventory
 addInventoryPanel.OnClientEvent:Connect(function(item, category)
 	local newPanel = inventoryPanel:Clone()
 	newPanel.Parent = newInventory.ui.InventoryBG:FindFirstChild(category)
 	viewport.new(itemModels:WaitForChild(item), newPanel.ViewportFrame, true)
+end)
+
+fixFOV.OnClientEvent.OnClientEvent:Connect(function()
+	local camera = game.Workspace.CurrentCamera
+	camera.FieldOfView = 70
 end)
 
 

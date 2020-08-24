@@ -44,6 +44,7 @@ local disableShop = uiEvents.DisableShop
 local enableShop = uiEvents.EnableShop
 local enableCodesUI = uiEvents.EnableCodeUI
 local disableCodesUI = uiEvents.DisableCodeUI
+local fixFOV = uiEvents.FixFOV
 
 --[[ Variables to access data
 	self -
@@ -99,6 +100,7 @@ function originalModeClass.new()
 	disableInventory:FireAllClients()
 	disableSpectate:FireAllClients()
 	disableCodesUI:FireAllClients()
+	fixFOV:FireAllClients()
 
 	--//Get Players
 	local plrs = game.Players:GetPlayers()
