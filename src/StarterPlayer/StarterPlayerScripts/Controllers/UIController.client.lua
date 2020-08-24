@@ -82,7 +82,7 @@ addInventoryPanel.OnClientEvent:Connect(function(item, category)
 	viewport.new(itemModels:WaitForChild(item), newPanel.ViewportFrame, true)
 end)
 
-fixFOV.OnClientEvent.OnClientEvent:Connect(function()
+fixFOV.OnClientEvent:Connect(function()
 	local camera = game.Workspace.CurrentCamera
 	camera.FieldOfView = 70
 end)
