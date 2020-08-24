@@ -134,5 +134,11 @@ loadEvent.OnClientEvent:Connect(function()
 	loadingScreen.new(plr)
 end)
 
+--// Code UI
+local codes = require(UIComponents:WaitForChild("CodeUI"))
+
+local codeUI = codes.new(plr)
+codeUI:Show()
+
 --// Experience events
 exp.new(plr)

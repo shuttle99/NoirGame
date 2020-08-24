@@ -1,3 +1,4 @@
 {
-  "ignoreUnknownInstances": true
+    "className" : "ScreenGui",
+    "ignoreUnknownInstances" : true
 }

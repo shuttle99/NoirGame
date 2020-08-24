@@ -7,12 +7,12 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local modules = ServerScriptService.Modules
 
 --// Modules
-local data = modules:WaitForChild("Init")
+local data = require(modules:WaitForChild("Init"))
 local statIncrementer = modules:WaitForChild("StatIncrementer")
 
 --// Local functions
 local function checkForItem(plr, item)
-    local plrDataStore = dataProfile:Get(plr)
+    local plrDataStore = data:Get(plr)
     if table.find(plrDataStore.Knives:Get(), item) then
         plrDataStore.EquippedKnife:Set(item)
         return true
@@ -30,10 +30,11 @@ end
 
 local function checkForCodeRedeemed(plr, code)
     local plrDataStore = data:Get(plr)
-    if table.find(plrDataStore.CodesRedeemed:Get(), code) then
+    if table.find(plrDataStore.CodesRedeemed:Get(), code) ~= -1 then
         local CodeData = plrDataStore.CodesRedeemed:Get()
         table.insert(CodeData, code)
         plrDataStore.CodesRedeemed:Set(CodeData)
+        return false
     end
 end
 
@@ -48,10 +49,11 @@ local codesTable = {
     end
 }
 
-function codes.Redeem(plr, code)
+function codes:Redeem(plr, code)
     if codesTable[code] then
-        if checkForCodeRedeemed(plr, code) then
+        if not checkForCodeRedeemed(plr, code) then
             codesTable[code](plr)
+            return true
         end
     end
 end
