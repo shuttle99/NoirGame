@@ -35,7 +35,7 @@ function codeUI:Init()
    self.button.Parent = self.plr.PlayerGui.GameUI
 
    self._maid:GiveTask(self.ui.Buttons.ApplyButton.MouseButton1Click:Connect(function()
-       if redeemCode:InvokeServer(self.ui.Buttons.CodeBox.Text) then
+       if redeemCode:InvokeServer(string.upper(self.ui.Buttons.CodeBox.Text)) then
            self.ui.Buttons.UnlockText.Text = "Code successfully redeemed!"
            wait(3)
            self.ui.Buttons.UnlockText.Text = "Enter a code above."
