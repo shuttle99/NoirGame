@@ -65,8 +65,10 @@ end
 
 --// Redeem code
 redeemCode.OnServerInvoke = function(plr, code)
-    if codes:Redeem(plr, code) then
+    if codes:Redeem(plr, code) == true then
         return true
+    else
+        return false
     end
 end
 

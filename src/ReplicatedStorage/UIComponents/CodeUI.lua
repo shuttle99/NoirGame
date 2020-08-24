@@ -39,6 +39,10 @@ function codeUI:Init()
            self.ui.Buttons.UnlockText.Text = "Code successfully redeemed!"
            wait(3)
            self.ui.Buttons.UnlockText.Text = "Enter a code above."
+        else
+            self.ui.Buttons.UnlockText.Text = "Invalid code or already redeemed."
+            wait(3)
+            self.ui.Buttons.UnlockText.Text = "Enter a code above."
        end
    end)
 end
