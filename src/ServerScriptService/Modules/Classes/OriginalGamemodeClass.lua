@@ -248,7 +248,7 @@ function originalModeClass:StartRound()
 		enableInventory:FireClient(plr)
 		enableSpectate:FireClient(plr, self.spectateList)
 		enableShop:FireClient(plr)
-		enableCodesUI:FireClient(plr))
+		enableCodesUI:FireClient(plr)
 		--// Remove player from current spectate list
 		updateSpectate:FireAllClients(plr)
 		--// Clear player's backpack
