@@ -39,9 +39,6 @@ local codesTable = {
         local plrData = data:Get(plr)
         checkForItem(plr, "CheekyStab", "Knives")
     end,
-    ["TWIISTED"] = function(plr)
-        print("Code twisted has been added")
-    end
 }
 
 function codes:Redeem(plr, code)
