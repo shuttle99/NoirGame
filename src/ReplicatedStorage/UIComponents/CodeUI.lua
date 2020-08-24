@@ -75,7 +75,7 @@ function codeUI:Disable()
 end
 
 function codeUI:Enable()
-    self.button.Parent = self.PlayerGui.GameUI
+    self.button.Parent = self.plr.PlayerGui.GameUI
 end
 
 return codeUI
