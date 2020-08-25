@@ -61,8 +61,10 @@ function gunClass:Activate()
 	
 	gunActivation:FireClient(self.plr, self.item)
 
-	gunShotServer.OnServerInvoke = function(plr, ray)
-		Draw.vector(ray.Origin, ray.Direction * 300, Color3.new(255, 255, 255), workspace.Rays, .25, .25)
+	gunShotServer.OnServerInvoke = function(plr, unitRay)
+		local part = workspace:FindPartOnRay(unitRay)
+		print(part.Name)
+		Draw.vector(self.item.Barrel.Position, unitRay.Direction * 300, Color3.new(255, 255, 255), workspace.Rays, .25, .25)
 	end
 end
 

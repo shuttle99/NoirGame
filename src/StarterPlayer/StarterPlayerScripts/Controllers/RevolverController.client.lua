@@ -22,7 +22,7 @@ local _maid = maid.new()
 --// Event handlers
 _maid:GiveTask(gunActivation.OnClientEvent:Connect(function(item)
 	_maid:GiveTask(item.Activated:Connect(function()
-		gunShotServer:InvokeServer(Ray.new(item.Barrel.Position), mouse.Hit.p * 300)
+		gunShotServer:InvokeServer(mouse.UnitRay)
 		--_maid:DoCleaning()
 	end))
 end))
