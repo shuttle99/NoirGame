@@ -87,7 +87,6 @@ fixFOV.OnClientEvent:Connect(function()
 	camera.FieldOfView = 70
 end)
 
-
 enableInventory.OnClientEvent:Connect(function()
 	newInventory:Enable()
 end)

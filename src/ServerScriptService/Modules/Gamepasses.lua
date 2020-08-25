@@ -19,13 +19,13 @@ local function checkForItem(plr, item)
     print(plr.Name)
     local plrDataStore = dataProfile:Get(plr)
     if table.find(plrDataStore.Knives:Get(), item) then
-        plrDataStore.EquippedKnife:Set(item)
+        --plrDataStore.EquippedKnife:Set(item)
         return true
     elseif table.find(plrDataStore.Guns:Get(), item) then
-        plrDataStore.EquippedGun:Set(item)
+        --plrDataStore.EquippedGun:Set(item)
         return true
     elseif table.find(plrDataStore.Sprays:Get(), item) then
-        plrDataStore.EquippedSpray:Set(item)
+        --plrDataStore.EquippedSpray:Set(item)
         return true
     else
         return false
