@@ -72,7 +72,7 @@ function gunClass:Activate()
 			local result = workspace:Raycast(unitRay.Origin, unitRay.Direction * 3000, rayParams)
 			if result.Instance then
 				local part = result.Instance
-				if game.Players:GetPlayerFromCharacter(part.Parent) then
+				if part.Parent:FindFirstChild("Humanoid") then
 					--// Check if player is murderer
 					if game.ServerStorage:FindFirstChild("MurdererValue") then
 						if part.Parent.Name == game.ServerStorage.MurdererValue.Value then

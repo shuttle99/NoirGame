@@ -25,9 +25,12 @@ local _maid = maid.new()
 
 --// Event handlers
 _maid:GiveTask(gunActivation.OnClientEvent:Connect(function(item, event)
-	mouse.Icon = "rbxassetId://5518924110"
+	mouse.Icon = "https://www.roblox.com/library/5518924110/Images-crosshair"
 	_maid:GiveTask(item.Activated:Connect(function()
 		event:InvokeServer(mouse.UnitRay)
 		--_maid:DoCleaning()
+	end))
+	_maid:GiveTask(item.Unequipped:Connect(function()
+		mouse.Icon = ""
 	end))
 end))
