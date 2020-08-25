@@ -114,4 +114,10 @@ function gamepasses:CheckForPasses(plr)
     end
 end
 
+function gamepasses:CheckForPass(plr, id)
+    if MarketplaceService:UserOwnsGamepassAsync(plr.UserId, id) then
+        passTable[id](plr)
+    end
+end
+
 return gamepasses
