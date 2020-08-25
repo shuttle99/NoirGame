@@ -13,6 +13,6 @@ local giveTag = events:WaitForChild("GiveTag")
 
 
 giveTag.Event:Connect(function(plr)
-    local speaker = chatService:GetSpeaker(plr)
-    speaker:SetExtraData("Tags"< {{TagText = "VIP", TagColor = Color3.new(1, 0, 0)}})
+    local speaker = chatService:GetSpeaker(plr.Name)
+    speaker:SetExtraData("Tags", {{TagText = "VIP", TagColor = Color3.new(1, 0, 0)}})
 end)
