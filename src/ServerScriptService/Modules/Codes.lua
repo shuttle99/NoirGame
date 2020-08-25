@@ -45,6 +45,9 @@ local codesTable = {
         --// Init the datastore
         checkForItem(plr, "CheekyStab", "Knives")
     end,
+    ["1987"] = function(plr)
+        checkForItem(plr, "PurpleGuy", "Knives")
+    end
 }
 
 function codes:Redeem(plr, code)
