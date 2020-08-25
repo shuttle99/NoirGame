@@ -44,7 +44,6 @@ end
 local codesTable = {
     ["CHEEKY"] = function(plr)
         --// Init the datastore
-        local plrData = data:Get(plr)
         checkForItem(plr, "CheekyStab", "Knives")
     end,
 }
