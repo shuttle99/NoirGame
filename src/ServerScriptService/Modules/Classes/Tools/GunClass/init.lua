@@ -6,9 +6,9 @@ local replicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
 --// Modules
-local raycaster = require(script.Raycaster)
 local data = require(game.ServerScriptService.Modules:WaitForChild("Init"))
 local maid = require(game.ReplicatedStorage.Shared.Maid)
+local Draw = require(game.ReplicatedStorage.Shared.Draw)
 
 --// Folders
 local replicatedAssets = replicatedStorage.ItemModels
@@ -19,11 +19,8 @@ local vigilante = items:WaitForChild("Vigilante")
 
 --//Events
 local setRole = events.SetRole
-local gunShot = events.GunShot
+local gunActivation = events.GunActivation
 local gunShotServer = events.GunShotServer
-
---// Connections
-local eventConnection
 
 function gunClass.new(plr)
 	local self = setmetatable({
@@ -62,20 +59,11 @@ function gunClass:Activate()
 		idle:Stop()
 	end))
 	
-	self._maid:GiveTask(self.item.Activated:Connect(function()
-		if not self.debounce then
-			self.debounce = true
-			fireAnim:Play()
-			gunShot:FireClient(self.plr, self.item)
-			eventConnection = gunShotServer.OnServerEvent:Connect(function(plr, mousePos)
-				print("Here is wehre it's stacking")
-				raycaster:CastRay(self.item.Barrel.Position, mousePos, self.item, plr, true)
-				eventConnection:Disconnect()
-			end)
-			wait(2)
-			self.debounce = false
-		end
-	end))
+	gunActivation:FireClient(self.plr, self.item)
+
+	gunShotServer.OnServerInvoke = function(plr, mousePos)
+		Draw.vector(self.item.Barrel.Position, mousePos, Color3.new(255, 255, 255), workspace.Rays, .25)
+	end
 end
 
 function gunClass:DropItem(pos)

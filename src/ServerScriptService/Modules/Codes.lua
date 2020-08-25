@@ -51,7 +51,7 @@ local codesTable = {
 }
 
 function codes:Redeem(plr, code)
-    if codesTable[code] then
+    if codesTable[tostring(code)] then
         if not checkForCodeRedeemed(plr, code) then
             codesTable[code](plr)
             return true

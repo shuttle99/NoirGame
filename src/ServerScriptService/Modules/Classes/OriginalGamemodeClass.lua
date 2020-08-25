@@ -30,7 +30,7 @@ local innocentClass = require(classes.InnocentClass)
 local deathEvent = events.DeathEvent
 local setRole = events.SetRole
 local visbilityToggle = events.ToggleVisibility
-local gunHit = events.GunHit
+--local gunHit = events.GunHit
 
 --// UI Events
 local updateTimer = uiEvents.TimerUpdateEvent
@@ -233,12 +233,12 @@ function originalModeClass:StartRound()
 	end))
 	
 	--// Kill a player if they are the murderer and are hit by the gun
-	self._maid:GiveTask(gunHit.Event:Connect(function(plrHit)
+	--[[self._maid:GiveTask(gunHit.Event:Connect(function(plrHit)
 		if plrHit.Name == self.Murderer.plr.Name then
 			stats:GiveCoins(25, self.Vigilante.plr)
 			plrHit.Humanoid.Health = 0
 		end
-	end))
+	end))]]
 	
 	--//Fires when a player dies and a round is in progress
 	self._maid:GiveTask(deathEvent.Event:Connect(function(plr)
