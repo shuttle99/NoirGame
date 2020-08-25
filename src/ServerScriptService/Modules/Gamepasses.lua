@@ -15,6 +15,9 @@ local addInventoryPanel = uiEvents.AddInventoryPanel
 --// Modules
 local dataProfile = require(modules.Init)
 
+--// Events
+local giveTag = events:WaitForChild("GiveTag")
+
 local function checkForItem(plr, item)
     print(plr.Name)
     local plrDataStore = dataProfile:Get(plr)
@@ -78,6 +81,7 @@ local passTable = {
             local vipValue = Instance.new("BoolValue")
             vipValue.Name = "VIP"
             vipValue.Parent = plr
+            giveTag:Fire(plr)
         end
     end,
 
@@ -89,6 +93,7 @@ local passTable = {
             local vipValue = Instance.new("BoolValue")
             vipValue.Name = "VIP"
             vipValue.Parent = plr
+            giveTag:Fire(plr)
         end
     end
 }
