@@ -1,3 +1,7 @@
+--[[
+	Handles visual effects of the gun
+]]
+
 --// Services
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -21,6 +25,7 @@ local _maid = maid.new()
 
 --// Event handlers
 _maid:GiveTask(gunActivation.OnClientEvent:Connect(function(item, event)
+	mouse.Icon = "rbxassetId://5518924110"
 	_maid:GiveTask(item.Activated:Connect(function()
 		event:InvokeServer(mouse.UnitRay)
 		--_maid:DoCleaning()
