@@ -98,7 +98,6 @@ end
 
 
 function PlayerProfile:Get(player)
-	print("Get")
 	return Profiles[player]
 end
 
