@@ -2,13 +2,20 @@ local codes = {}
 
 --// Services
 local ServerScriptService = game:GetService("ServerScriptService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --// Folders
 local modules = ServerScriptService.Modules
+local shared = ReplicatedStorage:WaitForChild("Shared")
+local uiComponents = shared:WaitForChild("UIComponents")
+local uiEvents = uiComponents:WaitForChild("UIEvents")
 
 --// Modules
 local data = require(modules:WaitForChild("Init"))
 local statIncrementer = modules:WaitForChild("StatIncrementer")
+
+--// Events
+local addInventoryPanel = uiEvents:WaitForChild("AddInventoryPanel")
 
 --// Local functions
 local function checkForItem(plr, item, category)
@@ -17,6 +24,7 @@ local function checkForItem(plr, item, category)
         local ItemData = plrDataStore[category]:Get()
         table.insert(ItemData, item)
         plrDataStore[category]:Set(ItemData)
+        addInventoryPanel:FireClient(plr, item, category)
         return false
     end
 end
