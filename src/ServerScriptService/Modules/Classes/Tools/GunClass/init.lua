@@ -30,9 +30,11 @@ function gunClass.new(plr)
 		item = "",
 		debounce = false,
 
+		_event = Instance.new("RemoteFunction"),
 		_maid = maid.new()
 	}, gunClass)
 	
+	self._event.Parent = events
 	if data:Get(plr) then
 		self.dataObj = data.new(plr)
 	else
@@ -59,12 +61,33 @@ function gunClass:Activate()
 		idle:Stop()
 	end))
 	
-	gunActivation:FireClient(self.plr, self.item)
-
-	gunShotServer.OnServerInvoke = function(plr, unitRay)
-		local part = workspace:FindPartOnRay(unitRay)
-		print(part.Name)
-		Draw.vector(self.item.Barrel.Position, unitRay.Direction * 300, Color3.new(255, 255, 255), workspace.Rays, .25, .25)
+	--// Record item activation on client
+	gunActivation:FireClient(self.plr, self.item, self._event)
+	--// Fire the ray
+	self._event.OnServerInvoke = function(plr, unitRay)
+		if not self.debounce then
+			fireAnim:Play()
+			self.debounce = true
+			local rayParams = RaycastParams.new()
+			local result = workspace:Raycast(unitRay.Origin, unitRay.Direction * 3000, rayParams)
+			if result.Instance then
+				local part = result.Instance
+				if game.Players:GetPlayerFromCharacter(part.Parent) then
+					--// Check if player is murderer
+					if game.ServerStorage:FindFirstChild("MurdererValue") then
+						if part.Parent.Name == game.ServerStorage.MurdererValue.Value then
+							part.Parent.Humanoid.Health = 0
+						end
+					end
+				end
+			end
+			--// Vector visualization
+			Draw.vector(self.item.Barrel.Position, (result.Position - self.item.Barrel.Position), Color3.new(255, 255, 255), workspace.Rays, 0, 1)
+			wait(.1)
+			game.Workspace.Rays:ClearAllChildren()
+			wait(1.9)
+			self.debounce = false
+		end
 	end
 end
 
@@ -78,6 +101,9 @@ function gunClass:DropItem(pos)
 				if #game.Players:GetPlayerFromCharacter(hit.Parent).Backpack:GetChildren() == 0 then
 					setRole:Fire("Vigilante", game.Players:GetPlayerFromCharacter(hit.Parent))
 					replicatedItemModel:Destroy()
+					if self._event then
+						self._event:Destroy()
+				end
 					self._maid:Destroy()
 				end
 			end
@@ -88,7 +114,9 @@ end
 function gunClass:Destroy()
 	self._maid:Destroy()
 	self.item:Destroy()
+	if self._event then
+		self._event:Destroy()
+	end
 end
-
 
 return gunClass

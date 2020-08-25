@@ -20,9 +20,9 @@ local maid = require(shared:WaitForChild("Maid"))
 local _maid = maid.new()
 
 --// Event handlers
-_maid:GiveTask(gunActivation.OnClientEvent:Connect(function(item)
+_maid:GiveTask(gunActivation.OnClientEvent:Connect(function(item, event)
 	_maid:GiveTask(item.Activated:Connect(function()
-		gunShotServer:InvokeServer(mouse.UnitRay)
+		event:InvokeServer(mouse.UnitRay)
 		--_maid:DoCleaning()
 	end))
 end))

@@ -232,14 +232,6 @@ function originalModeClass:StartRound()
 		return role == "Vandal" and giveVandal(plr) or role == "Vigilante" and giveVigilante(plr)
 	end))
 	
-	--// Kill a player if they are the murderer and are hit by the gun
-	--[[self._maid:GiveTask(gunHit.Event:Connect(function(plrHit)
-		if plrHit.Name == self.Murderer.plr.Name then
-			stats:GiveCoins(25, self.Vigilante.plr)
-			plrHit.Humanoid.Health = 0
-		end
-	end))]]
-	
 	--//Fires when a player dies and a round is in progress
 	self._maid:GiveTask(deathEvent.Event:Connect(function(plr)
 		--// Remove player from spectate list
