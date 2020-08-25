@@ -6,8 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --// Folders
 local modules = ServerScriptService.Modules
-local shared = ReplicatedStorage:WaitForChild("Shared")
-local uiComponents = shared:WaitForChild("UIComponents")
+local uiComponents = ReplicatedStorage:WaitForChild("UIComponents")
 local uiEvents = uiComponents:WaitForChild("UIEvents")
 
 --// Modules
