@@ -121,6 +121,11 @@ module.Guns = {
 		Description = "Just your everyday, average, murderer-slaying Revolver.",
 		Price = 0,
 	},
+	["BananaGun"] = {
+		Name = "Banana Gun",
+		Description = "pew pew pew pew pew pew pew... banana guuun...",
+		Price = 500,
+	},
 	["GoldenRevolver"] = {
 		Name = "Golden Revolver",
 		Description = "A great gold firearm. Part of the Golden Pack.",
