@@ -103,7 +103,7 @@ function shop.new(plr)
                         end)
 
                         --// Handle clicks on the purchase PurchasePage
-                        self._maid:GiveTask(purchasePage.InfoFrame.PurchaseButton.MouseButton1Click:Connect(function()
+                        purchasePage.InfoFrame.PurchaseButton.MouseButton1Click:Connect(function()
                             if events.ItemPurchase:InvokeServer(i, itemName) then
                                 local clonePanel = invPanel:Clone()
                                 clonePanel.Parent = self.plr.PlayerGui.GameUI.InventoryFrame.InventoryBG[i]
@@ -132,9 +132,9 @@ function shop:Init()
                 viewport.new(game.ReplicatedStorage.ItemModels[item], newPanel.ViewportFrame, true)
                 shopPanels[item] =  newPanel
             end
-            self._maid:GiveTask(tab.MouseButton1Click:Connect(function()
+            tab.MouseButton1Click:Connect(function()
                 tabs[tab.Name]()
-            end))
+            end)
         end
     end
 
