@@ -1,4 +1,4 @@
-local HttpService = game:GetService("HttpService")
+--[[local HttpService = game:GetService("HttpService")
 local provuser = "cheekyvisuals"
 local URL = "https://api.twitch.tv/helix/streams?user_login=" .. tostring(provuser)
 local response
@@ -61,3 +61,4 @@ while wait(60) do
         end
     end
 end
+]]

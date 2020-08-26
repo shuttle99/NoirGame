@@ -173,3 +173,39 @@ AFK.MouseButton1Click:Connect(function()
 		afkValue.Parent = plr
 	end
 end)
+
+local events = replicatedStorage:WaitForChild("Events")
+
+local enableProximity = events:WaitForChild("EnableProximity")
+local disableProximity = events:WaitForChild("DisableProximity")
+
+local staticFrame = plrUI:WaitForChild("ProximityFrame")
+local enabled = false
+
+--// Static Handler
+enableProximity.OnClientEvent:Connect(function()
+	if not enabled then
+		enabled = true
+		staticFrame.Visible = true
+
+		while staticFrame.Visible do
+			wait(.1)
+			for i = 3, 1, -1 do
+				print(i)
+				for _, element in pairs(staticFrame:GetChildren()) do
+					element.ImageTransparency = 1
+				end
+				staticFrame[i].ImageTransparency = 0.8
+				wait(.1)
+			end
+		end
+	end
+end)
+
+disableProximity.OnClientEvent:Connect(function()
+	enabled = false
+	staticFrame.Visible = false
+	for _, element in pairs(staticFrame:GetChildren()) do
+		element.ImageTransparency = 1
+	end
+end)

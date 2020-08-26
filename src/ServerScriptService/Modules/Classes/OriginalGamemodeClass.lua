@@ -91,6 +91,7 @@ local function teleportPlayers(plrList)
 	for i, _ in pairs(plrList) do
 		local char = i.Character or i.CharacterAdded:Wait()
 		char:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(table.remove(spawns, random:NextInteger(1, #spawns)).Position + Vector3.new(0, 3, 0))
+		print(char.Name .. " has been loaded!")
 	end
 end
 
@@ -175,9 +176,6 @@ function originalModeClass:StartRound()
 	for _, v in pairs(self.Innocents) do
 		roles[v.plr] = "Innocent"
 	end
-	
-	--// Teleport players to maps
-	teleportPlayers(roles)
 
 	--// Make a table of all players except for the murderer
 	local allButMurderer = {}
@@ -205,6 +203,9 @@ function originalModeClass:StartRound()
 		roles[plr] = "Vigilante"
 	end
 	
+	--// Teleport players to maps
+	teleportPlayers(roles)
+
 	--// Start the timer
 	roundTimer:Start()
 
@@ -242,10 +243,10 @@ function originalModeClass:StartRound()
 		end
 
 		--// If item disappeared from game
-		if not self.Vigilante then
+		--[[if not self.Vigilante then
 			if not checkForItemDropped("Gun") then
 				--// Give random player vigilante role
-				setRole:Fire("Vigilante", self.innocents[random:NextInteger(1, #self.Innocents)])
+				setRole:Fire("Vigilante", self.Innocents[random:NextInteger(1, #self.Innocents)])
 			end
 		end
 		if not self.Vandal then
@@ -253,7 +254,7 @@ function originalModeClass:StartRound()
 				--// Give random player vandal role
 				setRole:Fire("Vandal", self.innocents[random:NextInteger(1, #self.Innocents)])
 			end
-		end
+		end]]
 	end))
 
 	--// Handle the round ending

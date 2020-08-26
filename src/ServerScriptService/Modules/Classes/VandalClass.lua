@@ -36,6 +36,7 @@ function vandalClass:GiveAppearance()
 	char.Name = "StarterCharacter"
 	char.Parent = game.StarterPlayer
 	self.plr:LoadCharacter()
+	print("Character loaded")
 	char:Destroy()
 end
 

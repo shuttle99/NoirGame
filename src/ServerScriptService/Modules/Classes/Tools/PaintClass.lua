@@ -82,22 +82,24 @@ function paintClass:Activate()
             part.Parent = workspace
             part.Transparency = 1
             self.item.Handle.EmitFrom:FindFirstChildOfClass("ParticleEmitter").Enabled = true
-            for _, v in pairs(GetTouchingParts(part)) do         
-                if v.Parent:FindFirstChild("Humanoid") and v.Name == "HumanoidRootPart" then
-                    print(v.Name)
-                    --Check if murderer
-                    for _, x in pairs(v.Parent:GetChildren()) do
-                        if x.Name ~= "HumanoidRootPart" and x:IsA("BasePart") then
-							if x.Parent.Name == self.murderer.Value then
-								local murdererChar = x.Parent
-								print(murdererChar.Name)
-								sprayEffects[self.dataObj["EquippedSpray"]:Get()](murdererChar)
-								part:Destroy()
-								toggleVisibility:FireAllClients(game.Players:GetPlayerFromCharacter(murdererChar), true)
+			for _, v in pairs(GetTouchingParts(part)) do
+				if v then        
+					if v.Parent:FindFirstChild("Humanoid") and v.Name == "HumanoidRootPart" then
+						print(v.Name)
+						--Check if murderer
+						for _, x in pairs(v.Parent:GetChildren()) do
+							if x.Name ~= "HumanoidRootPart" and x:IsA("BasePart") then
+								if x.Parent.Name == self.murderer.Value then
+									local murdererChar = x.Parent
+									print(murdererChar.Name)
+									sprayEffects[self.dataObj["EquippedSpray"]:Get()](murdererChar)
+									part:Destroy()
+									toggleVisibility:FireAllClients(game.Players:GetPlayerFromCharacter(murdererChar), true)
+								end
 							end
-                      	end
-                  	end
-            	end
+						end
+					end
+				end
 			end
 			part:Destroy()
 			self._maid:GiveTask(spray.Stopped:Connect(function()

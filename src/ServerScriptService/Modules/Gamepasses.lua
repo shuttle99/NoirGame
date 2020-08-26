@@ -104,14 +104,12 @@ local passTable = {
 
 MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(plr, id, successful)
     if successful then
-        print("Did it work?")
         passTable[id](plr)
     end
 end)
 
 function gamepasses:CheckForPasses(plr)
     for i, func in pairs(passTable) do
-        print(i)
         if MarketplaceService:UserOwnsGamePassAsync(plr.UserId, i) then
             func(plr)
         end

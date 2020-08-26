@@ -145,6 +145,7 @@ function spectate:Destroy()
 end
 
 function spectate:RemovePlayer(plrToRemove)
+    --// If player leaves then they are nil so fix this
     if self.plrList[self.iterator].Name == plrToRemove.Name then
         if self.iterator + 1 > #self.plrList then
             self.iterator = 1

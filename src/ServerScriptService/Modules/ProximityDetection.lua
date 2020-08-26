@@ -14,10 +14,12 @@ local maid = require(shared.Maid)
 
 --// Events
 local enableProximity = events.EnableProximity
-local disableProximity = events.EnableProximity
+local disableProximity = events.DisableProximity
 
 --// Objects
 local _maid
+
+local enableTable = {}
 
 --Fires every frame
 function proximity:Enable(plrList)
@@ -27,10 +29,17 @@ function proximity:Enable(plrList)
     _maid:GiveTask(RunService.Stepped:Connect(function()
         for _, plr in pairs(plrList) do
             local distance = plr:DistanceFromCharacter(murderer.HumanoidRootPart.Position)
-            if distance < 50 then
-                enableProximity:FireClient(plr)
-            else 
+            if distance < 5 then
+                if not table.find(enableTable, plr) then
+                    enableProximity:FireClient(plr)
+                end
+            else
                 disableProximity:FireClient(plr)
+                for i, player in pairs(enableTable) do
+                    if player == plr then
+                        table.remove(enableTable, i)
+                    end
+                end
             end
         end
     end))

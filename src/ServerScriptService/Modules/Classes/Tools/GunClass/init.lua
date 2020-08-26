@@ -25,7 +25,7 @@ local gunShotServer = events.GunShotServer
 function gunClass.new(plr)
 	local self = setmetatable({
 		plr = plr,
-		dataObj = nil,
+		dataObj = data:Get(plr) or data.new(plr),
 		murderer = game.ServerStorage.MurdererValue,
 		item = "",
 		debounce = false,
@@ -35,13 +35,8 @@ function gunClass.new(plr)
 	}, gunClass)
 	
 	self._event.Parent = events
-	if data:Get(plr) then
-		self.dataObj = data.new(plr)
-	else
-		self.dataObj = data:Get(plr)
-	end
 
-	self.item = vigilante[self.dataObj["EquippedGun"]:Get()]:Clone()
+	self.item = vigilante[self.dataObj.EquippedGun:Get()]:Clone()
 	
 	return self
 end
