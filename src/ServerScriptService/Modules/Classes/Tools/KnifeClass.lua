@@ -6,17 +6,21 @@ local replicatedStorage = game:GetService("ReplicatedStorage")
 
 --// Folders
 local replicatedAssets = replicatedStorage.ItemModels
+local shared = replicatedStorage:WaitForChild("Shared")
 
 --// Modules
 local data = require(game.ServerScriptService.Modules.Init)
 local statIncrementer = require(game.ServerScriptService.Modules.StatIncrementer)
+local maid = require(shared:WaitForChild("Maid"))
 
 function knifeClass.new(plr)
 	local self = setmetatable({
 		plr = plr,
 		debounce = false,
 		dataObj = data:Get(plr),
-		item = ""
+		item = "",
+
+		_maid = maid.new()
 	}, knifeClass)
 
 	if not self.dataObj then
@@ -38,15 +42,17 @@ function knifeClass:Activate()
 	local anim = 1
 	local sound = 1
 
-	self.item.Equipped:Connect(function()
+	self._maid:GiveTask(self.item.Equipped:Connect(function()
 		idleAnim:Play()
-	end)
-
-	self.item.Unequipped:Connect(function()
-		idleAnim:Stop()
-	end)
+	end))
 	local connection
-	self.item.Activated:Connect(function()
+	self._maid:GiveTask(self.item.Unequipped:Connect(function()
+		idleAnim:Stop()
+		if connection then
+			connection:Disconnect()
+		end
+	end))
+	self._maid:GiveTask(self.item.Activated:Connect(function()
 		if not self.debounce then
 			self.debounce = true
 			animTable[anim]:Play()
@@ -65,7 +71,14 @@ function knifeClass:Activate()
 			sound = sound == 1 and 2 or sound == 2 and 3 or sound == 3 and 1
 			self.debounce = false
 		end
-	end)
+	end))
+end
+
+function knifeClass:Destroy()
+	self._maid:Destroy()
+	if self.item then
+		self.item:Destroy()
+	end
 end
 
 return knifeClass

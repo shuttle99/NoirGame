@@ -298,6 +298,9 @@ function originalModeClass:EndRound(winCondition)
 	elseif self.Vigilante then
 		self.Vigilante:EndClass()
 	end
+	if self.Murderer.item then
+		self.Murderer.item:Destroy()
+	end
 	--// Fire win condition
 	winConditions[winCondition]()
 	--// Clear all dropped items
