@@ -3,6 +3,7 @@ spectate.__index = spectate
 
 --// Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
 
 --// Folders
 local uiComponents = ReplicatedStorage:WaitForChild("UIComponents")
@@ -88,6 +89,26 @@ function spectate:Render()
         self:SetCameraView(self.plrList[self.iterator].Character or self.plrList[self.iterator].CharacterAdded:Wait())
     end))
 
+    self._maid:GiveTask(UserInputService.InputBegan:Connect(function(inputObject)
+        if inputObject.UserInputType == Enum.UserInputType.Keyboard then
+            if inputObject.KeyCode.Name == "Q" then
+                if self.iterator - 1 < 1 then
+                    self.iterator = #self.plrList
+                else
+                    self.iterator -= 1 
+                end
+                self:SetCameraView(self.plrList[self.iterator].Character or self.plrList[self.iterator].CharacterAdded:Wait())
+            elseif inputObject.KeyCode.Name == "E" then
+                if self.iterator + 1 > #self.plrList then
+                    self.iterator = 1
+                else
+                    self.iterator += 1
+                end
+                self:SetCameraView(self.plrList[self.iterator].Character or self.plrList[self.iterator].CharacterAdded:Wait())
+            end
+        end
+    end))
+
     --//Handle right button clicked
     self._maid:GiveTask(self.ui.RightButton.MouseButton1Click:Connect(function()
         if self.iterator + 1 > #self.plrList then
@@ -124,20 +145,23 @@ function spectate:Destroy()
 end
 
 function spectate:RemovePlayer(plrToRemove)
+    if self.plrList[self.iterator].Name == plrToRemove.Name then
+        if self.iterator + 1 > #self.plrList then
+            self.iterator = 1
+        else
+            self.iterator += 1
+        end
+        if self.ui.Visible then
+            self:SetCameraView(self.plrList[self.iterator].Character or self.plrList[self.iterator].CharacterAdded:Wait())
+        end
+    end
+    
     for i, v in pairs(self.plrList) do
-       if v.Name == plrToRemove.Name then
-           table.remove(self.plrList, i)
-       end
-       print(v.Name)
-    end
-    if self.iterator + 1 > #self.plrList then
-        self.iterator = 1
-    else
-        self.iterator += 1
-    end
-    if self.ui.Visible then
-        self:SetCameraView(self.plrList[self.iterator].Character or self.plrList[self.iterator].CharacterAdded:Wait())
-    end
+        if v.Name == plrToRemove.Name then
+            table.remove(self.plrList, i)
+        end
+        print(v.Name)
+     end
 end
 
 --// Just do it bro
