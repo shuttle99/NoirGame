@@ -182,12 +182,19 @@ local disableProximity = events:WaitForChild("DisableProximity")
 local staticFrame = plrUI:WaitForChild("ProximityFrame")
 local enabled = false
 
+local TweenService = game:GetService("TweenService")
+local firstTween
+
 --// Static Handler
 enableProximity.OnClientEvent:Connect(function()
 	if not enabled then
 		enabled = true
 		staticFrame.Visible = true
 
+		firstTween = TweenService:Create(staticFrame[1], TweenInfo.new(.1), {ImageTransparency = 0.8})
+		firstTween:Play()
+
+		firstTween.Completed:Wait()
 		while staticFrame.Visible do
 			wait(.1)
 			for i = 3, 1, -1 do
@@ -203,9 +210,13 @@ enableProximity.OnClientEvent:Connect(function()
 end)
 
 disableProximity.OnClientEvent:Connect(function()
+	if firstTween then
+		firstTween:Cancel()
+	end
 	enabled = false
 	staticFrame.Visible = false
 	for _, element in pairs(staticFrame:GetChildren()) do
-		element.ImageTransparency = 1
+		local secondTween = TweenService:Create(element, TweenInfo.new(0.1), {ImageTransparency = 1})
+		secondTween:Play()
 	end
 end)

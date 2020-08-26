@@ -29,7 +29,7 @@ function proximity:Enable(plrList)
     _maid:GiveTask(RunService.Stepped:Connect(function()
         for _, plr in pairs(plrList) do
             local distance = plr:DistanceFromCharacter(murderer.HumanoidRootPart.Position)
-            if distance < 5 then
+            if distance < 20 then
                 if not table.find(enableTable, plr) then
                     enableProximity:FireClient(plr)
                 end
