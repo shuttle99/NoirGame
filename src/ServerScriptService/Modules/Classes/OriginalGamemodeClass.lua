@@ -19,6 +19,7 @@ local uiEvents = uiComponents.UIEvents
 local scheduler = require(sharedModules.Scheduler)
 local maid = require(sharedModules.Maid)
 local stats = require(modules.StatIncrementer)
+local proximity = require(modules.ProximityDetection)
 
 --// Classes
 local murdererClass = require(classes.MurdererClass)
@@ -177,6 +178,9 @@ function originalModeClass:StartRound()
 			table.insert(allButMurderer, i)
 		end
 	end
+
+	--// Enable proximity effects
+	proximity:Enable(allButMurderer)
 	
 	--// Give the player the vandal data if they pick up an item
 	local function giveVandal(plrToGive)
@@ -303,7 +307,7 @@ function originalModeClass:StartRound()
 			visbilityToggle:FireClient(plr, self.Murderer.plr, true)
 		end
 		--// If player is not murderer, remove them from the allButMurderer table.
-		if table.find(allButMurderer, plr) ~= -1 then
+		if table.find(allButMurderer, plr) then
 			table.remove(allButMurderer, table.find(allButMurderer, plr))
 		end
 		--// Remove player from roles table
@@ -322,6 +326,8 @@ end
 
 --// End a round and fire the corresponding win condition in the table
 function originalModeClass:EndRound(winCondition)
+	--// Disable ProximityDetection
+	proximity:Disable()
 	--// Remove player roles
 	if self.Vandal then
 		self.Vandal:EndClass()
