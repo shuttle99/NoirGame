@@ -243,7 +243,7 @@ function originalModeClass:StartRound()
 		end
 
 		--// If item disappeared from game
-		--[[if not self.Vigilante then
+		if not self.Vigilante then
 			if not checkForItemDropped("Gun") then
 				--// Give random player vigilante role
 				setRole:Fire("Vigilante", self.Innocents[random:NextInteger(1, #self.Innocents)])
@@ -252,9 +252,9 @@ function originalModeClass:StartRound()
 		if not self.Vandal then
 			if not checkForItemDropped("Spray") then
 				--// Give random player vandal role
-				setRole:Fire("Vandal", self.innocents[random:NextInteger(1, #self.Innocents)])
+				setRole:Fire("Vandal", self.Innocents[random:NextInteger(1, #self.Innocents)])
 			end
-		end]]
+		end
 	end))
 
 	--// Handle the round ending

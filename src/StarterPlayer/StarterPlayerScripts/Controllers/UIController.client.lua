@@ -184,6 +184,7 @@ local enabled = false
 
 local TweenService = game:GetService("TweenService")
 local firstTween
+local secondTween
 
 --// Static Handler
 enableProximity.OnClientEvent:Connect(function()
@@ -210,13 +211,10 @@ enableProximity.OnClientEvent:Connect(function()
 end)
 
 disableProximity.OnClientEvent:Connect(function()
-	if firstTween then
-		firstTween:Cancel()
-	end
 	enabled = false
 	staticFrame.Visible = false
 	for _, element in pairs(staticFrame:GetChildren()) do
-		local secondTween = TweenService:Create(element, TweenInfo.new(0.1), {ImageTransparency = 1})
+		secondTween = TweenService:Create(element, TweenInfo.new(0.3), {ImageTransparency = 1})
 		secondTween:Play()
 	end
 end)
