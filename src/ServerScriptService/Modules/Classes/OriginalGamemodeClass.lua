@@ -88,7 +88,8 @@ local winConditions = {
 local function teleportPlayers(plrList)
 	local spawns = currentMapFolder:FindFirstChildOfClass("Folder"):FindFirstChild("Spawns"):GetChildren()
 	for i, _ in pairs(plrList) do
-		i.Character.HumanoidRootPart.CFrame = CFrame.new(table.remove(spawns, random:NextInteger(1, #spawns)).Position + Vector3.new(0, 3, 0))
+		local char = i.Character or i.CharacterAdded:Wait()
+		char:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(table.remove(spawns, random:NextInteger(1, #spawns)).Position + Vector3.new(0, 3, 0))
 	end
 end
 
@@ -303,6 +304,8 @@ function originalModeClass:EndRound(winCondition)
 	game.Workspace.Drops:ClearAllChildren()
 	--// Enable UI for the player
 	game.ReplicatedStorage.UIComponents.UIEvents.EnableShop:FireAllClients()
+
+	--// Manage UI
 	enableInventory:FireAllClients()
 	enableCodesUI:FireAllClients()
 	disableSpectate:FireAllClients()
