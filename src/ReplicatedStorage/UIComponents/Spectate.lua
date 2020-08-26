@@ -64,7 +64,7 @@ function spectate:Disable()
     --// Make button invisible 
     self.button.Parent = nil
 end
-
+7
 --// Makes UI visual
 function spectate:Render()
     print("Rendered the spectate ui")

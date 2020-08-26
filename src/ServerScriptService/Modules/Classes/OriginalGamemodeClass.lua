@@ -196,6 +196,22 @@ function originalModeClass:StartRound()
 	--// Start the timer
 	roundTimer:Start()
 
+	--// Check if an item is in the drops folder
+	local function checkForItemDropped(item)
+		for _, tool in pairs(game.Workspace.Drops:GetChildren()) do
+			if item == "Gun" then
+				if tool:FindFirstChild("Barrel") then
+					return true
+				end
+			elseif item == "Spray" then
+				if tool.Name == "Spray" then
+					return true
+				end
+			end
+		end
+		return false
+	end
+
 	--// Fire an event everytime the timer updates
 	self._maid:GiveTask(roundTimer.Tick:Connect(function()
 		--// Set time on the UI
@@ -211,6 +227,20 @@ function originalModeClass:StartRound()
 			local vigilanteChar = self.Vigilante.plr.Character or self.Vigilante.plr.CharacterAdded:Wait()
 			local hrp = vigilanteChar:WaitForChild("HumanoidRootPart")
 			self.VigilantePosition = hrp.Position
+		end
+
+		--// If item disappeared from game
+		if not self.Vigilante then
+			if not checkForItemDropped("Gun") then
+				--// Give random player vigilante role
+				setRole:Fire("Vigilante", self.innocents[random:NextInteger(1, #self.Innocents)])
+			end
+		end
+		if not self.Vandal then
+			if not checkForItemDropped("Spray") then
+				--// Give random player vandal role
+				setRole:Fire("Vandal", self.innocents[random:NextInteger(1, #self.Innocents)])
+			end
 		end
 	end))
 
