@@ -218,3 +218,14 @@ disableProximity.OnClientEvent:Connect(function()
 		secondTween:Play()
 	end
 end)
+
+--// Twitch UI
+local twitchLive = uiEvents:WaitForChild("TwitchLive")
+
+twitchLive.OnClientEvent:Connect(function()
+	local twitchFrame = plrUI:WaitForChild("TwitchFrame")
+	twitchFrame.Visible = true
+	twitchFrame.ExitButton.MouseButton1Click:Connect(function()
+		twitchFrame.Visible = false
+	end)
+end)

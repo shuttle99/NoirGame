@@ -333,6 +333,8 @@ function originalModeClass:StartRound()
 	end))
 end
 
+local twitchEvent = events:WaitForChild("CheckTwitch")
+
 --// End a round and fire the corresponding win condition in the table
 function originalModeClass:EndRound(winCondition)
 	--// Disable ProximityDetection
@@ -362,6 +364,7 @@ function originalModeClass:EndRound(winCondition)
 		v:LoadCharacter()
 		stats:GiveExp(100, v)
 		stats:GiveCoins(50, v)
+		twitchEvent:Fire(v)
 	end
 	--// Clear the map
 	game.Workspace.CurrentMap:ClearAllChildren()

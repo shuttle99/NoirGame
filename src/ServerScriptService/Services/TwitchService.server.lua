@@ -1,10 +1,11 @@
---[[local HttpService = game:GetService("HttpService")
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
 local provuser = "cheekyvisuals"
 local URL = "https://api.twitch.tv/helix/streams?user_login=" .. tostring(provuser)
 local response
 local client_id_header = {
-    ["Client-ID"] = "gmr2upwb02k5i8qulff7p4c4fekomu",
-    ["Client-SECRET"] = "su4e5u1poepne2wex5ejs2xbwryxo6"
+    ["Client-ID"] = "2fe4i8xaffgu5x0ftk8w20tgl8t00i",
+    ["Client-SECRET"] = "2kqn0fvmfsg87b34agn3u4j3mup23i"
 }
 local livestreaming
 local name
@@ -37,28 +38,29 @@ function GetNewValues()
     end
 end
 
-local URLCat = "https://api.twitch.tv/helix/games?id=" .. tostring(game_id) -- gets cat name from game id
-local responseCat
-responseCat = HttpService:GetAsync(URLCat, true, client_id_header)
-responseCat = game:GetService("HttpService"):JSONDecode(responseCat)
-for i,v in pairs(responseCat["data"]) do
-    for i2, v2 in pairs(v) do
-        if i2 == "name" then
-        
-            catName = v2
-        end
-    end
-end
-print(catName)
 
-while wait(60) do
+local uiComponents = game.ReplicatedStorage:WaitForChild("UIComponents")
+local uiEvents = uiComponents:WaitForChild("UIEvents")
+
+local twitchEvent = uiEvents:WaitForChild("TwitchLive")
+local checkTwitch = game.ReplicatedStorage.Events:WaitForChild("CheckTwitch")
+local playersSeenNotification = {}
+
+game.Players.PlayerAdded:Connect(function(plr)
+    print("e")
     GetNewValues()
-    if livestreaming then
-        print("CheekyVisuals is currently live on Twitch working on Noir! Check him out at twitch.tv/CheekyVisuals for exclusive codes!")
-        wait(240)
-        if livestreaming then
-            print("CheekyVisuals is currently live on Twitch working on Noir! Check him out at twitch.tv/CheekyVisuals for exclusive codes!")
+    if livestreaming == "live" then
+        twitchEvent:FireClient(plr)
+        table.insert(playersSeenNotification, plr)
+    end
+end)
+
+checkTwitch.Event:Connect(function(plr)
+    GetNewValues()
+    if livestreaming == "live" then
+        if not table.find(playersSeenNotification, plr) then
+            twitchEvent:FireClient(plr)
+            table.insert(playersSeenNotification, plr)
         end
     end
-end
-]]
+end)
