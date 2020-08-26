@@ -159,3 +159,17 @@ end)
 
 --// Experience events
 exp.new(plr)
+
+--// AFK Button
+local plrUI = plr.PlayerGui:WaitForChild("GameUI")
+local AFK = plrUI:WaitForChild("AFKButton")
+
+AFK.MouseButton1Click:Connect(function()
+	if plr:FindFirstChild("AFK") then
+		plr.AFK:Destroy()
+	else
+		local afkValue = Instance.new("BoolValue")
+		afkValue.Name = "AFK"
+		afkValue.Parent = plr
+	end
+end)
