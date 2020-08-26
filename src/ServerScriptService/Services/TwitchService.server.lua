@@ -55,6 +55,12 @@ game.Players.PlayerAdded:Connect(function(plr)
     end
 end)
 
+game.Players.PlayerRemoving:Connect(function(plr)
+    if table.find(playersSeenNotification, plr) then
+        table.remove(playersSeenNotification, table.find(playersSeenNotification, plr))
+    end
+end)
+
 checkTwitch.Event:Connect(function(plr)
     GetNewValues()
     if livestreaming == "live" then

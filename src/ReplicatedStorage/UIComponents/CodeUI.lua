@@ -63,9 +63,12 @@ end
 
 function codeUI:Show()
     self.ui.Visible = true
+    self.ui:TweenPosition(UDim2.fromScale(0.5, 0.5), Enum.EasingDirection.InOut, Enum.EasingStyle.Quint, .5)
 end
 
 function codeUI:Hide()
+    self.ui:TweenPosition(UDim2.fromScale(-0.5, 0.5), Enum.EasingDirection.InOut, Enum.EasingStyle.Quint, .5)
+    wait(.5)
     self.ui.Visible = false
 end
 
