@@ -63,6 +63,9 @@ local passTable = {
         giveItem("GoldenKnife", "Knives", plr)
         giveItem("GoldenRevolver", "Guns", plr)
         giveItem("GoldSpray", "Sprays", plr)
+        local goldenValue = Instance.new("BoolValue")
+        goldenValue.Name = "Golden"
+        goldenValue.Parent = plr
     end,
 
     --// Current build version of the golden pass
@@ -71,6 +74,9 @@ local passTable = {
         giveItem("GoldenKnife", "Knives", plr)
         giveItem("GoldenRevolver", "Guns", plr)
         giveItem("GoldSpray", "Sprays", plr)
+        local goldenValue = Instance.new("BoolValue")
+        goldenValue.Name = "Golden"
+        goldenValue.Parent = plr
     end,
 
     --// VIP from current game
@@ -81,7 +87,6 @@ local passTable = {
             local vipValue = Instance.new("BoolValue")
             vipValue.Name = "VIP"
             vipValue.Parent = plr
-            giveTag:Fire(plr)
         end
     end,
 
@@ -93,7 +98,6 @@ local passTable = {
             local vipValue = Instance.new("BoolValue")
             vipValue.Name = "VIP"
             vipValue.Parent = plr
-            giveTag:Fire(plr)
         end
     end
 }

@@ -9,14 +9,23 @@ local modules = ServerScriptService:WaitForChild("Modules")
 --// Modules
 local chatRunner = game.ServerScriptService:WaitForChild("ChatServiceRunner")
 local chatService = require(chatRunner:WaitForChild("ChatService"))
-local gamepasses = require(modules:WaitForChild("Gamepasses"))
-
 
 --// Events
 local giveTag = events:WaitForChild("GiveTag")
 
-giveTag.Event:Connect(function(plr)
+--[[giveTag.Event:Connect(function(plr)
     print("Connected to speaker event")
     local speaker = chatService:GetSpeaker(plr.Name)
     speaker:SetExtraData("Tags", {{TagText = "VIP", TagColor = Color3.new(1, 0, 0)}})
+end)]]
+
+chatService.SpeakerAdded:Connect(function(speakerAdded)
+    local plr = game.Players:FindFirstChild(speakerAdded)
+    local speaker = chatService:GetSpeaker(speakerAdded)
+    if plr:FindFirstChild("VIP") then
+        speaker:SetExtraData("Tags", {{TagText = "VIP", TagColor = Color3.new(1, 0, 0)}})
+    end
+    if plr:FindFirstChild("Golden") then
+        speaker:SetExtraData("Tags", {{TagText = "GOLDEN", TagColor = Color3.fromRGB(255, 166, 0)}})
+    end
 end)

@@ -16,6 +16,14 @@ end
 
 game.Players.PlayerAdded:Connect(function(plr)
 
+	local testValue = Instance.new("BoolValue")
+	testValue.Name = "Golden"
+	testValue.Parent = plr
+	
+	local test2Value = Instance.new("BoolValue")
+	test2Value.Name = "VIP"
+	test2Value.Parent = plr
+
 	local test2 = game.ReplicatedStorage.UIComponents.UIEvents.EnableInventory
 	test2:FireClient(plr)
 
