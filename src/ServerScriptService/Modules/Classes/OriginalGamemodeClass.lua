@@ -101,7 +101,6 @@ function originalModeClass.new()
 	disableInventory:FireAllClients()
 	disableSpectate:FireAllClients()
 	disableCodesUI:FireAllClients()
-	fixFOV:FireAllClients()
 
 	--//Get Players
 	local plrs = game.Players:GetPlayers()
@@ -145,6 +144,7 @@ function originalModeClass:StartRound()
 	--// Disable the spectate and shop UI
 	disableSpectate:FireAllClients()
 	disableShop:FireAllClients()
+	fixFOV:FireAllClients()
 
 	--// Toggle the visibility of the murderer
 	for _,v in pairs(self.plrs) do
