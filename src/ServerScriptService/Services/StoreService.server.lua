@@ -50,7 +50,7 @@ purchaseItem.OnServerInvoke = function(plr, category, item)
             elseif category == "Guns" then
                 local GunData = plrDataStore.Guns:Get()
                 table.insert(GunData, item)
-                plrDataStore.Gun:Set(GunData)
+                plrDataStore.Guns:Set(GunData)
             elseif category == "Sprays" then
                 local SprayData = plrDataStore.Sprays:Get()
                 table.insert(SprayData, item)

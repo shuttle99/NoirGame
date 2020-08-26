@@ -103,13 +103,15 @@ function shop.new(plr)
                         end)
 
                         --// Handle clicks on the purchase PurchasePage
-                        purchasePage.InfoFrame.PurchaseButton.MouseButton1Click:Connect(function()
+                        connection = purchasePage.InfoFrame.PurchaseButton.MouseButton1Click:Connect(function()
                             if events.ItemPurchase:InvokeServer(i, itemName) then
                                 local clonePanel = invPanel:Clone()
                                 clonePanel.Parent = self.plr.PlayerGui.GameUI.InventoryFrame.InventoryBG[i]
                                 viewport.new(itemModels[itemName], clonePanel.ViewportFrame, true)
+                                connection:Disconnect()
                             end
-                        end))
+                        end)
+                    --// Item requires gamepasses
                     else
                         MarketplaceService:PromptGamePassPurchase(plr, category[itemName].Gamepass)
                     end
@@ -222,7 +224,7 @@ function shop:Derender()
             v.Enabled = false
         end
     end
-
+    self.ui.ShopFrame.PurchasePage.Visible = false
     self.ui.ShopFrame.BackgroundTransparency = 1
     self.ui.ShopFrame.Header.TextTransparency = 1
     for _, element in pairs(self.ui.ShopFrame.Footer:GetChildren()) do
