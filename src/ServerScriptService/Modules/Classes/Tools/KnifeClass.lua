@@ -28,6 +28,13 @@ function knifeClass.new(plr)
 	end
 	
 	self.item = game.ServerStorage.Assets.Items.Murderer[self.dataObj["EquippedKnife"]:Get()]:Clone()
+	if self.dataObj.GoldenKnife then
+		for _, part in pairs(self.item:GetDescendants()) do
+			if part:IsA("BasePart") then
+				part.Color = Color3.fromRGB(249, 166, 2)
+			end
+		end
+	end
 	
 	return self
 end

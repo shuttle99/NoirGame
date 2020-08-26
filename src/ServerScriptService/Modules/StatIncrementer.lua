@@ -11,6 +11,7 @@ local uiEvents = uiComponents:WaitForChild("UIEvents")
 
 --// Events
 local expUpdate = uiEvents:WaitForChild("ExpUpdate")
+local toggleGold = uiEvents:WaitForChild("ToggleGold")
 
 --// Modules
 local ds = require(modules.Init)
@@ -57,5 +58,12 @@ function statIncrementer:GiveTickets(amt, plr)
         plrDataStore.Tickets:Increment(amt)
     end
 end
+
+toggleGold.OnServerEvent:Connect(function(plr, enabled, category)
+    local plrDataStore = ds:Get(plr)
+
+    --// Toggle the golden category when UI button is clicked
+    plrDataStore["Golden" .. category]:Set(enabled)
+end)
 
 return statIncrementer

@@ -11,6 +11,9 @@ local shared = ReplicatedStorage:WaitForChild("Shared")
 local events = ReplicatedStorage:WaitForChild("Events")
 local replicatedData = ReplicatedStorage:WaitForChild("ReplicatedData")
 local itemModels = ReplicatedStorage:WaitForChild("ItemModels")
+local uiComponents = ReplicatedStorage:WaitForChild("UIComponents")
+local uiEvents = uiComponents:WaitForChild("UIEvents")
+local toggleGold = uiEvents:WaitForChild("ToggleGold")
 
 --// Modules
 local viewport = require(shared:WaitForChild("ViewportClass"))
@@ -24,6 +27,9 @@ local equippedSprayFrame
 
 --// Remote Functions
 local checkItem = events:WaitForChild("CheckForItemOwned")
+
+--// Remote events
+
 
 --// Tab functions
 local tabFuncs
@@ -85,13 +91,42 @@ function inventory:Init()
             tabFuncs[tab.Name]()
         end)
     end
+
+    --// Edit whether or not the player has golden weapons
+    self._maid:GiveTask(self.ui.GunsFrame.GoldCheck.MouseButton1Click:Connect(function()
+        if self.ui.GunsFrame.GoldCheck.Text == "X" then
+            toggleGold:FireServer(false, "Gun")
+            self.ui.GunsFrame.GoldCheck.Text = ""
+        else
+            toggleGold:FireServer(true, "Gun")
+            self.ui.GunsFrame.GoldCheck.Text = "X"
+        end
+    end))
+
+    self._maid:GiveTask(self.ui.SpraysFrame.GoldCheck.MouseButton1Click:Connect(function()
+        if self.ui.SpraysFrame.GoldCheck.Text == "X" then
+            toggleGold:FireServer(false, "Spray")
+            self.ui.SpraysFrame.GoldCheck.Text = ""
+        else
+            toggleGold:FireServer(true, "Spray")
+            self.ui.SpraysFrame.GoldCheck.Text = "X"
+        end
+    end))
+
+    self._maid:GiveTask(self.ui.KnivesFrame.GoldCheck.MouseButton1Click:Connect(function()
+        if self.ui.KnivesFrame.GoldCheck.Text == "X" then
+            toggleGold:FireServer(false, "Knife")
+            self.ui.KnivesFrame.GoldCheck.Text = ""
+        else
+            toggleGold:FireServer(true, "Knife")
+            self.ui.KnivesFrame.GoldCheck.Text = "X"
+        end
+    end))
+
     self:Enable()
 end
 
 function inventory:Render()
-    
-    self._maid:DoCleaning()
-
     self.ui.Visible = true
     local tweenInventoryIn = TweenService:Create(self.ui, TweenInfo.new(.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = UDim2.new(0.221, 0,0.252, 0)})
     tweenInventoryIn:Play()
@@ -117,6 +152,13 @@ end
 
 function inventory:Enable()
     self.openButton.Parent = self.plr.PlayerGui.GameUI
+    --[[self._maid:GiveTask(self.openButton.MouseButton1Click:Connect(function()
+        if self.ui.Visible == true then
+            self:Derender()
+        elseif self.ui.Visible == false then
+            self:Render()
+        end
+    end))]]
     self.openButton.MouseButton1Click:Connect(function()
         self:Render()
     end)

@@ -32,6 +32,7 @@ end
 
 -- Public Init
 function ExperienceBar:Init()
+    local TweenService = game:GetService("TweenService")
     --// Render the UI
     self.ui.Parent = self.plr.PlayerGui.GameUI
 
@@ -42,6 +43,18 @@ function ExperienceBar:Init()
     --// Whenever the UI is changed, detect it and update the UI accordingly
     expUpdate.OnClientEvent:Connect(function(amt, level)
         percentToLevel = level % 1
+        
+        --//Tween the gained label
+        local newLabel = self.ui.GainedLabel:Clone()
+        newLabel.Parent = self.ui
+        newLabel.Text = "+" .. amt .. "!"
+        newLabel:TweenPosition(UDim2.fromScale(0.5, -0.6), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, .5)
+        wait(.7)
+        local textTransparencyTween = TweenService:Create(newLabel, TweenInfo.new(.5), {TextTransparency = 1})
+        textTransparencyTween:Play()
+        textTransparencyTween.Completed:Wait()
+        newLabel:Destroy()
+
         --// Add tween
         self.ui.XPAmountFrame:TweenSize(UDim2.fromScale(percentToLevel, 1), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, .5)
     end)

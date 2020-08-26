@@ -13,4 +13,9 @@ return {
 	Experience = 0,
 	Tickets = 0,
 	CodesRedeemed1 = {},
+
+	--// Gamepass specific
+	GoldenSpray = false,
+	GoldenKnife = false,
+	GoldenGun = false
 }
