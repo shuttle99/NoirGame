@@ -104,8 +104,16 @@ function originalModeClass.new()
 	disableCodesUI:FireAllClients()
 
 	--//Get Players
-	local plrs = game.Players:GetPlayers()
+	local plrsInitial = game.Players:GetPlayers()
 	local plrCopy = game.Players:GetPlayers()
+	local plrs = {}
+
+	--// Check for AFK players
+	for _, player in pairs(plrsInitial) do
+		if not player:FindFirstChild("AFK") then
+			table.insert(plrs, player)
+		end
+	end
 
 	--// Fill in class info
 	local self = setmetatable({

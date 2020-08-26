@@ -31,7 +31,13 @@ local round
 
 --// Local functions
 local function checkForPlayers()
-	if #game.Players:GetPlayers() >= 4 then
+	local counter = 0
+	for _, player in pairs(game.Players:GetPlayers()) do
+		if not player:FindFirstChild("AFK") then
+			counter += 1
+		end
+	end
+	if counter >= 4 then
 		return true
 	end
 end
