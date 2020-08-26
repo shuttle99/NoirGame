@@ -1,12 +1,12 @@
 --// Services
-local ServerStorage = game:GetService("ServerStorage")
+local Workspace = game:GetService("Workspace")
 
 --// Folders
-local music = ServerStorage.Music:GetChildren()
+local music = Workspace.Music:GetChildren()
 
 --// Init
 local random = Random.new()
-local songPlaying
+local songPlaying = Workspace.Music:FindFirstChild("FirstSong")
 
 --// Play random audio
 local function chooseSong()
@@ -19,5 +19,4 @@ songPlaying.Ended:Connect(function()
     chooseSong()
 end)
 
---// Play the first sound
-chooseSong()
+songPlaying:Play()
