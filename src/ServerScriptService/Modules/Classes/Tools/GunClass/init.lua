@@ -37,6 +37,13 @@ function gunClass.new(plr)
 	self._event.Parent = events
 
 	self.item = vigilante[self.dataObj.EquippedGun:Get()]:Clone()
+	if self.dataObj.GoldenGun then
+		for _, part in pairs(self.item:GetDescendants()) do
+			if part:IsA("BasePart") then
+				part.Color = Color3.fromRGB(249, 166, 2)
+			end
+		end
+	end
 	
 	return self
 end

@@ -60,9 +60,6 @@ local passTable = {
     --// Golden pass from previous game
     [10505111] = function(plr)
         --// Init the user's dataProfile
-        giveItem("GoldenKnife", "Knives", plr)
-        giveItem("GoldenRevolver", "Guns", plr)
-        giveItem("GoldSpray", "Sprays", plr)
         local goldenValue = Instance.new("BoolValue")
         goldenValue.Name = "Golden"
         goldenValue.Parent = plr
@@ -71,9 +68,6 @@ local passTable = {
     --// Current build version of the golden pass
     [11292412] = function(plr)
         --// Init the user's dataProfile
-        giveItem("GoldenKnife", "Knives", plr)
-        giveItem("GoldenRevolver", "Guns", plr)
-        giveItem("GoldSpray", "Sprays", plr)
         local goldenValue = Instance.new("BoolValue")
         goldenValue.Name = "Golden"
         goldenValue.Parent = plr

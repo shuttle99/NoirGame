@@ -94,31 +94,25 @@ function inventory:Init()
 
     --// Edit whether or not the player has golden weapons
     self._maid:GiveTask(self.ui.GunsFrame.GoldCheck.MouseButton1Click:Connect(function()
-        if self.ui.GunsFrame.GoldCheck.Text == "X" then
-            toggleGold:FireServer(false, "Gun")
+        if self.ui.GunsFrame.GoldCheck.Text == "X" and toggleGold:InvokeServer(false, "Gun") then
             self.ui.GunsFrame.GoldCheck.Text = ""
-        else
-            toggleGold:FireServer(true, "Gun")
+        elseif toggleGold:FireServer(false, "Gun") then
             self.ui.GunsFrame.GoldCheck.Text = "X"
         end
     end))
 
     self._maid:GiveTask(self.ui.SpraysFrame.GoldCheck.MouseButton1Click:Connect(function()
-        if self.ui.SpraysFrame.GoldCheck.Text == "X" then
-            toggleGold:FireServer(false, "Spray")
+        if self.ui.SpraysFrame.GoldCheck.Text == "X" and toggleGold:InvokeServer(false, "Spray") then
             self.ui.SpraysFrame.GoldCheck.Text = ""
-        else
-            toggleGold:FireServer(true, "Spray")
+        elseif toggleGold:FireServer(false, "Spray") then
             self.ui.SpraysFrame.GoldCheck.Text = "X"
         end
     end))
 
     self._maid:GiveTask(self.ui.KnivesFrame.GoldCheck.MouseButton1Click:Connect(function()
-        if self.ui.KnivesFrame.GoldCheck.Text == "X" then
-            toggleGold:FireServer(false, "Knife")
+        if self.ui.KnivesFrame.GoldCheck.Text == "X" and toggleGold:InvokeServer(false, "Knife") then
             self.ui.KnivesFrame.GoldCheck.Text = ""
-        else
-            toggleGold:FireServer(true, "Knife")
+        elseif toggleGold:FireServer(false, "Knife") then
             self.ui.KnivesFrame.GoldCheck.Text = "X"
         end
     end))

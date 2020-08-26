@@ -3,6 +3,7 @@ local statIncrementer = {}
 --// Services
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local MarketplaceService = game:GetService("MarketplaceService")
 
 --// Folders
 local modules = ServerScriptService.Modules
@@ -15,6 +16,7 @@ local toggleGold = uiEvents:WaitForChild("ToggleGold")
 
 --// Modules
 local ds = require(modules.Init)
+local gamepasses = require(modules.Gamepasses)
 
 local function getLevel(xp)
     return ((math.sqrt(625+100*xp)-25)/50)
@@ -59,11 +61,16 @@ function statIncrementer:GiveTickets(amt, plr)
     end
 end
 
-toggleGold.OnServerEvent:Connect(function(plr, enabled, category)
+toggleGold.OnServerInvoke = function(plr, enabled, category)
     local plrDataStore = ds:Get(plr)
-
-    --// Toggle the golden category when UI button is clicked
-    plrDataStore["Golden" .. category]:Set(enabled)
-end)
+    if plr:FindFirstChild("Golden") then
+        --// Toggle the golden category when UI button is clicked
+        plrDataStore["Golden" .. category]:Set(enabled)
+        return true
+    else 
+        MarketplaceService:PromptGamePassPurchase(plr, 10505111) 
+        return false
+    end
+end
 
 return statIncrementer
