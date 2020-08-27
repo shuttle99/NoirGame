@@ -206,6 +206,12 @@ function shop:Render()
             tapeATween:Play()
             tapeBTween:Play()
             tapeBTween.Completed:Wait()
+            self.ui.shopFrame.Footer.Visible = true
+            for _, v in pairs(self.ui.ShopFrame.Footer:GetChildren()) do
+                if v:IsA("TextButton") then
+                    v.TextTransparency = 0
+                end
+            end
         end
     end
 end

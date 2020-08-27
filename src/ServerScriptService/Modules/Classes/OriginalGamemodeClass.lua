@@ -205,7 +205,7 @@ function originalModeClass:StartRound()
 
 	loadEvent:FireAllClients()
 
-	wait(3)
+	--wait(3)
 
 	--// Teleport players to maps
 	teleportPlayers(roles)
@@ -270,6 +270,7 @@ function originalModeClass:StartRound()
 		--// Handle the round ending
 		self._maid:GiveTask(roundTimer.Ended:Connect(function()
 			--// End round with "TimeOut" argument
+			victoryScreen:FireAllClients("InnocentsWin")
 			self:EndRound("TimeOut")
 			--// Fire roundEnded bindable event and remove disconnect
 			self._roundEnded:Fire()
@@ -305,8 +306,7 @@ function originalModeClass:StartRound()
 			--// Check and clear data of player who dies
 			if roles[plr] == "Murderer" then
 				--// Murderer is killed, end the game
-				victoryScreen:FireAllClients("InnocentsWin")
-				self:EndRound("MurdererDies")
+				self:EndRound("InnocentsWin")
 				roundTimer:Stop()
 			elseif roles[plr] == "Vandal" then
 				--// Drop player's item and remove them from their role
@@ -338,8 +338,7 @@ function originalModeClass:StartRound()
 				--// Give player tickets, premium currency
 				stats:GiveTickets(1, self.Murderer.plr)
 				--// Fire victory condition for the murderer winning
-				self:EndRound("InnocentsDie")
-				victoryScreen:FireAllClients("MurdererWins")
+				self:EndRound("MurdererWins")
 				--// Stop the timer
 				roundTimer:Stop()
 			end
@@ -351,6 +350,7 @@ local twitchEvent = events:WaitForChild("CheckTwitch")
 
 --// End a round and fire the corresponding win condition in the table
 function originalModeClass:EndRound(winCondition)
+	victoryScreen:FireAllClients(winCondition)
 	--// Disable ProximityDetection
 	proximity:Disable()
 	--// Remove player roles
@@ -362,8 +362,6 @@ function originalModeClass:EndRound(winCondition)
 	if self.Murderer.item then
 		self.Murderer.item:Destroy()
 	end
-	--// Fire win condition
-	winConditions[winCondition]()
 	--// Clear all dropped items
 	game.Workspace.Drops:ClearAllChildren()
 	--// Enable UI for the player
@@ -373,6 +371,7 @@ function originalModeClass:EndRound(winCondition)
 	enableInventory:FireAllClients()
 	enableCodesUI:FireAllClients()
 	disableSpectate:FireAllClients()
+	--wait(2)
 	--// Give players rewards and reset them
 	for _, v in pairs(game.Players:GetPlayers()) do
 		v:LoadCharacter()
