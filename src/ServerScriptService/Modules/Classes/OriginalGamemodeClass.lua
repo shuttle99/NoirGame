@@ -137,10 +137,6 @@ function originalModeClass.new()
 	self.Vandal:GiveAppearance()
 	self.Vigilante:GiveAppearance()
 
-	--// Give items for characters
-	self.Vandal.item:Activate()
-	self.Vigilante.item:Activate()
-
 	--// Init round ending events
 	self._roundEnded = Instance.new("BindableEvent")
 	self.roundEnded = self._roundEnded.Event
@@ -218,6 +214,12 @@ function originalModeClass:StartRound()
 		--// Enable proximity effects
 		proximity:Enable(allButMurderer)
 	
+
+		--// Give items for characters
+		self.Vandal.item:Activate()
+		self.Vigilante.item:Activate()
+		self.Murderer.tool:Activate()
+
 
 		--// Check if an item is in the drops folder
 		local function checkForItemDropped(item)

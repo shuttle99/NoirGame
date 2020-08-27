@@ -27,7 +27,7 @@ function murdererClass.new(plr)
 	}, murdererClass)
 	
 	self:GiveAppearance()
-	self.tool:Activate()
+	--self.tool:Activate()
 	notif:FireClient(self.plr, "You are the Murderer!", "Use your KNIFE to kill everyone.")
 	
 	game.ServerStorage.MurdererValue.Value = self.plr.Name

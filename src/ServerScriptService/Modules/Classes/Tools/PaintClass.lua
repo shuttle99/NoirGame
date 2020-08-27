@@ -17,7 +17,7 @@ local toggleVisibility = events.ToggleVisibility
 
 --// Modules
 local sprayEffects = require(modules.SprayEffects)
-local data = require(modules.Init)
+local data = require(modules:WaitForChild("Init"))
 local maid = require(shared.Maid)
 
 --// Local Functions
