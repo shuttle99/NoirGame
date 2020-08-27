@@ -43,7 +43,7 @@ function loading:Init()
     textTween:Play()
 
     textTween.Completed:Wait()
-    wait(2)
+    wait(3)
 
     frameTween = TweenService:Create(self.ui.LoadingLabel, TweenInfo.new(.5, Enum.EasingStyle.Quint), {ImageTransparency = 1})
     textTween = TweenService:Create(self.ui.TipLabel, TweenInfo.new(.5, Enum.EasingStyle.Quint), {TextTransparency = 1})

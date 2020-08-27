@@ -99,7 +99,6 @@ end
 --// Init the round
 function originalModeClass.new()
 	--// Fire UI events
-	loadEvent:FireAllClients()
 	disableShop:FireAllClients()
 	disableInventory:FireAllClients()
 	disableSpectate:FireAllClients()
@@ -133,7 +132,7 @@ function originalModeClass.new()
 	for _ , player in pairs(plrCopy) do
 		table.insert(self.spectateList, player)
 	end
-
+	
 	--// Set appearances of characters
 	self.Vandal:GiveAppearance()
 	self.Vigilante:GiveAppearance()
@@ -148,21 +147,6 @@ function originalModeClass.new()
 	self._maid:GiveTask(self._roundEnded)
 	
 	return self
-end
-
---// Round Prep
-function originalModeClass:PrepareRound()
-	local thePlayers = game.Players:GetPlayers()
-	--// Init the Timer
-	local prepTimer = scheduler.new(5)
-
-	self._maid:GiveTask(prepTimer.Tick:Connect(function()
-		updateTimer:FireAllClients("Preparing round: " .. prepTimer.CurrentTime)
-	end))
-
-	prepTimer.Ended:Connect(function()
-		self:StartRound()
-	end)
 end
 
 --//Round Start
@@ -182,6 +166,7 @@ function originalModeClass:StartRound()
 
 	--// Init the timer
 	local roundTimer = scheduler.new(self.gameLength)
+	local prepTimer = scheduler.new(5)
 
 	--// Set role table
 	local roles = {
@@ -201,9 +186,6 @@ function originalModeClass:StartRound()
 		end
 	end
 
-	--// Enable proximity effects
-	proximity:Enable(allButMurderer)
-	
 	--// Give the player the vandal data if they pick up an item
 	local function giveVandal(plrToGive)
 		visbilityToggle:FireClient(plrToGive, self.Murderer.plr, true)
@@ -218,134 +200,150 @@ function originalModeClass:StartRound()
 		self.Vigilante.item:Activate()
 		roles[plr] = "Vigilante"
 	end
-
-	--// Start the timer
-	roundTimer:Start()
-
-	--// Check if an item is in the drops folder
-	local function checkForItemDropped(item)
-		for _, tool in pairs(game.Workspace.Drops:GetChildren()) do
-			if item == "Gun" then
-				if tool:FindFirstChild("Barrel") then
-					return true
-				end
-			elseif item == "Spray" then
-				if tool.Name == "Spray" then
-					return true
-				end
-			end
-		end
-		return false
-	end
-
-	--// Fire an event everytime the timer updates
-	self._maid:GiveTask(roundTimer.Tick:Connect(function()
-		--// Set time on the UI
-		updateTimer:FireAllClients("Time Left: " .. roundTimer.CurrentTime)
-		--// Cache the vandal's position
-		if self.Vandal then
-			local vandalChar = self.Vandal.plr.Character or self.Vandal.plr.CharacterAdded:Wait()
-			local hrp = vandalChar:WaitForChild("HumanoidRootPart")
-			self.VandalPosition = hrp.Position
-		end
-		--// Cache the vigilante's position
-		if self.Vigilante then
-			local vigilanteChar = self.Vigilante.plr.Character or self.Vigilante.plr.CharacterAdded:Wait()
-			local hrp = vigilanteChar:WaitForChild("HumanoidRootPart")
-			self.VigilantePosition = hrp.Position
-		end
-
-		--// If item disappeared from game
-		if not self.Vigilante then
-			if not checkForItemDropped("Gun") then
-				--// Give random player vigilante role
-				setRole:Fire("Vigilante", self.Innocents[random:NextInteger(1, #self.Innocents)])
-			end
-		end
-		if not self.Vandal then
-			if not checkForItemDropped("Spray") then
-				--// Give random player vandal role
-				setRole:Fire("Vandal", self.Innocents[random:NextInteger(1, #self.Innocents)])
-			end
-		end
-	end))
-
-	--// Handle the round ending
-	self._maid:GiveTask(roundTimer.Ended:Connect(function()
-		--// End round with "TimeOut" argument
-		self:EndRound("TimeOut")
-		--// Fire roundEnded bindable event and remove disconnect
-		self._roundEnded:Fire()
-		self._maid:Destroy()
-	end))
-
-	--// Fires when the timer is deliberately stopped
-	self._maid:GiveTask(roundTimer.Stopped:Connect(function()
-		self._roundEnded:Fire()
-		self._maid:Destroy()
-	end))
-	--// Give player proper data when they receive a goal
-	self._maid:GiveTask(setRole.Event:Connect(function(role, plr)
-		return role == "Vandal" and giveVandal(plr) or role == "Vigilante" and giveVigilante(plr)
-	end))
 	
-	--//Fires when a player dies and a round is in progress
-	self._maid:GiveTask(deathEvent.Event:Connect(function(plr)
-		--// Remove player from spectate list
-		if table.find(self.spectateList, plr) ~= -1 then
-			table.remove(self.spectateList, table.find(self.spectateList, plr))
+	prepTimer:Start()
+
+	loadEvent:FireAllClients()
+
+	wait(3)
+
+	--// Teleport players to maps
+	teleportPlayers(roles)
+
+	self._maid:GiveTask(prepTimer.Ended:Connect(function()
+
+		--// Start the timer
+		roundTimer:Start()
+
+		--// Enable proximity effects
+		proximity:Enable(allButMurderer)
+	
+
+		--// Check if an item is in the drops folder
+		local function checkForItemDropped(item)
+			for _, tool in pairs(game.Workspace.Drops:GetChildren()) do
+				if item == "Gun" then
+					if tool:FindFirstChild("Barrel") then
+						return true
+					end
+				elseif item == "Spray" then
+					if tool.Name == "Spray" then
+						return true
+					end
+				end
+			end
+			return false
 		end
-		--// Re-enable player UI
-		proximity:DisablePlayer(plr)
-		enableInventory:FireClient(plr)
-		enableSpectate:FireClient(plr, self.spectateList)
-		enableShop:FireClient(plr)
-		enableCodesUI:FireClient(plr)
-		--// Remove player from current spectate list
-		updateSpectate:FireAllClients(plr)
-		--// Clear player's backpack
-		plr.Backpack:ClearAllChildren()
-		--// Check and clear data of player who dies
-		if roles[plr] == "Murderer" then
-			--// Murderer is killed, end the game
-			victoryScreen:FireAllClients("InnocentsWin")
-			self:EndRound("MurdererDies")
-			roundTimer:Stop()
-		elseif roles[plr] == "Vandal" then
-			--// Drop player's item and remove them from their role
-			self.Vandal.item:DropItem(self.VandalPosition)
-			self.Vandal = nil
-			--// Show the murderer
-			visbilityToggle:FireClient(plr, self.Murderer.plr, true)
-			print(allButMurderer)
-		elseif roles[plr] == "Vigilante" then
-			--// Drop player's item and remove them from their role
-			self.Vigilante.item:DropItem(self.VigilantePosition)
-			self.Vigilante = nil
-			--// Show the murderer
-			visbilityToggle:FireClient(plr, self.Murderer.plr, true)
-		elseif roles[plr] == "Innocent" then
-			--// Remove player from innocent table
-			self.Innocents[plr] = nil
-			--// Show the murderer
-			visbilityToggle:FireClient(plr, self.Murderer.plr, true)
-		end
-		--// If player is not murderer, remove them from the allButMurderer table.
-		if table.find(allButMurderer, plr) then
-			table.remove(allButMurderer, table.find(allButMurderer, plr))
-		end
-		--// Remove player from roles table
-		roles[plr] = nil
-		--// Check if every non-murderer is dead
-		if #allButMurderer == 0 then
-			--// Give player tickets, premium currency
-			stats:GiveTickets(1, self.Murderer.plr)
-			--// Fire victory condition for the murderer winning
-			self:EndRound("InnocentsDie")
-			victoryScreen:FireAllClients("MurdererWins")
-			--// Stop the timer
-			roundTimer:Stop()
-		end
+
+		--// Fire an event everytime the timer updates
+		self._maid:GiveTask(roundTimer.Tick:Connect(function()
+			--// Set time on the UI
+			updateTimer:FireAllClients("Time Left: " .. roundTimer.CurrentTime)
+			--// Cache the vandal's position
+			if self.Vandal then
+				local vandalChar = self.Vandal.plr.Character or self.Vandal.plr.CharacterAdded:Wait()
+				local hrp = vandalChar:WaitForChild("HumanoidRootPart")
+				self.VandalPosition = hrp.Position
+			end
+			--// Cache the vigilante's position
+			if self.Vigilante then
+				local vigilanteChar = self.Vigilante.plr.Character or self.Vigilante.plr.CharacterAdded:Wait()
+				local hrp = vigilanteChar:WaitForChild("HumanoidRootPart")
+				self.VigilantePosition = hrp.Position
+			end
+
+			--// If item disappeared from game
+			if not self.Vigilante then
+				if not checkForItemDropped("Gun") then
+					--// Give random player vigilante role
+					setRole:Fire("Vigilante", self.Innocents[random:NextInteger(1, #self.Innocents)])
+				end
+			end
+			if not self.Vandal then
+				if not checkForItemDropped("Spray") then
+					--// Give random player vandal role
+					setRole:Fire("Vandal", self.Innocents[random:NextInteger(1, #self.Innocents)])
+				end
+			end
+		end))
+
+		--// Handle the round ending
+		self._maid:GiveTask(roundTimer.Ended:Connect(function()
+			--// End round with "TimeOut" argument
+			self:EndRound("TimeOut")
+			--// Fire roundEnded bindable event and remove disconnect
+			self._roundEnded:Fire()
+			self._maid:Destroy()
+		end))
+
+		--// Fires when the timer is deliberately stopped
+		self._maid:GiveTask(roundTimer.Stopped:Connect(function()
+			self._roundEnded:Fire()
+			self._maid:Destroy()
+		end))
+		--// Give player proper data when they receive a goal
+		self._maid:GiveTask(setRole.Event:Connect(function(role, plr)
+			return role == "Vandal" and giveVandal(plr) or role == "Vigilante" and giveVigilante(plr)
+		end))
+		
+		--//Fires when a player dies and a round is in progress
+		self._maid:GiveTask(deathEvent.Event:Connect(function(plr)
+			--// Remove player from spectate list
+			if table.find(self.spectateList, plr) ~= -1 then
+				table.remove(self.spectateList, table.find(self.spectateList, plr))
+			end
+			--// Re-enable player UI
+			proximity:DisablePlayer(plr)
+			enableInventory:FireClient(plr)
+			enableSpectate:FireClient(plr, self.spectateList)
+			enableShop:FireClient(plr)
+			enableCodesUI:FireClient(plr)
+			--// Remove player from current spectate list
+			updateSpectate:FireAllClients(plr)
+			--// Clear player's backpack
+			plr.Backpack:ClearAllChildren()
+			--// Check and clear data of player who dies
+			if roles[plr] == "Murderer" then
+				--// Murderer is killed, end the game
+				victoryScreen:FireAllClients("InnocentsWin")
+				self:EndRound("MurdererDies")
+				roundTimer:Stop()
+			elseif roles[plr] == "Vandal" then
+				--// Drop player's item and remove them from their role
+				self.Vandal.item:DropItem(self.VandalPosition)
+				self.Vandal = nil
+				--// Show the murderer
+				visbilityToggle:FireClient(plr, self.Murderer.plr, true)
+				print(allButMurderer)
+			elseif roles[plr] == "Vigilante" then
+				--// Drop player's item and remove them from their role
+				self.Vigilante.item:DropItem(self.VigilantePosition)
+				self.Vigilante = nil
+				--// Show the murderer
+				visbilityToggle:FireClient(plr, self.Murderer.plr, true)
+			elseif roles[plr] == "Innocent" then
+				--// Remove player from innocent table
+				self.Innocents[plr] = nil
+				--// Show the murderer
+				visbilityToggle:FireClient(plr, self.Murderer.plr, true)
+			end
+			--// If player is not murderer, remove them from the allButMurderer table.
+			if table.find(allButMurderer, plr) then
+				table.remove(allButMurderer, table.find(allButMurderer, plr))
+			end
+			--// Remove player from roles table
+			roles[plr] = nil
+			--// Check if every non-murderer is dead
+			if #allButMurderer == 0 then
+				--// Give player tickets, premium currency
+				stats:GiveTickets(1, self.Murderer.plr)
+				--// Fire victory condition for the murderer winning
+				self:EndRound("InnocentsDie")
+				victoryScreen:FireAllClients("MurdererWins")
+				--// Stop the timer
+				roundTimer:Stop()
+			end
+		end))
 	end))
 end
 
