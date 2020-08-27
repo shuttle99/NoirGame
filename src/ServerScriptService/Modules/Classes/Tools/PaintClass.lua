@@ -100,7 +100,8 @@ function paintClass:Activate()
 								if x.Parent.Name == self.murderer.Value then
 									local murdererChar = x.Parent
 									print(murdererChar.Name)
-									sprayEffects[self.dataObj["EquippedSpray"]:Get()](murdererChar)
+									--sprayEffects[self.dataObj["EquippedSpray"]:Get()](murdererChar)
+									murdererChar.Humanoid:ApplyDescription(game.ReplicatedStorage.ItemModels:FindFirstChild(self.dataObj["EquippedSpray"]:Get().HumanoidDescription))
 									part:Destroy()
 									toggleVisibility:FireAllClients(game.Players:GetPlayerFromCharacter(murdererChar), true)
 								end
