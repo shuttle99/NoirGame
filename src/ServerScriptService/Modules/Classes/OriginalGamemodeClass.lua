@@ -205,7 +205,7 @@ function originalModeClass:StartRound()
 
 	loadEvent:FireAllClients()
 
-	--wait(3)
+	wait(3)
 
 	--// Teleport players to maps
 	teleportPlayers(roles)
@@ -371,7 +371,7 @@ function originalModeClass:EndRound(winCondition)
 	enableInventory:FireAllClients()
 	enableCodesUI:FireAllClients()
 	disableSpectate:FireAllClients()
-	--wait(2)
+	wait(2)
 	--// Give players rewards and reset them
 	for _, v in pairs(game.Players:GetPlayers()) do
 		v:LoadCharacter()
