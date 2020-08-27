@@ -46,6 +46,7 @@ local enableShop = uiEvents.EnableShop
 local enableCodesUI = uiEvents.EnableCodeUI
 local disableCodesUI = uiEvents.DisableCodeUI
 local fixFOV = uiEvents.FixFOV
+local victoryScreen = uiEvents.VictoryScreen
 
 --[[ Variables to access data
 	self -
@@ -294,6 +295,7 @@ function originalModeClass:StartRound()
 		--// Check and clear data of player who dies
 		if roles[plr] == "Murderer" then
 			--// Murderer is killed, end the game
+			victoryScreen:FireAllClients("InnocentsWin")
 			self:EndRound("MurdererDies")
 			roundTimer:Stop()
 		elseif roles[plr] == "Vandal" then
@@ -327,6 +329,7 @@ function originalModeClass:StartRound()
 			stats:GiveTickets(1, self.Murderer.plr)
 			--// Fire victory condition for the murderer winning
 			self:EndRound("InnocentsDie")
+			victoryScreen:FireAllClients("MurdererWins")
 			--// Stop the timer
 			roundTimer:Stop()
 		end

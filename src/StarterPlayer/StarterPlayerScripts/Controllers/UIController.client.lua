@@ -236,12 +236,14 @@ local winEvent = uiEvents:WaitForChild("VictoryScreen")
 winEvent.OnClientEvent:Connect(function(winCondition)
 	local background = plrUI:WaitForChild("BackgroundImage")
 	background.ImageTransparency = 1
-	background.Visible = false
+	background.Visible = true
 	
-	local backgroundTween = TweenService:Create(background, TweenInfo.new(0.5), {ImageTransparency = 0})
+	local backgroundTween = TweenService:Create(background, TweenInfo.new(1.5), {ImageTransparency = 0})
 	backgroundTween:Play()
 	backgroundTween.Completed:Wait()
 	
-	local 
-
+	local winScreen = plrUI:WaitForChild(winCondition)
+	winScreen.Position = UDim2.fromScale(0.5, -0.5)
+	winScreen.Visible = true
+	winScreen:TweenPosition(UDim2.fromScale(0.5, 0.5), Enum.EasingDirection.InOut, Enum.EasingStyle.Quint, 1.5)
 end)
