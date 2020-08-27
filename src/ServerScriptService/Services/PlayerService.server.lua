@@ -22,9 +22,6 @@ game.Players.PlayerAdded:Connect(function(plr)
 
 	local dataObj = data.new(plr) --// Yield caused here
 	gamepasses:CheckForPasses(plr)
-
-	wait(5)
-	statIncrementer:GiveExp(500, plr)
 	
 	local leaderstats = Instance.new("Folder")
 	leaderstats.Name = "leaderstats"

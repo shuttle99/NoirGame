@@ -133,7 +133,7 @@ function originalModeClass.new()
 	for _ , player in pairs(plrCopy) do
 		table.insert(self.spectateList, player)
 	end
-	
+
 	--// Set appearances of characters
 	self.Vandal:GiveAppearance()
 	self.Vigilante:GiveAppearance()
@@ -148,6 +148,21 @@ function originalModeClass.new()
 	self._maid:GiveTask(self._roundEnded)
 	
 	return self
+end
+
+--// Round Prep
+function originalModeClass:PrepareRound()
+	local thePlayers = game.Players:GetPlayers()
+	--// Init the Timer
+	local prepTimer = scheduler.new(5)
+
+	self._maid:GiveTask(prepTimer.Tick:Connect(function()
+		updateTimer:FireAllClients("Preparing round: " .. prepTimer.CurrentTime)
+	end))
+
+	prepTimer.Ended:Connect(function()
+		self:StartRound()
+	end)
 end
 
 --//Round Start
@@ -203,9 +218,6 @@ function originalModeClass:StartRound()
 		self.Vigilante.item:Activate()
 		roles[plr] = "Vigilante"
 	end
-	
-	--// Teleport players to maps
-	teleportPlayers(roles)
 
 	--// Start the timer
 	roundTimer:Start()
