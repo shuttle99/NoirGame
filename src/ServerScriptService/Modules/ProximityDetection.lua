@@ -50,4 +50,8 @@ function proximity:Disable()
     _maid:Destroy()
 end
 
+function proximity:DisablePlayer(plr)
+    disableProximity:FireClient(plr)
+end
+
 return proximity

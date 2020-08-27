@@ -284,6 +284,7 @@ function originalModeClass:StartRound()
 			table.remove(self.spectateList, table.find(self.spectateList, plr))
 		end
 		--// Re-enable player UI
+		proximity:DisablePlayer(plr)
 		enableInventory:FireClient(plr)
 		enableSpectate:FireClient(plr, self.spectateList)
 		enableShop:FireClient(plr)
