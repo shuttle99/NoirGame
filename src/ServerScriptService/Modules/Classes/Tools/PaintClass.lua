@@ -39,7 +39,7 @@ function paintClass.new(plr)
 		_maid = maid.new()
 	}, paintClass)
 
-	if self.dataObj.GoldenSpray then
+	if self.dataObj.GoldenSpray:Get() == true then
 		for _, item in pairs(self.item:GetDescendants()) do
 			if item:IsA("BasePart") then
 				item.Color = Color3.fromRGB(249, 166, 2)

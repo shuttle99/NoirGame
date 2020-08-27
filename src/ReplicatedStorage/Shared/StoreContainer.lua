@@ -87,12 +87,6 @@ module.Knives = {
 		Description = "A weapon for the true OGs.",
 		Price = 1000,
 	},
-	["GoldenKnife"] = {
-		Name = "Golden Butterfly Knife",
-		Description = "Shiny! Part of the Golden Pack.",
-		Price = 0,
-		Gamepass = 11292412
-	},
 	["Bananknife"] = {
 		Name = "Bananknife",
 		Description = "I uh... really don't know what to say about this one.",
@@ -121,17 +115,16 @@ module.Guns = {
 		Description = "Just your everyday, average, murderer-slaying Revolver.",
 		Price = 0,
 	},
+	["HuntingRifle"] = {
+		Name = "Hunting Rifle",
+		Description = "It's murderer-huntin' season!",
+		Price = 750,
+	},
 	["BananaGun"] = {
 		Name = "Banana Gun",
 		Description = "pew pew pew pew pew pew pew... banana guuun...",
 		Price = 500,
 	},
-	["GoldenRevolver"] = {
-		Name = "Golden Revolver",
-		Description = "A great gold firearm. Part of the Golden Pack.",
-		Price = 0,
-		Gamepass = 11292412
-	}
 }
 
 module.Sprays = {

@@ -96,7 +96,7 @@ function inventory:Init()
     self._maid:GiveTask(self.ui.GunsFrame.GoldCheck.MouseButton1Click:Connect(function()
         if self.ui.GunsFrame.GoldCheck.Text == "X" and toggleGold:InvokeServer(false, "Gun") then
             self.ui.GunsFrame.GoldCheck.Text = ""
-        elseif toggleGold:FireServer(false, "Gun") then
+        elseif toggleGold:InvokeServer(false, "Gun") then
             self.ui.GunsFrame.GoldCheck.Text = "X"
         end
     end))
@@ -104,7 +104,7 @@ function inventory:Init()
     self._maid:GiveTask(self.ui.SpraysFrame.GoldCheck.MouseButton1Click:Connect(function()
         if self.ui.SpraysFrame.GoldCheck.Text == "X" and toggleGold:InvokeServer(false, "Spray") then
             self.ui.SpraysFrame.GoldCheck.Text = ""
-        elseif toggleGold:FireServer(false, "Spray") then
+        elseif toggleGold:InvokeServer(false, "Spray") then
             self.ui.SpraysFrame.GoldCheck.Text = "X"
         end
     end))
@@ -112,7 +112,7 @@ function inventory:Init()
     self._maid:GiveTask(self.ui.KnivesFrame.GoldCheck.MouseButton1Click:Connect(function()
         if self.ui.KnivesFrame.GoldCheck.Text == "X" and toggleGold:InvokeServer(false, "Knife") then
             self.ui.KnivesFrame.GoldCheck.Text = ""
-        elseif toggleGold:FireServer(false, "Knife") then
+        elseif toggleGold:InvokeServer(false, "Knife") then
             self.ui.KnivesFrame.GoldCheck.Text = "X"
         end
     end))
