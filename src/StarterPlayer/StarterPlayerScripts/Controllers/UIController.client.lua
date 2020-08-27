@@ -229,3 +229,19 @@ twitchLive.OnClientEvent:Connect(function()
 		twitchFrame.Visible = false
 	end)
 end)
+
+--// Win screen handler
+local winEvent = uiEvents:WaitForChild("VictoryScreen")
+
+winEvent.OnClientEvent:Connect(function(winCondition)
+	local background = plrUI:WaitForChild("BackgroundImage")
+	background.ImageTransparency = 1
+	background.Visible = false
+	
+	local backgroundTween = TweenService:Create(background, TweenInfo.new(0.5), {ImageTransparency = 0})
+	backgroundTween:Play()
+	backgroundTween.Completed:Wait()
+	
+	local 
+
+end)
