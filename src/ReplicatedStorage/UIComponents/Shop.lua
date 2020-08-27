@@ -147,6 +147,7 @@ end
 --// Make the shop visible and play animation
 function shop:Render()
     if not self.debounce then
+        self.ui.ShopFrame.Footer.Visible = true
         print("render")
         self.debounce = true
         for _, player in pairs(game.Players:GetPlayers()) do
@@ -206,12 +207,6 @@ function shop:Render()
             tapeATween:Play()
             tapeBTween:Play()
             tapeBTween.Completed:Wait()
-            self.ui.shopFrame.Footer.Visible = true
-            for _, v in pairs(self.ui.ShopFrame.Footer:GetChildren()) do
-                if v:IsA("TextButton") then
-                    v.TextTransparency = 0
-                end
-            end
         end
     end
 end
