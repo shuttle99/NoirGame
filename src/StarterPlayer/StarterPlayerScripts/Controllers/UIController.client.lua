@@ -246,4 +246,13 @@ winEvent.OnClientEvent:Connect(function(winCondition)
 	winScreen.Position = UDim2.fromScale(0.5, -0.5)
 	winScreen.Visible = true
 	winScreen:TweenPosition(UDim2.fromScale(0.5, 0.5), Enum.EasingDirection.InOut, Enum.EasingStyle.Quint, 1.5)
+
+	wait(2.5)
+
+	winScreen:TweenPosition(UDim2.fromScale(0.5, 1.5), Enum.EasingDirection.InOut, Enum.EasingStyle.Quint, 1)
+	backgroundTween = TweenService:Create(background, TweenInfo.new(1.5), {ImageTransparency = 1})
+	backgroundTween:Play()
+	backgroundTween.Completed:Wait()
+	background.Visible = false
+	winScreen.Visible = false
 end)
