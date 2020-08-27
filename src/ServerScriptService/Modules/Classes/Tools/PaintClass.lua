@@ -101,7 +101,19 @@ function paintClass:Activate()
 									local murdererChar = x.Parent
 									print(murdererChar.Name)
 									--sprayEffects[self.dataObj["EquippedSpray"]:Get()](murdererChar)
-									murdererChar.Humanoid:ApplyDescription(game.ReplicatedStorage.ItemModels:FindFirstChild(self.dataObj["EquippedSpray"]:Get().HumanoidDescription))
+									local sprayModel = game.ReplicatedStorage.ItemModels:FindFirstChild(self.dataObj["EquippedSpray"]:Get())
+									print(sprayModel.Name)
+									game.Players:FindFirstChild(self.murderer.Value):ClearCharacterAppearance()
+
+									local accessories = {}
+									for _, item in pairs(murdererChar.Humanoid:GetAccessories()) do
+										table.insert(accessories, item)
+									end
+									for _, accessory in pairs(accessories) do
+										murdererChar.Humanoid:AddAccessory(accessory)
+									end
+	
+									murdererChar.Humanoid:ApplyDescription(sprayModel.Humanoid:GetAppliedDescription())
 									part:Destroy()
 									toggleVisibility:FireAllClients(game.Players:GetPlayerFromCharacter(murdererChar), true)
 								end
