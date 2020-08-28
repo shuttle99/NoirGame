@@ -138,11 +138,12 @@ local loadEvent = uiEvents:WaitForChild("LoadEvent")
 local loadingScreen = require(UIComponents:WaitForChild("LoadingMap"))
 
 loadEvent.OnClientEvent:Connect(function(enable)
+	local loadingScreenObject
 	if enable then
-		loadingScreen.new(plr)
-		loadingScreen:Show()
+		loadingScreenObject = loadingScreen.new(plr)
+		loadingScreenObject:Show()
 	else
-		loadingScreen:Hide()
+		loadingScreenObject:Hide()
 	end
 end)
 
