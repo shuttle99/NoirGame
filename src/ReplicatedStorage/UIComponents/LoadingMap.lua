@@ -11,6 +11,8 @@ local loadingScreen = uiComponents:WaitForChild("LoadingFrame")
 
 --// Variables
 local random = Random.new()
+local frameTween
+local textTween
 
 --// Tip table
 local tips = {
@@ -27,24 +29,21 @@ function loading.new(plr)
         ui = loadingScreen:Clone()
     }, loading)
 
-    self:Init(self.plr)
-
     return self
 end
 
-function loading:Init()
+function loading:Show()
     self.ui.TipLabel.Text = tips[random:NextInteger(1, #tips)]
 
     self.ui.Parent = self.plr:WaitForChild("PlayerGui"):WaitForChild("GameUI")
-    local frameTween = TweenService:Create(self.ui.LoadingLabel, TweenInfo.new(1, Enum.EasingStyle.Quint), {ImageTransparency = 0})
-    local textTween = TweenService:Create(self.ui.TipLabel, TweenInfo.new(1, Enum.EasingStyle.Quint), {TextTransparency = 0})
+    frameTween = TweenService:Create(self.ui.LoadingLabel, TweenInfo.new(1, Enum.EasingStyle.Quint), {ImageTransparency = 0})
+    textTween = TweenService:Create(self.ui.TipLabel, TweenInfo.new(1, Enum.EasingStyle.Quint), {TextTransparency = 0})
 
     frameTween:Play()
     textTween:Play()
+end
 
-    textTween.Completed:Wait()
-    wait(3)
-
+function loading:Hide()
     frameTween = TweenService:Create(self.ui.LoadingLabel, TweenInfo.new(.5, Enum.EasingStyle.Quint), {ImageTransparency = 1})
     textTween = TweenService:Create(self.ui.TipLabel, TweenInfo.new(.5, Enum.EasingStyle.Quint), {TextTransparency = 1})
 
@@ -53,7 +52,7 @@ function loading:Init()
 
     textTween.Completed:Wait()
 
-    self.ui:Destroy()
+    self.ui:Destroy()  
 end
 
 return loading

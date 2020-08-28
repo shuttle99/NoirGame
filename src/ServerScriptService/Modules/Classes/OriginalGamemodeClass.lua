@@ -133,6 +133,18 @@ function originalModeClass.new()
 		table.insert(self.spectateList, player)
 	end
 	
+	return self
+end
+
+--//Round Start
+function originalModeClass:StartRound()
+
+	--// To do - only loop through players in the actual round; consider using a local function
+	loadEvent:FireAllClients(true)
+
+	local prepTimer = scheduler.new(5)
+	prepTimer:Start()
+
 	--// Set appearances of characters
 	self.Vandal:GiveAppearance()
 	self.Vigilante:GiveAppearance()
@@ -141,12 +153,7 @@ function originalModeClass.new()
 	self._roundEnded = Instance.new("BindableEvent")
 	self.roundEnded = self._roundEnded.Event
 	self._maid:GiveTask(self._roundEnded)
-	
-	return self
-end
 
---//Round Start
-function originalModeClass:StartRound()
 	--// Disable the spectate and shop UI
 	disableSpectate:FireAllClients()
 	disableShop:FireAllClients()
@@ -162,7 +169,7 @@ function originalModeClass:StartRound()
 
 	--// Init the timer
 	local roundTimer = scheduler.new(self.gameLength)
-	local prepTimer = scheduler.new(5)
+
 
 	--// Set role table
 	local roles = {
@@ -196,17 +203,14 @@ function originalModeClass:StartRound()
 		self.Vigilante.item:Activate()
 		roles[plr] = "Vigilante"
 	end
-	
-	prepTimer:Start()
-
-	loadEvent:FireAllClients()
-
-	wait(3)
 
 	--// Teleport players to maps
 	teleportPlayers(roles)
 
 	self._maid:GiveTask(prepTimer.Ended:Connect(function()
+
+		--// Turn off the loading VictoryScreen
+		loadEvent:FireAllClients(false)
 
 		--// Start the timer
 		roundTimer:Start()

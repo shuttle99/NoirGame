@@ -137,8 +137,12 @@ local loadEvent = uiEvents:WaitForChild("LoadEvent")
 --// Load object
 local loadingScreen = require(UIComponents:WaitForChild("LoadingMap"))
 
-loadEvent.OnClientEvent:Connect(function()
-	loadingScreen.new(plr)
+loadEvent.OnClientEvent:Connect(function(enable)
+	if enable then
+		loadingScreen.new(plr)
+		loadingScreen:Show()
+	else
+		loadingScreen:Hide()
 end)
 
 --// Code UI
