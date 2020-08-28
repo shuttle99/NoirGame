@@ -24,15 +24,19 @@ local maid = require(shared:WaitForChild("Maid"))
 local _maid = maid.new()
 
 --// Event handlers
-_maid:GiveTask(gunActivation.OnClientEvent:Connect(function(item, event)
+gunActivation.OnClientEvent:Connect(function(item, event)
+	_maid:GiveTask(plr.CharacterRemoving:Connect(function()
+		item:Destroy()
+		_maid:DoCleaning()
+	end))
 	--[[_maid:GiveTask(item.Equipped:Connect(function()
 		mouse.Icon = "rbxassetid://5613409376"
 	end))]]
 	_maid:GiveTask(item.Activated:Connect(function()
-		event:InvokeServer(mouse.UnitRay)
+		event:FireServer(mouse.UnitRay)
 		--_maid:DoCleaning()
 	end))
 	_maid:GiveTask(item.Unequipped:Connect(function()
 		mouse.Icon = ""
 	end))
-end))
+end)

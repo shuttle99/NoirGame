@@ -170,7 +170,6 @@ function originalModeClass:StartRound()
 	--// Init the timer
 	local roundTimer = scheduler.new(self.gameLength)
 
-
 	--// Set role table
 	local roles = {
 		[self.Murderer.plr] = "Murderer",

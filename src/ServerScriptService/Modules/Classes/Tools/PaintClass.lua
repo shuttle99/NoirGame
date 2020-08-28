@@ -44,6 +44,9 @@ function paintClass.new(plr)
 			if item:IsA("BasePart") then
 				item.Color = Color3.fromRGB(249, 166, 2)
 			end
+			if item:IsA("MeshPart") then
+				item.TextureID = ""
+			end
 		end
 	end
 

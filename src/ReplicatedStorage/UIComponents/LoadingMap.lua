@@ -33,6 +33,7 @@ function loading.new(plr)
 end
 
 function loading:Show()
+    print("Show loading screen")
     self.ui.TipLabel.Text = tips[random:NextInteger(1, #tips)]
 
     self.ui.Parent = self.plr:WaitForChild("PlayerGui"):WaitForChild("GameUI")
@@ -44,6 +45,7 @@ function loading:Show()
 end
 
 function loading:Hide()
+    print("Hide loading screen")
     frameTween = TweenService:Create(self.ui.LoadingLabel, TweenInfo.new(.5, Enum.EasingStyle.Quint), {ImageTransparency = 1})
     textTween = TweenService:Create(self.ui.TipLabel, TweenInfo.new(.5, Enum.EasingStyle.Quint), {TextTransparency = 1})
 
@@ -52,7 +54,7 @@ function loading:Hide()
 
     textTween.Completed:Wait()
 
-    self.ui:Destroy()  
+    self.ui:Destroy()
 end
 
 return loading

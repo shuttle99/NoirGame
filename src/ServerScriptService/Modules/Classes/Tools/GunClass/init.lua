@@ -30,7 +30,7 @@ function gunClass.new(plr)
 		item = "",
 		debounce = false,
 
-		_event = Instance.new("RemoteFunction"),
+		_event = Instance.new("RemoteEvent"),
 		_maid = maid.new()
 	}, gunClass)
 	
@@ -41,6 +41,9 @@ function gunClass.new(plr)
 		for _, part in pairs(self.item:GetDescendants()) do
 			if part:IsA("BasePart") then
 				part.Color = Color3.fromRGB(249, 166, 2)
+			end
+			if part:IsA("MeshPart") then
+				part.TextureID = ""
 			end
 		end
 	end
@@ -66,12 +69,12 @@ function gunClass:Activate()
 	--// Record item activation on client
 	gunActivation:FireClient(self.plr, self.item, self._event)
 	--// Fire the ray
-	self._event.OnServerInvoke = function(plr, unitRay)
+	self._maid:GiveTask(self._event.OnServerEvent:Connect(function(plr, unitRay)
 		if not self.debounce then
 			fireAnim:Play()
 			self.debounce = true
 			local rayParams = RaycastParams.new()
-			local result = workspace:Raycast(unitRay.Origin, unitRay.Direction * 3000, rayParams)
+			local result = workspace:Raycast(self.item.Barrel.Position, unitRay.Direction * 3000, rayParams)
 			if result.Instance then
 				local part = result.Instance
 				if part.Parent:FindFirstChild("Humanoid") then
@@ -84,13 +87,13 @@ function gunClass:Activate()
 				end
 			end
 			--// Vector visualization
-			Draw.vector(self.item.Barrel.Position, (result.Position - self.item.Barrel.Position), Color3.new(255, 255, 255), workspace.Rays, 0, 1)
+			Draw.vector(self.item.Barrel.Position, (result.Position - self.item.Barrel.Position), Color3.new(255, 255, 255), workspace.Rays, 2, 2)
 			wait(.1)
 			game.Workspace.Rays:ClearAllChildren()
 			wait(1.9)
 			self.debounce = false
 		end
-	end
+	end))
 end
 
 function gunClass:DropItem(pos)

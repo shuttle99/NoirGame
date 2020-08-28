@@ -1,82 +1,100 @@
 local sprayEffects = {
     ["StandardSpray"] = function(char)
-        local plr = game.Players:GetPlayerFromCharacter(char)
-        plr:ClearCharacterAppearance()
         for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then 
+			if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+                part:Destroy()
+            elseif part:IsA("BasePart") then 
                 part.Color = Color3.fromRGB(255, 0, 0)
+            elseif part:IsA("SpecialMesh") then
+                part.TextureId = ""
             end
         end
     end,
     ["GreenSpray"] = function(char)
-        local plr = game.Players:GetPlayerFromCharacter(char)
-        plr:ClearCharacterAppearance()
         for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then 
-                part.Color = Color3.fromRGB(0,255, 0)
+			if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+                part:Destroy()
+            elseif part:IsA("BasePart") then 
+                part.Color = Color3.fromRGB(0, 255, 0)
+            elseif part:IsA("SpecialMesh") then
+                part.TextureId = ""
             end
         end
     end,
     ["BlueSpray"] = function(char)
-        local plr = game.Players:GetPlayerFromCharacter(char)
-        plr:ClearCharacterAppearance()
         for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then 
+			if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+                part:Destroy()
+            elseif part:IsA("BasePart") then 
                 part.Color = Color3.fromRGB(0, 0, 255)
+            elseif part:IsA("SpecialMesh") then
+                part.TextureId = ""
             end
         end
     end,
     ["WhiteSpray"] = function(char)
-        local plr = game.Players:GetPlayerFromCharacter(char)
-        plr:ClearCharacterAppearance()
         for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then 
+			if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+                part:Destroy()
+            elseif part:IsA("BasePart") then 
                 part.Color = Color3.fromRGB(248, 248, 248)
+            elseif part:IsA("SpecialMesh") then
+                part.TextureId = ""
             end
         end
     end,
     ["GoldSpray"] = function(char)
-        local plr = game.Players:GetPlayerFromCharacter(char)
-        plr:ClearCharacterAppearance()
         for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then 
+			if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+                part:Destroy()
+            elseif part:IsA("BasePart") then 
                 part.Color = Color3.fromRGB(249, 166, 2)
+            elseif part:IsA("SpecialMesh") then
+                part.TextureId = ""
             end
         end
     end,
     ["BlackSpray"] = function(char)
-        local plr = game.Players:GetPlayerFromCharacter(char)
-        plr:ClearCharacterAppearance()
         for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then 
-                part.Color = Color3.fromRGB(0, 0, 0)
+			if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+                part:Destroy()
+            elseif part:IsA("BasePart") then 
+                part.Color = Color3.fromRGB(14, 14, 14)
+            elseif part:IsA("SpecialMesh") then
+                part.TextureId = ""
             end
         end
     end,
     ["OrangeSpray"] = function(char)
-        local plr = game.Players:GetPlayerFromCharacter(char)
-        plr:ClearCharacterAppearance()
         for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then 
+			if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+                part:Destroy()
+            elseif part:IsA("BasePart") then 
                 part.Color = Color3.fromRGB(255, 125, 0)
+            elseif part:IsA("SpecialMesh") then
+                part.TextureId = ""
             end
         end
     end,
     ["TealSpray"] = function(char)
-        local plr = game.Players:GetPlayerFromCharacter(char)
-        plr:ClearCharacterAppearance()
         for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then 
+			if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+                part:Destroy()
+            elseif part:IsA("BasePart") then 
                 part.Color = Color3.fromRGB(0, 255, 255)
+            elseif part:IsA("SpecialMesh") then
+                part.TextureId = ""
             end
         end
     end,
     ["PurpleSpray"] = function(char)
-        local plr = game.Players:GetPlayerFromCharacter(char)
-        plr:ClearCharacterAppearance()
         for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then 
+			if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+                part:Destroy()
+            elseif part:IsA("BasePart") then 
                 part.Color = Color3.fromRGB(255, 0, 255)
+            elseif part:IsA("SpecialMesh") then
+                part.TextureId = ""
             end
         end
     end,
@@ -84,7 +102,7 @@ local sprayEffects = {
         for _, part in pairs(char:GetDescendants()) do
             if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
                 part:Destroy()
-        elseif part:IsA("BasePart") then 
+       		elseif part:IsA("BasePart") then 
                 part.Color = Color3.fromRGB(255, 255, 0)
             elseif part:IsA("SpecialMesh") then
                 part.TextureId = ""
@@ -92,31 +110,37 @@ local sprayEffects = {
         end
     end,
     ["FireSpray"] = function(char)
-        local plr = game.Players:GetPlayerFromCharacter(char)
         game.ReplicatedStorage.ItemModels.FireSpray.Head.ParticleEmitter:Clone().Parent = char.Head
-        plr:ClearCharacterAppearance()
         for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then 
-                part.Color = Color3.fromRGB(67, 29, 29)
+			if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+                part:Destroy()
+            elseif part:IsA("BasePart") then 
+                part.Color = Color3.fromRGB(69, 29, 29)
+            elseif part:IsA("SpecialMesh") then
+                part.TextureId = ""
             end
         end
     end,
     ["IceSpray"] = function(char)
-        local plr = game.Players:GetPlayerFromCharacter(char)
         local cloneHat = game.ReplicatedStorage.ItemModels.IceSpray.IceCube:Clone()
-        cloneHat.Parent = char
         char.Humanoid:AddAccessory(cloneHat)
-        plr:ClearCharacterAppearance()
         for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then 
-                part.Transparency = 0.5
-                part.Color = Color3.fromRGB(175, 221, 255)
-            end
+			if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+                part:Destroy()
+            elseif part:IsA("BasePart") then 
+				if part.Name ~= "HumanoidRootPart" or not part.Parent:IsA("Tool") then
+					part.Transparency = 0.5
+				end
+                part.Color = Color3.fromRGB(175, 221, 225)
+            elseif part:IsA("SpecialMesh") then
+                part.TextureId = ""
+            elseif part:IsA("Accessory") then
+				part:Destroy()
+			end
         end
     end,
     ["RainbowSpray"] = function(char)
         local plr = game.Players:GetPlayerFromCharacter(char)
-        plr:ClearCharacterAppearance()
         for _, texture in pairs(game.ReplicatedStorage.ItemModels.RainbowSpray:GetDescendants()) do
             if texture:IsA("Decal") then
                 texture:Clone().Parent = char:FindFirstChild(texture.Parent.Name)
@@ -129,7 +153,6 @@ local sprayEffects = {
     end,
     ["TicketSpray"] = function(char)
         local plr = game.Players:GetPlayerFromCharacter(char)
-        plr:ClearCharacterAppearance()
         for _, texture in pairs(game.ReplicatedStorage.ItemModels.TicketSpray:GetDescendants()) do
             if texture:IsA("Decal") then
                 texture:Clone().Parent = char:FindFirstChild(texture.Parent.Name)
@@ -142,7 +165,6 @@ local sprayEffects = {
     end,
     ["MonochromeSpray"] = function(char)
         local plr = game.Players:GetPlayerFromCharacter(char)
-        plr:ClearCharacterAppearance()
         for _, texture in pairs(game.ReplicatedStorage.ItemModels.MonochromeSpray:GetDescendants()) do
             if texture:IsA("Decal") then
                 texture:Clone().Parent = char:FindFirstChild(texture.Parent.Name)

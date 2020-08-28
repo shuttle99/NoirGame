@@ -56,7 +56,7 @@ end
 
 function intermission()
 	round = nil
-	local intermissionTimer = scheduler.new(15)
+	local intermissionTimer = scheduler.new(30)
 
 	intermissionTimer:Start()
 	intermissionTimer.Tick:Connect(function()

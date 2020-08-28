@@ -29,9 +29,13 @@ function knifeClass.new(plr)
 	
 	self.item = game.ServerStorage.Assets.Items.Murderer[self.dataObj["EquippedKnife"]:Get()]:Clone()
 	if self.dataObj.GoldenKnife:Get() == true then
+		print("User has the golden knife enabled")
 		for _, part in pairs(self.item:GetDescendants()) do
 			if part:IsA("BasePart") then
 				part.Color = Color3.fromRGB(249, 166, 2)
+			end
+			if part:IsA("MeshPart") then
+				part.TextureID = ""
 			end
 		end
 	end
