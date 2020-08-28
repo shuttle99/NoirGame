@@ -81,11 +81,13 @@ local sprayEffects = {
         end
     end,
     ["YellowSpray"] = function(char)
-        local plr = game.Players:GetPlayerFromCharacter(char)
-        plr:ClearCharacterAppearance()
         for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then 
+            if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+                part:Destroy()
+        elseif part:IsA("BasePart") then 
                 part.Color = Color3.fromRGB(255, 255, 0)
+            elseif part:IsA("SpecialMesh") then
+                part.TextureId = ""
             end
         end
     end,

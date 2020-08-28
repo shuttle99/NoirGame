@@ -16,6 +16,11 @@ module.Knives = {
 		Description = "An elegant weapon reminiscent of a more civilized age.",
 		Price = 5000,
 	},
+	["LinkedSword"] = {
+		Name = "Linked Sword",
+		Description = "A true classic.",
+		Price = 4000,
+	},
 	["ERRORKnife"] = {
 		Name = "ERROR",
 		Description = "Just get CS:S, man!",
@@ -95,6 +100,11 @@ module.Knives = {
 	["2x4"] = {
 		Name = "2x4",
 		Description = "A nailed plank? Sounds good to me!",
+		Price = 750,
+	},
+	["BaseballBat"] = {
+		Name = "Baseball Bat",
+		Description = "BONK!",
 		Price = 750,
 	},
 	["Karambit"] = {
