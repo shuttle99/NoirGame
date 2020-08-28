@@ -143,6 +143,7 @@ loadEvent.OnClientEvent:Connect(function(enable)
 		loadingScreen:Show()
 	else
 		loadingScreen:Hide()
+	end
 end)
 
 --// Code UI
