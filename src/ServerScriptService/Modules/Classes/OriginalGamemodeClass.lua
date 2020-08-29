@@ -25,6 +25,7 @@ local Vandal = require(classes:WaitForChild("VandalClass"))
 local Innocent = require(classes:WaitForChild("InnocentClass"))
 local Maid = require(shared:WaitForChild("Maid"))
 local Scheduler = require(shared:WaitForChild("Scheduler"))
+local StatIncrementer = require(modules:WaitForChild("StatIncrementer"))
 
 --// Variables
 local random = Random.new()
@@ -196,8 +197,14 @@ function original:EndRound(condition)
 
 	for _, player in pairs(game.Players:GetPlayers()) do
 		player:LoadCharacter()
+
 	end
 	game.Workspace.CurrentMap:ClearAllChildren()
+
+	for _, player in pairs(self.players) do
+		StatIncrementer:GiveCoins(100, player)
+		StatIncrementer:GiveExp(100, player)
+	end
 
 	--// Disable all event connections
 	self._roundEnded:Fire()
@@ -224,6 +231,11 @@ function original:CheckDeath(player)
 			self.roles[plr] = nil
 			self[roles] = nil
 			playerRole = roles
+		end
+	end
+	for i, v in pairs(self.spectateList) do
+		if v == player then
+			table.remove(self.spectateList, i)
 		end
 	end
 	EventTable["EnableSpectate"]:FireClient(player, self.spectateList)
