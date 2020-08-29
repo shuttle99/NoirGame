@@ -129,13 +129,40 @@ function original:StartRound()
 		if self.vigilante then
 			vigilantePosition = self.vigilante.plr.Character.HumanoidRootPart.Position
 		end
-
 	end))
 
 	--// Fires when timer runs out
 	self._maid:GiveTask(self.timer.Ended:Connect(function()
 		self:EndRound("InnocentsWin") -- Win condition 1
 	end))
+
+	self._maid:GiveTask(EventTable["SetRole"].Event:Connect(function(role, plr)
+		return role == "Vandal" and self:GiveVandal(plr) or role == "Vigilante" and self:GiveVigilante(plr)
+	end))
+end
+
+function original:GiveVandal(plr)
+	for i, innocent in pairs(self.innocents) do
+		if innocent == plr then
+			innocent:Disable()
+			table.remove(self.innocents, i)
+			self.roles[plr] = "Vandal"
+			self.vandal = Vandal.new(plr)
+			self.vandal.item:Activate()
+		end
+	end
+end
+
+function original:GiveVandal(plr)
+	for i, innocent in pairs(self.innocents) do
+		if innocent == plr then
+			innocent:Disable()
+			table.remove(self.innocents, i)
+			self.roles[plr] = "Vigilante"
+			self.vigilante = Vigilante.new(plr)
+			self.vigilante.item:Activate()
+		end
+	end
 end
 
 function original:EndRound(condition)
