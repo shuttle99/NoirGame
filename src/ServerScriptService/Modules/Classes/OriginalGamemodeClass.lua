@@ -28,7 +28,7 @@ local Scheduler = require(shared:WaitForChild("Scheduler"))
 
 --// Variables
 local random = Random.new()
-local roundTime = 15
+local roundTime = 120
 
 --//Events
 local EventTable = {}
@@ -130,6 +130,11 @@ end
 
 function original:EndRound(condition)
 	EventTable["VictoryScreen"]:FireAllClients(condition)
+
+	for _, player in pairs(game.Players:GetPlayers()) do
+		player:LoadCharacter()
+	end
+	game.Workspace.CurrentMap:ClearAllChildren()
 
 	--// Disable all event connections
 	self._roundEnded:Fire()

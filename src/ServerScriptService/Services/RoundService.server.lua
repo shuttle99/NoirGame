@@ -47,10 +47,15 @@ local function chooseMap()
 	map.Parent = currentMapFolder
 end
 
+local bindConnection
 local function roundComplete()
+	bindConnection = game.ReplicatedStorage.Events.DeathEvent.Event:Connect(function(plr)
+		round:CheckDeath(plr)
+	end)
 	connection = round._roundEnded.Event:Connect(function()
 		intermission()
 		connection:Disconnect()
+		bindConnection:Disconnect()
 	end)
 end
 
