@@ -45,6 +45,10 @@ function innocentClass:Enable(gamemode)
 	--// Activate items when they're added
 end
 
+function innocentClass:Disable()
+	print("Innocent removed")
+end
+
 --// Add disable method when you add items to innocent
 
 return innocentClass

@@ -44,8 +44,8 @@ function vigilanteClass:Enable(gamemode)
 	gamemode:TeleportPlayer(self.plr)
 end
 
-function vigilanteClass:Disable()
-	self.item:Destroy()
+function vigilanteClass:Disable(pos)
+	self.item:DropItem(pos)
 end
 
 return vigilanteClass

@@ -29,6 +29,8 @@ local Scheduler = require(shared:WaitForChild("Scheduler"))
 --// Variables
 local random = Random.new()
 local roundTime = 120
+local vandalPosition
+local vigilantePosition
 
 --//Events
 local EventTable = {}
@@ -120,6 +122,14 @@ function original:StartRound()
 	--// Fires every second
 	self._maid:GiveTask(self.timer.Tick:Connect(function()
 		EventTable["TimerUpdateEvent"]:FireAllClients(self.timer.CurrentTime)
+
+		if self.vandal then
+			vandalPosition = self.vandal.plr.Character.HumanoidRootPart.Position
+		end
+		if self.vigilante then
+			vigilantePosition = self.vigilante.plr.Character.HumanoidRootPart.Position
+		end
+
 	end))
 
 	--// Fires when timer runs out
@@ -142,6 +152,8 @@ function original:EndRound(condition)
 	self.timer:Stop()
 end
 
+--TODO implement setrole
+
 --// Event connections
 function original:CheckDeath(player)
 	local playerRole
@@ -151,6 +163,11 @@ function original:CheckDeath(player)
 			table.insert(allButMurderer, plr)
 		end
 		if plr == player.Name then
+			if roles == "Vandal" then
+				self.vandal:Disable(vandalPosition)
+			elseif roles == "Vigilante" then
+				self.vigilante:Disable(vigilantePosition)
+			end
 			self.roles[plr] = nil
 			self[roles] = nil
 			playerRole = roles
@@ -159,7 +176,7 @@ function original:CheckDeath(player)
 	if playerRole == "Murderer" then
 		self:EndRound("InnocentsWin") -- Win condition 2
 	else
-		table.remove(allButMurderer, table.find(player))
+		table.remove(allButMurderer, table.find(allButMurderer, player))
 		if #allButMurderer == 0 then
 			self:EndRound("MurdererWins")
 		end

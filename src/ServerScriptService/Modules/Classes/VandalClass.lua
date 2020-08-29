@@ -48,8 +48,8 @@ function vandalClass:Enable(gamemode)
 	gamemode:TeleportPlayer(self.plr)
 end
 
-function vandalClass:Disable()
-	self.item:Destroy()
+function vandalClass:Disable(pos)
+	self.item:DropItem(pos)
 end
 
 return vandalClass
