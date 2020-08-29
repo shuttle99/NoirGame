@@ -86,6 +86,22 @@ function original:TeleportPlayer(player)
 	spawn:Destroy()
 end
 
+function original:DisableUI()
+	EventTable["DisableInventory"]:FireAllClients()
+	EventTable["DisableShop"]:FireAllClients()
+	EventTable["DisableSpectate"]:FireAllClients()
+	EventTable["DisableCodeUI"]:FireAllClients()
+	EventTable["EnableProximity"]:FireAllClients()
+end
+
+function original:EnableUI()
+	EventTable["EnableInventory"]:FireAllClients()
+	EventTable["EnableShop"]:FireAllClients()
+	EventTable["EnableCodeUI"]:FireAllClients()
+	EventTable["DisableProximity"]:FireAllClients()
+	EventTable["DisableSpectate"]:FireAllClients()
+end
+
 function original:PrepareRound()
 	--// Call loading UI
 	EventTable["LoadEvent"]:FireAllClients(true)
@@ -94,16 +110,20 @@ function original:PrepareRound()
 	local prepTimer = Scheduler.new(5)
 	prepTimer:Start()
 
+	self:DisableUI()
+
 	--// Prepare players
 	self._maid:GiveTask(prepTimer.Tick:Connect(function()
 		if prepTimer.CurrentTime == 2 then
 			--// Teleport all players
-			--[[TODO: Add teleportation to classes prepare method; Disable player movement until StartRound is called]]
 			self.murderer:Enable(self)
 			self.vigilante:Enable(self)
 			self.vandal:Enable(self)
+
+			EventTable["ToggleVisibility"]:FireClient(self.vigilante.plr, self.murderer.plr, false)
 			for _, innocent in pairs(self.innocents) do
 				innocent:Enable(self)
+				EventTable["ToggleVisibility"]:FireClient(innocent.plr, self.murderer.plr, false)
 			end
 		end
 	end))
@@ -137,35 +157,41 @@ function original:StartRound()
 	end))
 
 	self._maid:GiveTask(EventTable["SetRole"].Event:Connect(function(role, plr)
-		return role == "Vandal" and self:GiveVandal(plr) or role == "Vigilante" and self:GiveVigilante(plr)
+		if role == "Vandal" then
+			self:GiveVandal(plr)
+		elseif role == "Vigilante" then
+			self:GiveVigilante(plr)
+		end
 	end))
 end
 
-function original:GiveVandal(plr)
+function original:GiveVandal(player)
 	for i, innocent in pairs(self.innocents) do
-		if innocent == plr then
+		if innocent.plr == player then
 			innocent:Disable()
 			table.remove(self.innocents, i)
-			self.roles[plr] = "Vandal"
-			self.vandal = Vandal.new(plr)
+			self.roles[player] = "Vandal"
+			self.vandal = Vandal.new(player)
 			self.vandal.item:Activate()
+			EventTable["ToggleVisibility"]:FireClient(player, self.murderer.plr, true)
 		end
 	end
 end
 
-function original:GiveVandal(plr)
+function original:GiveVigilante(player)
 	for i, innocent in pairs(self.innocents) do
-		if innocent == plr then
+		if innocent.plr == player then
 			innocent:Disable()
 			table.remove(self.innocents, i)
-			self.roles[plr] = "Vigilante"
-			self.vigilante = Vigilante.new(plr)
+			self.roles[player] = "Vigilante"
+			self.vigilante = Vigilante.new(player)
 			self.vigilante.item:Activate()
 		end
 	end
 end
 
 function original:EndRound(condition)
+	self:EnableUI()
 	EventTable["VictoryScreen"]:FireAllClients(condition)
 
 	for _, player in pairs(game.Players:GetPlayers()) do
@@ -200,6 +226,8 @@ function original:CheckDeath(player)
 			playerRole = roles
 		end
 	end
+	EventTable["EnableSpectate"]:FireClient(player, self.spectateList)
+	EventTable["UpdateSpectate"]:FireAllClients(player)
 	if playerRole == "Murderer" then
 		self:EndRound("InnocentsWin") -- Win condition 2
 	else
