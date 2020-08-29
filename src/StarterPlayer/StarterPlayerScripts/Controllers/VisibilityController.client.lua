@@ -12,6 +12,7 @@ local events = replicatedStorage.Events
 
 --// Events
 local toggleVisbility = events.ToggleVisibility
+local checkVandal = events.CheckVandal
 
 --// Local Functions
 local function hideMurderer(murderer)
