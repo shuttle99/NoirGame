@@ -37,10 +37,11 @@ function vigilanteClass:GiveAppearance()
 	char:Destroy()
 end
 
-function vigilanteClass:Prepare()
+function vigilanteClass:Enable(gamemode)
 	notif:FireClient(self.plr, "You are the Vigilante!", "Use your REVOLVER to shoot the MURDERER when they are revealed.")
 	self:GiveAppearance()
 	self.item:Activate()
+	gamemode:TeleportPlayer(self.plr)
 end
 
 function vigilanteClass:Disable()

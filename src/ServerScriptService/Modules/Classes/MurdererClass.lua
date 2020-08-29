@@ -37,7 +37,7 @@ function murdererClass:GiveAppearance()
 	char:Destroy()
 end
 
-function murdererClass:Enable()
+function murdererClass:Enable(gamemode)
 	notif:FireClient(self.plr, "You are the Murderer!", "Use your KNIFE to kill everyone.")
 	--// Set global value so other scripts can reference the murderer
 	game.ServerStorage.MurdererValue.Value = self.plr.Name
@@ -45,6 +45,7 @@ function murdererClass:Enable()
 	self:GiveAppearance()
 	--// Give them tool and activate it
 	self.tool:Activate()
+	gamemode:TeleportPlayer(self.plr)
 end
 
 function murdererClass:Disable()

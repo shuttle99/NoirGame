@@ -4,11 +4,14 @@ vandalClass.__index = vandalClass
 --// Services
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local serverStorage = game:GetService("ServerStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 --// Folders
 local events = replicatedStorage.Events
 local toolClasses = script.Parent.Tools
 local assets = serverStorage.Assets
+local modules = ServerScriptService:WaitForChild("Modules")
+local classes = modules:WaitForChild("Classes")
 
 --// Asset folders
 local characters = assets.Characters
@@ -38,12 +41,11 @@ function vandalClass:GiveAppearance()
 	char:Destroy()
 end
 
-function vandalClass:Enable()
+function vandalClass:Enable(gamemode)
 	notif:FireClient(self.plr, "You are the Vandal!", "Use your SPRAY PAINT to reveal the MURDERER to everyone else.")
 	self:GiveAppearance()
 	self.item:Activate()
-
-	
+	gamemode:TeleportPlayer(self.plr)
 end
 
 function vandalClass:Disable()

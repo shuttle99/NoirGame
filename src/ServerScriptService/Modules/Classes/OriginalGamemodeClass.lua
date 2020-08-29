@@ -55,7 +55,8 @@ function original.new(players)
 
 		spectateList = players,
 
-		_maid = Maid.new()
+		_maid = Maid.new(),
+		_roundEnded = Instance.new("BindableEvent")
 	}, original)
 
 	self.roles[self.murderer.plr.Name] = "Murderer"
@@ -73,47 +74,40 @@ function original.new(players)
 	return self
 end
 
-function original:TeleportPlayers()
+function original:TeleportPlayer(player)
 	local maps = Workspace:WaitForChild("CurrentMap")
 	local map = maps:FindFirstChildOfClass("Folder")
-	local spawns = map.Spawns:WaitForChildren()
-	for _, player in pairs(self.players) do
-		local character = player.Character or player.CharacterAdded:Wait()
-		local spawn = table.remove(spawns, random:NextInteger(1, #spawns))
-		character.HumanoidRootPart.CFrame = CFrame.new(spawn.Position + Vector3.new(0, 3, 0))
-	end
+	local spawns = map.Spawns:GetChildren()
+	local character = player.Character or player.CharacterAdded:Wait()
+	local spawn = spawns[random:NextInteger(1, # spawns)]
+	character.HumanoidRootPart.CFrame = CFrame.new(spawn.Position + Vector3.new(0, 3, 0))
+	spawn:Destroy()
 end
 
 function original:PrepareRound()
+	--// Call loading UI
+	EventTable["LoadEvent"]:FireAllClients(true)
+	
 	--// Init the timer
 	local prepTimer = Scheduler.new(5)
 	prepTimer:Start()
 
-	--// Call loading UI
-	for _, player in pairs(self.players) do
-		EventTable["LoadEvent"]:FireClient(player,true)
-	end
-
+	--// Prepare players
 	self._maid:GiveTask(prepTimer.Tick:Connect(function()
 		if prepTimer.CurrentTime == 2 then
 			--// Teleport all players
 			--[[TODO: Add teleportation to classes prepare method; Disable player movement until StartRound is called]]
-			self.murderer:Enable()
-			self.vigilante:Enable()
-			self.vandal:Enable()
-			for _, innocent in self.innocents do
-				innocent:Enable()
-			end
-			self:TeleportPlayers()
-		elseif prepTimer.CurrentTime == 4 then
-			--// End loading UI
-			for _, player in pairs(self.players) do
-				EventTable["LoadEvent"]:FireClient(player, false)
+			self.murderer:Enable(self)
+			self.vigilante:Enable(self)
+			self.vandal:Enable(self)
+			for _, innocent in pairs(self.innocents) do
+				innocent:Enable(self)
 			end
 		end
 	end))
 
 	self._maid:GiveTask(prepTimer.Ended:Connect(function()
+		EventTable["LoadEvent"]:FireAllClients(false)
 		--// Start the round
 		self:StartRound()
 	end))
@@ -125,11 +119,11 @@ function original:StartRound()
 
 	--// Fires every second
 	self._maid:GiveTask(self.timer.Tick:Connect(function()
-		print(self.timer.CurrentTime)
+		EventTable["TimerUpdateEvent"]:FireAllClients(self.timer.CurrentTime)
 	end))
 
 	--// Fires when timer runs out
-	self._maid:GiveTask(self.Timer.Ended:Connect(function()
+	self._maid:GiveTask(self.timer.Ended:Connect(function()
 		self:EndRound("InnocentsWin") -- Win condition 1
 	end))
 end
@@ -138,6 +132,7 @@ function original:EndRound(condition)
 	EventTable["VictoryScreen"]:FireAllClients(condition)
 
 	--// Disable all event connections
+	self._roundEnded:Fire()
 	self._maid:Destroy()
 	self.timer:Stop()
 end

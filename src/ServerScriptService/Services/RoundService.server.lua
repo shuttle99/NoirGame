@@ -48,7 +48,7 @@ local function chooseMap()
 end
 
 local function roundComplete()
-	connection = round.roundEnded:Connect(function()
+	connection = round._roundEnded.Event:Connect(function()
 		intermission()
 		connection:Disconnect()
 	end)
@@ -65,14 +65,15 @@ function intermission()
 			chooseMap()
 		end
 	end)
-
+ 
 	intermissionTimer.Ended:Connect(function()
 		while not checkForPlayers() do
 			wait(1.5)
 			updateTimer:FireAllClients("You need ".. 4 - #game.Players:GetPlayers() .. " more players for the game to begin!")
 		end
 
-		originalGamemode.new(game.Players:GetPlayers())
+		round = originalGamemode.new(game.Players:GetPlayers())
+		roundComplete()
 	end)
 end
 

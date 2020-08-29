@@ -38,9 +38,10 @@ function innocentClass:GiveAppearance()
 	char:Destroy()
 end
 
-function innocentClass:Enable()
+function innocentClass:Enable(gamemode)
 	notif:FireClient(self.plr, "You are innocent!", "Survive.")
 	self:GiveAppearance()
+	gamemode:TeleportPlayer(self.plr)
 	--// Activate items when they're added
 end
 
