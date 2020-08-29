@@ -26,8 +26,6 @@ function vandalClass.new(plr)
 		item = paintClass.new(plr)
 	}, vandalClass)
 	
-	notif:FireClient(self.plr, "You are the Vandal!", "Use your SPRAY PAINT to reveal the MURDERER to everyone else.")	
-	
 	return self
 end
 
@@ -40,7 +38,15 @@ function vandalClass:GiveAppearance()
 	char:Destroy()
 end
 
-function vandalClass:EndClass()
+function vandalClass:Enable()
+	notif:FireClient(self.plr, "You are the Vandal!", "Use your SPRAY PAINT to reveal the MURDERER to everyone else.")
+	self:GiveAppearance()
+	self.item:Activate()
+
+	
+end
+
+function vandalClass:Disable()
 	self.item:Destroy()
 end
 

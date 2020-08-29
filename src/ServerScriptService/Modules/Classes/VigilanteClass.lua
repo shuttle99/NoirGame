@@ -26,8 +26,6 @@ function vigilanteClass.new(plr)
 		item = gunClass.new(plr)
 	}, vigilanteClass)
 	
-	notif:FireClient(self.plr, "You are the Vigilante!", "Use your REVOLVER to shoot the MURDERER when they are revealed.")
-	
 	return self
 end
 
@@ -39,7 +37,13 @@ function vigilanteClass:GiveAppearance()
 	char:Destroy()
 end
 
-function vigilanteClass:EndClass()
+function vigilanteClass:Prepare()
+	notif:FireClient(self.plr, "You are the Vigilante!", "Use your REVOLVER to shoot the MURDERER when they are revealed.")
+	self:GiveAppearance()
+	self.item:Activate()
+end
+
+function vigilanteClass:Disable()
 	self.item:Destroy()
 end
 

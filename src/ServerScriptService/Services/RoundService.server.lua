@@ -72,10 +72,7 @@ function intermission()
 			updateTimer:FireAllClients("You need ".. 4 - #game.Players:GetPlayers() .. " more players for the game to begin!")
 		end
 
-		round = originalGamemode.new()
-		round:StartRound()
-
-		roundComplete()
+		originalGamemode.new(game.Players:GetPlayers())
 	end)
 end
 

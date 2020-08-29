@@ -25,12 +25,6 @@ function murdererClass.new(plr)
 		plr = plr,
 		tool = knifeClass.new(plr)
 	}, murdererClass)
-	
-	self:GiveAppearance()
-	--self.tool:Activate()
-	notif:FireClient(self.plr, "You are the Murderer!", "Use your KNIFE to kill everyone.")
-	
-	game.ServerStorage.MurdererValue.Value = self.plr.Name
 
 	return self
 end
@@ -41,6 +35,21 @@ function murdererClass:GiveAppearance()
 	char.Parent = game.StarterPlayer
 	self.plr:LoadCharacter()
 	char:Destroy()
+end
+
+function murdererClass:Enable()
+	notif:FireClient(self.plr, "You are the Murderer!", "Use your KNIFE to kill everyone.")
+	--// Set global value so other scripts can reference the murderer
+	game.ServerStorage.MurdererValue.Value = self.plr.Name
+	--// Set murderer appearance
+	self:GiveAppearance()
+	--// Give them tool and activate it
+	self.tool:Activate()
+end
+
+function murdererClass:Disable()
+	self.tool:Destroy()
+	game.ServerStorage.MurdererValue.Value = nil
 end
 
 return murdererClass

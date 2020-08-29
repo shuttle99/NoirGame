@@ -16,13 +16,13 @@ local characters = assets.Characters
 local visibilityToggle = events.ToggleVisibility
 local notif = replicatedStorage.UIComponents.UIEvents.RoleNotification
 
+--// Constants
+local random = Random.new()
+
 function innocentClass.new(plr)
 	local self = setmetatable({
 		plr = plr,
 	}, innocentClass)
-	
-	self:GiveAppearance()
-	notif:FireClient(self.plr, "You are innocent!", "Survive.")
 	
 	return self
 end
@@ -37,5 +37,13 @@ function innocentClass:GiveAppearance()
 	self.plr:LoadCharacter()
 	char:Destroy()
 end
+
+function innocentClass:Enable()
+	notif:FireClient(self.plr, "You are innocent!", "Survive.")
+	self:GiveAppearance()
+	--// Activate items when they're added
+end
+
+--// Add disable method when you add items to innocent
 
 return innocentClass
