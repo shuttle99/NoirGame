@@ -79,4 +79,5 @@ MarketplaceService.ProcessReceipt = processReceipt
 function devProducts:PurchaseProduct(plr, id)
     MarketplaceService:PromptProductPurchase(plr, id)
 end
+
 return devProducts

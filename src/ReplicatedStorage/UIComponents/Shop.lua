@@ -61,6 +61,7 @@ function shop.new(plr)
         enabled = false,
         replicatedData = game.ReplicatedStorage.ReplicatedData:FindFirstChild(plr.UserId),
 
+        _toggleCashPurchase = script.Parent.UIEvents:WaitForChild("ToggleCashPurchase"),
         _maid = maid.new()
     }, shop)
 
@@ -171,7 +172,7 @@ function shop:Render()
         end))
 
         self._maid:GiveTask(self.ui.ShopFrame.Currency.Cash.BuyMore.MouseButton1Click:Connect(function()
-            print("Purchase more money")
+            self._toggleCashPurchase:Fire(self.plr, true)
         end))
 
         self.ui.ShopFrame.Footer.Visible = true

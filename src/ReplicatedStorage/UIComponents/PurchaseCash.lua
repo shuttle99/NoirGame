@@ -13,7 +13,7 @@ local uiComponents = ReplicatedStorage:WaitForChild("UIComponents")
 function cashPurchase.new(plr)
     local self = setmetatable({
         plr = plr,
-        ui = uiComponents:WaitForChild("DevProductsFrame"):Clone()
+        ui = uiComponents:WaitForChild("DevProductsFrame"):Clone(),
     }, cashPurchase)
 
     self.ui.Parent = self.plr.PlayerGui:WaitForChild("GameUI")
@@ -28,3 +28,5 @@ end
 function cashPurchase:Hide()
     self.ui.Visible = false
 end
+
+return cashPurchase

@@ -261,3 +261,29 @@ winEvent.OnClientEvent:Connect(function(winCondition)
 	background.Visible = false
 	winScreen.Visible = false
 end)
+
+--// Dev products
+local cashPurchaseFrame = require(UIComponents:WaitForChild("PurchaseCash"))
+local toggleCashPurchase = uiEvents:WaitForChild("ToggleCashPurchase")
+local purchaseDevProduct = events:WaitForChild("PurchaseDevProduct")
+
+local plrCashFrame = cashPurchaseFrame.new(plr)
+
+toggleCashPurchase.Event:Connect(function(enable)
+	if enable then
+		plrCashFrame:Show()
+
+		for _, element in pairs(plrCashFrame.ui.ScrollingFrame:GetChildren()) do
+			if element:IsA("Frame") then
+				element.Purchase.MouseButton1Click:Connect(function()
+					local id = element.Name
+					purchaseDevProduct:FireServer(plr, id)
+				end)
+			end
+		end
+
+	elseif not enable then
+		plrCashFrame:Hide()
+	end
+end)
+

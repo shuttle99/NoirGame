@@ -12,11 +12,13 @@ local classes = modules.Classes
 local storeContainer = require(shared.StoreContainer)
 local dataProfile = require(modules.Init)
 local codes = require(modules.Codes)
+local devProducts = require(modules.DevProducts)
 
 --// Events
 local purchaseItem = events.ItemPurchase
 local itemOwned = events.CheckForItemOwned
 local redeemCode = events.RedeemCode
+local purchaseDevProduct = events.PurchaseDevProduct
 
 function checkForItem(plr, item)
     local plrDataStore = dataProfile:Get(plr)
@@ -71,5 +73,10 @@ redeemCode.OnServerInvoke = function(plr, code)
         return false
     end
 end
+
+--// Purchase dev product
+purchaseDevProduct.OnServerEvent:Connect(function(plr, id)
+    devProducts:PurchaseProduct(plr, id)
+end)
 
 itemOwned.OnServerInvoke = checkForItem
