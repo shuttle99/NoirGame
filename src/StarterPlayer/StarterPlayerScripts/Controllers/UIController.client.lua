@@ -272,16 +272,6 @@ local plrCashFrame = cashPurchaseFrame.new(plr)
 toggleCashPurchase.Event:Connect(function(enable)
 	if enable then
 		plrCashFrame:Show()
-
-		for _, element in pairs(plrCashFrame.ui.ScrollingFrame:GetChildren()) do
-			if element:IsA("Frame") then
-				element.Purchase.MouseButton1Click:Connect(function()
-					local id = element.Name
-					purchaseDevProduct:FireServer(plr, id)
-				end)
-			end
-		end
-
 	elseif not enable then
 		plrCashFrame:Hide()
 	end

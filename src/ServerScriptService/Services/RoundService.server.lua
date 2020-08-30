@@ -1,16 +1,17 @@
 --// Services
-local replicatedStorage = game:GetService("ReplicatedStorage")
-local serverStorage = game:GetService("ServerStorage")
-local serverScriptService = game:GetService("ServerScriptService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
+local Lighting = game:GetService("Lighting")
 
 --// Folders
-local sharedModules = replicatedStorage.Shared
-local modules = serverScriptService.Modules
+local sharedModules = ReplicatedStorage.Shared
+local modules = ServerScriptService.Modules
 local classes = modules.Classes
-local assets = serverStorage.Assets
+local assets = ServerStorage.Assets
 local maps = assets.Maps:GetChildren()
 local currentMapFolder = workspace.CurrentMap
-local uiComponents = replicatedStorage.UIComponents
+local uiComponents = ReplicatedStorage.UIComponents
 local uiEvents = uiComponents.UIEvents
 
 --// Modules
@@ -27,6 +28,7 @@ local connection
 local updateTimer = uiEvents.TimerUpdateEvent
 
 --// Round variable
+local roundTime
 local round
 
 --// Local functions
@@ -45,6 +47,17 @@ end
 local function chooseMap()
 	local map = maps[random:NextInteger(1, #maps)]:Clone()
 	map.Parent = currentMapFolder
+
+	--// Set Config of map
+	for _, value in pairs(map.MapConfig:GetChildren()) do
+		if value.Name ~= "RoundTime" and value.Name ~= "Thumbnail" then
+			if Lighting[value.Name] then
+				Lighting[value.Name] = value.Value
+			end
+		end
+	end
+
+	roundTime = map.MapConfig.RoundTime.Value
 end
 
 local bindConnection
@@ -77,7 +90,7 @@ function intermission()
 			updateTimer:FireAllClients("You need ".. 4 - #game.Players:GetPlayers() .. " more players for the game to begin!")
 		end
 
-		round = originalGamemode.new(game.Players:GetPlayers())
+		round = originalGamemode.new(game.Players:GetPlayers(), roundTime)
 		roundComplete()
 	end)
 end

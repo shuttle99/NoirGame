@@ -171,9 +171,9 @@ function shop:Render()
             self.ui.ShopFrame.Currency.Cash.Amount.Text = self.replicatedData.Cash.Value
         end))
 
-        self._maid:GiveTask(self.ui.ShopFrame.Currency.Cash.BuyMore.MouseButton1Click:Connect(function()
+        --[[self._maid:GiveTask(self.ui.ShopFrame.Currency.Cash.BuyMore.MouseButton1Click:Connect(function()
             self._toggleCashPurchase:Fire(self.plr, true)
-        end))
+        end))]]
 
         self.ui.ShopFrame.Footer.Visible = true
         print("render")

@@ -28,7 +28,6 @@ local StatIncrementer = require(modules:WaitForChild("StatIncrementer"))
 
 --// Variables
 local random = Random.new()
-local roundTime = 120
 local vandalPosition
 local vigilantePosition
 
@@ -43,7 +42,7 @@ for _, event in pairs(uiEvents:GetChildren()) do
 end
 
 --// Round constructor
-function original.new(players)
+function original.new(players, roundTime)
 	local cachedPlayers = players
 	local self = setmetatable({
 		timer = Scheduler.new(roundTime),
