@@ -6,7 +6,6 @@ original.__index = original
 
 --// Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ServerStorage = game:GetService("ServerStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local Workspace = game:GetService("Workspace")
 
@@ -216,6 +215,7 @@ end
 
 --// Event connections
 function original:CheckDeath(player)
+	EventTable["UpdateSpectate"]:FireAllClients(player)
 	local playerRole
 	local allButMurderer = {}
 	for plr, roles in pairs(self.roles) do
@@ -239,7 +239,6 @@ function original:CheckDeath(player)
 		end
 	end
 	EventTable["EnableSpectate"]:FireClient(player, self.spectateList)
-	EventTable["UpdateSpectate"]:FireAllClients(player)
 	if playerRole == "Murderer" then
 		self:EndRound("InnocentsWin") -- Win condition 2
 	else
