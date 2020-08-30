@@ -29,8 +29,6 @@ end
 
 --// Event Handler
 toggleVisbility.OnClientEvent:Connect(function(murderer, visibility)
-	print("Connection")
-	print(visibility)
 	murderer.Character.Archivable = true
 	if visibility then
 		showMurderer(murderer)
