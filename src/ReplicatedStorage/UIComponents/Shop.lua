@@ -59,6 +59,7 @@ function shop.new(plr)
         open = false,
         debounce = false,
         enabled = false,
+        replicatedData = game.ReplicatedStorage.ReplicatedData:FindFirstChild(plr.UserId),
 
         _maid = maid.new()
     }, shop)
@@ -147,6 +148,32 @@ end
 --// Make the shop visible and play animation
 function shop:Render()
     if not self.debounce then
+
+        --// Set currency to player's amount
+        self.ui.ShopFrame.Currency:WaitForChild("Cash").Amount.Text = self.replicatedData:WaitForChild("Cash").Value
+
+        for _, element in pairs(self.ui.ShopFrame.Currency.Cash:GetChildren()) do
+            local elementTween
+            if element:IsA("TextButton") then
+                elementTween = TweenService:Create(element, TweenInfo.new(0.5), {TextTransparency = 0, BackgroundTransparency = 0})
+                elementTween:Play()
+            elseif element:IsA("TextLabel") then
+                elementTween = TweenService:Create(element, TweenInfo.new(0.5), {TextTransparency = 0})
+                elementTween:Play()
+            elseif element:IsA("ImageLabel") then
+                elementTween = TweenService:Create(element, TweenInfo.new(0.5), {ImageTransparency = 0})
+                elementTween:Play()
+            end
+        end
+
+        self._maid:GiveTask(self.replicatedData.Cash.Changed:Connect(function()
+            self.ui.ShopFrame.Currency.Cash.Amount.Text = self.replicatedData.Cash.Value
+        end))
+
+        self._maid:GiveTask(self.ui.ShopFrame.Currency.Cash.BuyMore.MouseButton1Click:Connect(function()
+            print("Purchase more money")
+        end))
+
         self.ui.ShopFrame.Footer.Visible = true
         print("render")
         self.debounce = true

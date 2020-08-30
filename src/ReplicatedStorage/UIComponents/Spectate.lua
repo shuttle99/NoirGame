@@ -20,6 +20,7 @@ local disableShop = uiEvents:WaitForChild("BindedShopDisable")
 --// Camera
 local camera = workspace.CurrentCamera
 
+
 function spectate.new(plr, plrList)
     local self = setmetatable({
         plr = plr,
@@ -89,7 +90,7 @@ function spectate:Render()
         self:SetCameraView(self.plrList[self.iterator].Character or self.plrList[self.iterator].CharacterAdded:Wait())
     end))
 
-    self._maid:GiveTask(UserInputService.InputBegan:Connect(function(inputObject)
+    self._maid.KeyboardConnection = UserInputService.InputBegan:Connect(function(inputObject)
         if inputObject.UserInputType == Enum.UserInputType.Keyboard then
             if inputObject.KeyCode.Name == "Q" then
                 if self.iterator - 1 < 1 then
@@ -107,7 +108,7 @@ function spectate:Render()
                 self:SetCameraView(self.plrList[self.iterator].Character or self.plrList[self.iterator].CharacterAdded:Wait())
             end
         end
-    end))
+    end)
 
     --//Handle right button clicked
     self._maid:GiveTask(self.ui.RightButton.MouseButton1Click:Connect(function()
@@ -137,6 +138,8 @@ function spectate:Derender()
 
     --// Fix camera
     camera.CameraSubject = self.plr.Character.Humanoid
+
+    self._maid.KeyboardConnection = nil
 end
 
 function spectate:Destroy()
