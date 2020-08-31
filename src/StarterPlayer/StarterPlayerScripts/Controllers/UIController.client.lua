@@ -103,7 +103,6 @@ local newSpectate
 
 --// Spectate Init
 enableSpectate.OnClientEvent:Connect(function(plrList)
-	print("Enabled the spectate UI")
 	if newSpectate then
 		print("Previous spectate UI disabled")
 		newSpectate:Destroy()

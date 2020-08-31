@@ -54,7 +54,7 @@ function original.new(players, roundTime)
 		innocents = {},
 		roles = {},
 
-		spectateList = players,
+		spectateList = {},
 
 		_maid = Maid.new(),
 		_roundEnded = Instance.new("BindableEvent")
@@ -67,6 +67,10 @@ function original.new(players, roundTime)
 	for _, player in pairs(cachedPlayers) do
 		table.insert(self.innocents, Innocent.new(player))
 		self.roles[player.Name] = "Innocent"
+	end
+
+	for _, player in pairs(self.players) do
+		table.insert(self.spectateList, player)
 	end
 
 	--// Begin the round
@@ -126,6 +130,19 @@ function original:PrepareRound()
 			end
 		end
 	end))
+
+	if game.Workspace.CurrentMap:FindFirstChild("LorenAlleys") then
+		for _, part in pairs(game.Workspace.CurrentMap:FindFirstChildOfClass("Folder").Map:GetDescendants()) do
+			if part.Name == "Detector" then
+				self._maid.DetectorTouched = part.Touched:Connect(function(hit)
+					if hit.Parent:FindFirstChild("Humanoid") then
+						part.Sound:Play()
+					end
+					self._maid.DetectorTouched = nil
+				end)
+			end
+		end
+	end
 
 	self._maid:GiveTask(prepTimer.Ended:Connect(function()
 		EventTable["LoadEvent"]:FireAllClients(false)
@@ -198,6 +215,7 @@ function original:EndRound(condition)
 
 	end
 	game.Workspace.CurrentMap:ClearAllChildren()
+	game.WOrkspace.DroppedItems:Destroy()
 
 	for _, player in pairs(self.players) do
 		StatIncrementer:GiveCoins(100, player)
