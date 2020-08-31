@@ -25,6 +25,7 @@ local Innocent = require(classes:WaitForChild("InnocentClass"))
 local Maid = require(shared:WaitForChild("Maid"))
 local Scheduler = require(shared:WaitForChild("Scheduler"))
 local StatIncrementer = require(modules:WaitForChild("StatIncrementer"))
+local Proximity = require(modules:WaitForChild("ProximityDetection"))
 
 --// Variables
 local random = Random.new()
@@ -43,7 +44,10 @@ end
 
 --// Round constructor
 function original.new(players, roundTime)
-	local cachedPlayers = players
+	local cachedPlayers = {}
+	for _, plr in pairs(players) do
+		table.insert(cachedPlayers, plr)
+	end
 	local self = setmetatable({
 		timer = Scheduler.new(roundTime),
 		players = players,
@@ -70,6 +74,7 @@ function original.new(players, roundTime)
 	end
 
 	for _, player in pairs(self.players) do
+		print(player.Name)
 		table.insert(self.spectateList, player)
 	end
 
@@ -94,7 +99,7 @@ function original:DisableUI()
 	EventTable["DisableShop"]:FireAllClients()
 	EventTable["DisableSpectate"]:FireAllClients()
 	EventTable["DisableCodeUI"]:FireAllClients()
-	EventTable["EnableProximity"]:FireAllClients()
+	Proximity:Enable(self.spectateList)
 end
 
 function original:EnableUI()
@@ -215,7 +220,7 @@ function original:EndRound(condition)
 
 	end
 	game.Workspace.CurrentMap:ClearAllChildren()
-	game.WOrkspace.DroppedItems:Destroy()
+	game.Workspace.DroppedItems:Destroy()
 
 	for _, player in pairs(self.players) do
 		StatIncrementer:GiveCoins(100, player)
@@ -232,6 +237,9 @@ end
 
 --// Event connections
 function original:CheckDeath(player)
+	for _, plr in pairs(self.spectateList) do
+		print(plr.Name)
+	end
 	EventTable["UpdateSpectate"]:FireAllClients(player)
 	local playerRole
 	local allButMurderer = {}
