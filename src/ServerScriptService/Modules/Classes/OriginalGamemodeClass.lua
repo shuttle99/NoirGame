@@ -32,6 +32,7 @@ local Proximity = require(modules:WaitForChild("ProximityDetection"))
 local random = Random.new()
 local vandalPosition
 local vigilantePosition
+local allButMurderer
 
 --//Events
 local EventTable = {}
@@ -58,6 +59,7 @@ function original.new(players, roundTime)
 		vandal = Vandal.new(table.remove(cachedPlayers, random:NextInteger(1, #cachedPlayers))),
 		innocents = {},
 		roles = {},
+		allButMurderer = {},
 
 		spectateList = {},
 
@@ -74,12 +76,15 @@ function original.new(players, roundTime)
 		self.roles[player.Name] = "Innocent"
 	end
 
-	for _, player in pairs(self.players) do
+	for player, roles in pairs(self.roles) do
 		print(player.Name)
 		table.insert(self.spectateList, player)
+		if roles ~= "Murderer" then
+			table.insert(self.allButMurderer, player)
+		end
 	end
 
-	ServerStorage.MurdererValue.Value = self.Murderer.plr.Name
+	ServerStorage.MurdererValue.Value = self.murderer.plr.Name
 
 	--// Begin the round
 	self:PrepareRound()
@@ -102,7 +107,7 @@ function original:DisableUI()
 	EventTable["DisableShop"]:FireAllClients()
 	EventTable["DisableSpectate"]:FireAllClients()
 	EventTable["DisableCodeUI"]:FireAllClients()
-	Proximity:Enable(self.spectateList)
+	Proximity:Enable(self.allButMurderer)
 end
 
 function original:EnableUI()
@@ -223,7 +228,7 @@ function original:EndRound(condition)
 
 	end
 	game.Workspace.CurrentMap:ClearAllChildren()
-	game.Workspace.DroppedItems:Destroy()
+	game.Workspace.Drops:Destroy()
 
 	for _, player in pairs(self.players) do
 		StatIncrementer:GiveCoins(100, player)
@@ -245,10 +250,9 @@ function original:CheckDeath(player)
 	end
 	EventTable["UpdateSpectate"]:FireAllClients(player)
 	local playerRole
-	local allButMurderer = {}
 	for plr, roles in pairs(self.roles) do
-		if roles ~= "Murderer" then
-			table.insert(allButMurderer, plr)
+		if table.find(self.allButMurderer, plr) then
+			table.remove(self.allButMurderer, plr)
 		end
 		if plr == player.Name then
 			if roles == "Vandal" then

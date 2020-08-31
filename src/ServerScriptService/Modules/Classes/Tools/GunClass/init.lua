@@ -88,7 +88,7 @@ function gunClass:Activate()
 					end
 				end
 				--// Vector visualization
-				Draw.vector(self.item.Barrel.Position, (result.Position - self.item.Barrel.Position), Color3.new(255, 255, 255), workspace.Rays, 2, 2)
+				Draw.vector(self.item.Barrel.Position, (result.Position - self.item.Barrel.Position), Color3.new(255, 255, 255), workspace.Rays, .35, .35)
 				wait(.1)
 				game.Workspace.Rays:ClearAllChildren()
 				wait(1.9)
