@@ -8,6 +8,7 @@ original.__index = original
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local Workspace = game:GetService("Workspace")
+local ServerStorage = game:GetService("ServerStorage")
 
 --// Folders
 local events = ReplicatedStorage:WaitForChild("Events")
@@ -77,6 +78,8 @@ function original.new(players, roundTime)
 		print(player.Name)
 		table.insert(self.spectateList, player)
 	end
+
+	ServerStorage.MurdererValue.Value = self.Murderer.plr.Name
 
 	--// Begin the round
 	self:PrepareRound()
