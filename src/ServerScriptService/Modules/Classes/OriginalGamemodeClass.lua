@@ -114,8 +114,8 @@ function original:EnableUI()
 	EventTable["EnableInventory"]:FireAllClients()
 	EventTable["EnableShop"]:FireAllClients()
 	EventTable["EnableCodeUI"]:FireAllClients()
-	EventTable["DisableProximity"]:FireAllClients()
 	EventTable["DisableSpectate"]:FireAllClients()
+	Proximity:Disable()
 end
 
 function original:PrepareRound()
