@@ -107,7 +107,6 @@ function original:DisableUI()
 	EventTable["DisableShop"]:FireAllClients()
 	EventTable["DisableSpectate"]:FireAllClients()
 	EventTable["DisableCodeUI"]:FireAllClients()
-	Proximity:Enable(self.allButMurderer)
 end
 
 function original:EnableUI()
@@ -115,7 +114,6 @@ function original:EnableUI()
 	EventTable["EnableShop"]:FireAllClients()
 	EventTable["EnableCodeUI"]:FireAllClients()
 	EventTable["DisableSpectate"]:FireAllClients()
-	Proximity:Disable()
 end
 
 function original:PrepareRound()
@@ -167,6 +165,9 @@ end
 function original:StartRound()
 	--// Start the timer
 	self.timer:Start()
+
+	--// Enable proximity detection
+	Proximity:Enable(self.allButMurderer)
 
 	--// Fires every second
 	self._maid:GiveTask(self.timer.Tick:Connect(function()
@@ -221,6 +222,7 @@ end
 
 function original:EndRound(condition)
 	self:EnableUI()
+	Proximity:DisableUI()
 	EventTable["VictoryScreen"]:FireAllClients(condition)
 
 	for _, player in pairs(game.Players:GetPlayers()) do
