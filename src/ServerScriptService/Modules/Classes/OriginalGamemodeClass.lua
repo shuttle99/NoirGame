@@ -67,13 +67,13 @@ function original.new(players, roundTime)
 		_roundEnded = Instance.new("BindableEvent")
 	}, original)
 
-	self.roles[self.murderer.plr.Name] = "Murderer"
-	self.roles[self.vigilante.plr.Name] = "Vigilante"
-	self.roles[self.vandal.plr.Name] = "Vandal"
+	self.roles[self.murderer.plr] = "Murderer"
+	self.roles[self.vigilante.plr] = "Vigilante"
+	self.roles[self.vandal.plr] = "Vandal"
 
 	for _, player in pairs(cachedPlayers) do
 		table.insert(self.innocents, Innocent.new(player))
-		self.roles[player.Name] = "Innocent"
+		self.roles[player] = "Innocent"
 	end
 
 	for player, roles in pairs(self.roles) do
@@ -228,7 +228,7 @@ function original:EndRound(condition)
 
 	end
 	game.Workspace.CurrentMap:ClearAllChildren()
-	game.Workspace.Drops:Destroy()
+	game.Workspace.Drops:ClearAllChildren()
 
 	for _, player in pairs(self.players) do
 		StatIncrementer:GiveCoins(100, player)
@@ -252,9 +252,9 @@ function original:CheckDeath(player)
 	local playerRole
 	for plr, roles in pairs(self.roles) do
 		if table.find(self.allButMurderer, plr) then
-			table.remove(self.allButMurderer, plr)
+			table.remove(self.allButMurderer, table.find(self.allButMurderer, plr))
 		end
-		if plr == player.Name then
+		if plr == player then
 			if roles == "Vandal" then
 				self.vandal:Disable(vandalPosition)
 			elseif roles == "Vigilante" then
@@ -274,8 +274,8 @@ function original:CheckDeath(player)
 	if playerRole == "Murderer" then
 		self:EndRound("InnocentsWin") -- Win condition 2
 	else
-		table.remove(allButMurderer, table.find(allButMurderer, player))
-		if #allButMurderer == 0 then
+		table.remove(self.allButMurderer, table.find(self.allButMurderer, player))
+		if #self.allButMurderer == 0 then
 			self:EndRound("MurdererWins")
 		end
 	end
