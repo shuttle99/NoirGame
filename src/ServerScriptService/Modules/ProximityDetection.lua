@@ -28,7 +28,7 @@ function proximity:Enable(plrList)
     local murderer = Players:FindFirstChild(murdererName).Character or Players:FindFirstChild(murdererName).CharacterAdded:Wait()
     _maid:GiveTask(RunService.Stepped:Connect(function()
         for _, plr in pairs(plrList) do
-            local distance = plr:DistanceFromCharacter(murderer.HumanoidRootPart.Position)
+            local distance = plr:DistanceFromCharacter(murderer:WaitForChild("HumanoidRootPart").Position)
             if distance < 20 then
                 if not table.find(enableTable, plr) then
                     enableProximity:FireClient(plr)
