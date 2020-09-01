@@ -85,7 +85,7 @@ function original.new(players, roundTime)
 	end
 
 	ServerStorage.MurdererValue.Value = self.murderer.plr.Name
-
+	print(#self.allButMurderer .. " is the length of the all but murderer table.")
 	--// Begin the round
 	self:PrepareRound()
 
@@ -225,7 +225,6 @@ function original:EndRound(condition)
 
 	for _, player in pairs(game.Players:GetPlayers()) do
 		player:LoadCharacter()
-
 	end
 	game.Workspace.CurrentMap:ClearAllChildren()
 	game.Workspace.Drops:ClearAllChildren()
@@ -250,10 +249,11 @@ function original:CheckDeath(player)
 	end
 	EventTable["UpdateSpectate"]:FireAllClients(player)
 	local playerRole
+	if table.find(self.allButMurderer, player) then
+		table.remove(self.allButMurderer, table.find(self.allButMurderer, player))
+		print(#self.allButMurderer .. " is the length of the table once one player has been killed")
+	end
 	for plr, roles in pairs(self.roles) do
-		if table.find(self.allButMurderer, plr) then
-			table.remove(self.allButMurderer, table.find(self.allButMurderer, plr))
-		end
 		if plr == player then
 			if roles == "Vandal" then
 				self.vandal:Disable(vandalPosition)
@@ -274,7 +274,6 @@ function original:CheckDeath(player)
 	if playerRole == "Murderer" then
 		self:EndRound("InnocentsWin") -- Win condition 2
 	else
-		table.remove(self.allButMurderer, table.find(self.allButMurderer, player))
 		if #self.allButMurderer == 0 then
 			self:EndRound("MurdererWins")
 		end
