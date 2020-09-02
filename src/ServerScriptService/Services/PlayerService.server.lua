@@ -1,3 +1,5 @@
+--[[
+
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local BadgeService = game:GetService("BadgeService")
 local events = replicatedStorage.Events
@@ -65,3 +67,4 @@ game.Players.PlayerRemoving:Connect(function(plr)
 	fireDeath(plr)
 end)
 
+]]
