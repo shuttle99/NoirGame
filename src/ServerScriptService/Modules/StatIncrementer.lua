@@ -23,7 +23,7 @@ local function getLevel(xp)
 end
 
 function statIncrementer:GiveCoins(amt, plr)
-    local plrDataStore = ds:Get(plr)
+    local plrDataStore = ds:Get(plr) or ds.new(plr)
     if plr:FindFirstChild("VIP") then
         plrDataStore.Cash:Increment(amt * 2)
     else
@@ -32,13 +32,13 @@ function statIncrementer:GiveCoins(amt, plr)
 end
 
 function statIncrementer:RemoveCoins(amt, plr)
-    local plrDataStore = ds:Get(plr)
+    local plrDataStore = ds:Get(plr) or ds.new(plr)
     plrDataStore.Cash:Increment(-amt)
 end
 
 function statIncrementer:GiveExp(amt, plr)
     --// Datastore init
-    local plrDataStore = ds:Get(plr)
+    local plrDataStore = ds:Get(plr) or ds.new(plr)
 
     --// Increment experience
     plrDataStore.Experience:Increment(amt)
@@ -52,7 +52,7 @@ function statIncrementer:GiveExp(amt, plr)
 end
 
 function statIncrementer:GiveTickets(amt, plr)
-    local plrDataStore = ds:Get(plr)
+    local plrDataStore = ds:Get(plr) or ds.new(plr)
 
     if plr.MembershipType == Enum.MembershipType.Premium then
         plrDataStore.Tickets:Increment(amt * 2)
@@ -62,7 +62,7 @@ function statIncrementer:GiveTickets(amt, plr)
 end
 
 toggleGold.OnServerInvoke = function(plr, enabled, category)
-    local plrDataStore = ds:Get(plr)
+    local plrDataStore = ds:Get(plr) or ds.new(plr)
     if plr:FindFirstChild("Golden") then
         --// Toggle the golden category when UI button is clicked
         plrDataStore["Golden" .. category]:Set(enabled)

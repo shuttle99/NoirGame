@@ -111,6 +111,7 @@ function original:DisableUI()
 	EventTable["DisableShop"]:FireAllClients()
 	EventTable["DisableSpectate"]:FireAllClients()
 	EventTable["DisableCodeUI"]:FireAllClients()
+	EventTable["TogglePlayersRemaining"]:FireAllClients(true, #self.allButMurderer)
 end
 
 function original:EnableUI()
@@ -118,6 +119,7 @@ function original:EnableUI()
 	EventTable["EnableShop"]:FireAllClients()
 	EventTable["EnableCodeUI"]:FireAllClients()
 	EventTable["DisableSpectate"]:FireAllClients()
+	EventTable["TogglePLayersRemaining"]:FireAllClients(false, #self.allButMurderer)
 end
 
 function original:PrepareRound()
@@ -287,6 +289,7 @@ function original:CheckDeath(player)
 			self:EndRound("MurdererWins")
 		end
 	end
+	EventTable["UpdatePlayersRemaining"]:FireAllClients(#self.allButMurderer)
 end
 
 --Return

@@ -216,5 +216,67 @@ module.Sprays = {
 	}
 }
 
+function module:LoopThroughItems()
+	for i, item in pairs(module.Guns) do
+		local name = Instance.new("StringValue")
+		local desc = Instance.new("StringValue")
+		local price = Instance.new("IntValue")
+		name.Value = item.Name
+		desc.Value = item.Description
+		price.Value = item.Price
+		name.Name = "Name"
+		desc.Name = "Description"
+		price.Name = "Price"
+		name.Parent = game.ReplicatedStorage.ItemModels[i]
+		desc.Parent = game.ReplicatedStorage.ItemModels[i]
+		price.Parent = game.ReplicatedStorage.ItemModels[i]
+		if item.Gamepass then
+			local gamepass = Instance.new("IntValue")
+			gamepass.Value = item.Gamepass
+			gamepass.Name = "Gamepass"
+			gamepass.Parent = game.ReplicatedStorage.ItemModels[i]
+		end
+	end
+	for i, item in pairs(module.Sprays) do
+		local name = Instance.new("StringValue")
+		local desc = Instance.new("StringValue")
+		local price = Instance.new("IntValue")
+		name.Value = item.Name
+		desc.Value = item.Description
+		price.Value = item.Price
+		name.Name = "Name"
+		desc.Name = "Description"
+		price.Name = "Price"
+		name.Parent = game.ReplicatedStorage.ItemModels[i]
+		desc.Parent = game.ReplicatedStorage.ItemModels[i]
+		price.Parent = game.ReplicatedStorage.ItemModels[i]
+		if item.Gamepass then
+			local gamepass = Instance.new("IntValue")
+			gamepass.Value = item.Gamepass
+			gamepass.Name = "Gamepass"
+			gamepass.Parent = game.ReplicatedStorage.ItemModels[i]
+		end
+	end
+	for i, item in pairs(module.Knives) do
+		local name = Instance.new("StringValue")
+		local desc = Instance.new("StringValue")
+		local price = Instance.new("IntValue")
+		name.Value = item.Name
+		desc.Value = item.Description
+		price.Value = item.Price
+		name.Name = "Name"
+		desc.Name = "Description"
+		price.Name = "Price"
+		name.Parent = game.ReplicatedStorage.ItemModels[i]
+		desc.Parent = game.ReplicatedStorage.ItemModels[i]
+		price.Parent = game.ReplicatedStorage.ItemModels[i]
+		if item.Gamepass then
+			local gamepass = Instance.new("IntValue")
+			gamepass.Value = item.Gamepass
+			gamepass.Name = "Gamepass"
+			gamepass.Parent = game.ReplicatedStorage.ItemModels[i]
+		end
+	end
+end
 
 return module

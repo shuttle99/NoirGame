@@ -276,3 +276,19 @@ toggleCashPurchase.Event:Connect(function(enable)
 	end
 end)
 
+--// Players remaining
+local playersRemaining = plrUI:WaitForChild("PlayersLeft")
+local togglePlayersRemaining = uiEvents:WaitForChild("TogglePlayersRemaining")
+local updatePlayersRemaining = uiEvents:WaitForChild("UpdatePlayersRemaining")
+
+togglePlayersRemaining.OnClientEvent:Connect(function(visible, playersLeft)
+	if visible then
+		playersRemaining.Text = "Innocents remaining: " .. playersLeft
+	end
+	playersRemaining.Visible = visible
+end)
+
+updatePlayersRemaining.OnClientEvent:Connect(function(playersLeft)
+	playersRemaining.Text = "Innocents remaining: " .. playersLeft
+end)
+
