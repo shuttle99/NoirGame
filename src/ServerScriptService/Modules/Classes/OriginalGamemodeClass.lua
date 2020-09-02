@@ -119,7 +119,7 @@ function original:EnableUI()
 	EventTable["EnableShop"]:FireAllClients()
 	EventTable["EnableCodeUI"]:FireAllClients()
 	EventTable["DisableSpectate"]:FireAllClients()
-	EventTable["TogglePLayersRemaining"]:FireAllClients(false, #self.allButMurderer)
+	EventTable["TogglePlayersRemaining"]:FireAllClients(false, #self.allButMurderer)
 end
 
 function original:PrepareRound()
