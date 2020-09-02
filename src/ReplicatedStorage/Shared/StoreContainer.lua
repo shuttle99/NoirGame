@@ -1,16 +1,16 @@
 local storeContainer = {}
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ServerStorage = game:GetService("ServerStorage")
 
 local itemModels = ReplicatedStorage:WaitForChild("ItemModels")
-local assets = ServerStorage:WaitForChild("Assets")
 
 storeContainer.Knives = {}
 storeContainer.Sprays = {}
 storeContainer.Guns = {}
 
 function storeContainer:Init()
+	local ServerStorage = game:GetService("ServerStorage")
+	local assets = ServerStorage:WaitForChild("Assets")
 	for _, folder in pairs(assets.Items:GetChildren()) do
 		local reference
 		if folder.Name == "Murderer" then
