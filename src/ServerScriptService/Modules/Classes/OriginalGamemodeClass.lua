@@ -52,7 +52,7 @@ function original.new(players, roundTime)
 	end
 	local self = setmetatable({
 		timer = Scheduler.new(roundTime),
-		players = players,
+		players = {},
 
 		murderer = Murderer.new(table.remove(cachedPlayers, random:NextInteger(1, #cachedPlayers))),
 		vigilante = Vigilante.new(table.remove(cachedPlayers, random:NextInteger(1, #cachedPlayers))),
@@ -74,6 +74,10 @@ function original.new(players, roundTime)
 	for _, player in pairs(cachedPlayers) do
 		table.insert(self.innocents, Innocent.new(player))
 		self.roles[player] = "Innocent"
+	end
+
+	for _, player in pairs(players) do
+		table.insert(self.players, players)
 	end
 
 	for player, roles in pairs(self.roles) do
@@ -174,10 +178,12 @@ function original:StartRound()
 		EventTable["TimerUpdateEvent"]:FireAllClients(self.timer.CurrentTime)
 
 		if self.vandal then
-			vandalPosition = self.vandal.plr.Character.HumanoidRootPart.Position
+			local vandalChar = self.vandal.plr.Character or self.vandal.plr.CharacterAdded:Wait()
+			vandalPosition = vandalChar.HumanoidRootPart.Position
 		end
 		if self.vigilante then
-			vigilantePosition = self.vigilante.plr.Character.HumanoidRootPart.Position
+			local vigilanteChar = self.vigilante.plr.Character or self.vigilante.plr.CharacterAdded:Wait()
+			vigilantePosition = vigilanteChar.HumanoidRootPart.Position
 		end
 	end))
 
@@ -221,8 +227,9 @@ function original:GiveVigilante(player)
 end
 
 function original:EndRound(condition)
+	self._maid:Destroy()
 	self:EnableUI()
-	Proximity:DisableUI()
+	Proximity:Disable()
 	EventTable["VictoryScreen"]:FireAllClients(condition)
 
 	for _, player in pairs(game.Players:GetPlayers()) do
@@ -238,7 +245,6 @@ function original:EndRound(condition)
 
 	--// Disable all event connections
 	self._roundEnded:Fire()
-	self._maid:Destroy()
 	self.timer:Stop()
 end
 
@@ -246,6 +252,7 @@ end
 
 --// Event connections
 function original:CheckDeath(player)
+	Proximity:DisablePlayer(player)
 	for _, plr in pairs(self.spectateList) do
 		print(plr.Name)
 	end

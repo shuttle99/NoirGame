@@ -196,14 +196,13 @@ enableProximity.OnClientEvent:Connect(function()
 		enabled = true
 		staticFrame.Visible = true
 
-		firstTween = TweenService:Create(staticFrame[1], TweenInfo.new(.1), {ImageTransparency = 0.8})
+		firstTween = TweenService:Create(staticFrame[1], TweenInfo.new(.7), {ImageTransparency = 0.8})
 		firstTween:Play()
 
 		firstTween.Completed:Wait()
 		while staticFrame.Visible do
 			wait(.1)
 			for i = 3, 1, -1 do
-				print(i)
 				for _, element in pairs(staticFrame:GetChildren()) do
 					element.ImageTransparency = 1
 				end
@@ -216,11 +215,12 @@ end)
 
 disableProximity.OnClientEvent:Connect(function()
 	enabled = false
-	staticFrame.Visible = false
 	for _, element in pairs(staticFrame:GetChildren()) do
-		secondTween = TweenService:Create(element, TweenInfo.new(0.3), {ImageTransparency = 1})
+		secondTween = TweenService:Create(element, TweenInfo.new(0.7), {ImageTransparency = 1})
 		secondTween:Play()
 	end
+	secondTween.Completed:Wait()
+	staticFrame.Visible = false
 end)
 
 --// Twitch UI
