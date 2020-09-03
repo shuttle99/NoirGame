@@ -28,6 +28,7 @@ end)
 
 Players.PlayerRemoving:Connect(function(player)
     roundHandler:RegisterDeath(player)
+    roundHandler:RemovePlayer(player)
 end)
 
 --// Init the store container from the server

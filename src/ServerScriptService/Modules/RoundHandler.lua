@@ -49,6 +49,7 @@ local function chooseMap()
 end
 
 local function intermission()
+    game.Workspace.CurrentMap:ClearAllChildren()
     local intermissionTimer = Scheduler.new(30)
     intermissionTimer:Start()
     
@@ -80,6 +81,12 @@ function RoundHandler:RegisterDeath(player)
     print("Death detected")
     if round then
         round:CheckDeath(player)
+    end
+end
+
+function RoundHandler:RemovePlayer(player)
+    if table.find(PlayerHandler.PlayerList, player) then
+        table.remove(PlayerHandler.PlayerList, table.find(PlayerHandler.PlayerList, player))
     end
 end
 

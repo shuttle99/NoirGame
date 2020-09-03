@@ -54,6 +54,7 @@ end
 function statIncrementer:GiveTickets(amt, plr)
     local plrDataStore = ds:Get(plr)
 
+    --// Premium check
     if plr.MembershipType == Enum.MembershipType.Premium then
         plrDataStore.Tickets:Increment(amt * 2)
     else

@@ -77,7 +77,7 @@ function original.new(players, roundTime)
 	end
 
 	for _, player in pairs(players) do
-		table.insert(self.players, players)
+		table.insert(self.players, player)
 	end
 
 	for player, roles in pairs(self.roles) do
@@ -87,6 +87,20 @@ function original.new(players, roundTime)
 			table.insert(self.allButMurderer, player)
 		end
 	end
+
+	self._maid.PlayerLeft = game.Players.PlayerRemoving:Connect(function(plr)
+		if #game.Players:GetPlayers() - 1 < 4 then
+			self._roundEnded:Fire()
+			self._maid:Destroy()
+			EventTable["LoadEvent"]:FireAllClients(false)
+			self:EnableUI()
+			for _, player in pairs(game.Players:GetPlayers()) do
+				if player.Name ~= plr.Name then
+					player:LoadCharacter()
+				end
+			end
+		end
+	end)
 
 	ServerStorage.MurdererValue.Value = self.murderer.plr.Name
 	print(#self.allButMurderer .. " is the length of the all but murderer table.")
@@ -123,6 +137,7 @@ function original:EnableUI()
 end
 
 function original:PrepareRound()
+
 	--// Call loading UI
 	EventTable["LoadEvent"]:FireAllClients(true)
 	
@@ -163,6 +178,7 @@ function original:PrepareRound()
 
 	self._maid:GiveTask(prepTimer.Ended:Connect(function()
 		EventTable["LoadEvent"]:FireAllClients(false)
+		self._maid.PlayerLeft = nil
 		--// Start the round
 		self:StartRound()
 	end))
@@ -241,6 +257,7 @@ function original:EndRound(condition)
 	game.Workspace.Drops:ClearAllChildren()
 
 	for _, player in pairs(self.players) do
+		print(player.Name)
 		StatIncrementer:GiveCoins(100, player)
 		StatIncrementer:GiveExp(100, player)
 	end
@@ -255,10 +272,8 @@ end
 --// Event connections
 function original:CheckDeath(player)
 	Proximity:DisablePlayer(player)
-	for _, plr in pairs(self.spectateList) do
-		print(plr.Name)
-	end
 	EventTable["UpdateSpectate"]:FireAllClients(player)
+	EventTable["ToggleVisibility"]:FireClient(player, self.murderer.plr)
 	local playerRole
 	if table.find(self.allButMurderer, player) then
 		table.remove(self.allButMurderer, table.find(self.allButMurderer, player))
