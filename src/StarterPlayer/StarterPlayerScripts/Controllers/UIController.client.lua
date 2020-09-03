@@ -15,6 +15,7 @@ local itemModels = replicatedStorage:WaitForChild("ItemModels")
 local viewport = require(shared:WaitForChild("ViewportClass"))
 local spectate = require(UIComponents.Spectate)
 local exp = require(UIComponents.ExperienceBar)
+local storeContainer = require(shared:WaitForChild("StoreContainer"))
 
 --// Timer Events
 local mainTimer = timer.new(plr)
@@ -43,9 +44,15 @@ local enableShop = uiEvents:WaitForChild("EnableShop")
 local disableShop = uiEvents:WaitForChild("DisableShop")
 local enableShopBinded = uiEvents:WaitForChild("BindedShopEnable")
 local disableShopBinded = uiEvents:WaitForChild("BindedShopDisable")
+local initShop = uiEvents:WaitForChild("ShopInit")
 
 --// Shop Init
-local newShop = shop.new(plr)
+local newShop
+
+initShop.OnClientEvent:Connect(function()
+	newShop = shop.new(plr)
+end)
+
 enableShop.OnClientEvent:Connect(function()
 	newShop:Enable()
 end)

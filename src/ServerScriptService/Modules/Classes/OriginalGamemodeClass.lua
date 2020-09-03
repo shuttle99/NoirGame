@@ -273,7 +273,7 @@ end
 function original:CheckDeath(player)
 	Proximity:DisablePlayer(player)
 	EventTable["UpdateSpectate"]:FireAllClients(player)
-	EventTable["ToggleVisibility"]:FireClient(player, self.murderer.plr)
+	EventTable["ToggleVisibility"]:FireClient(player, self.murderer.plr, true)
 	local playerRole
 	if table.find(self.allButMurderer, player) then
 		table.remove(self.allButMurderer, table.find(self.allButMurderer, player))

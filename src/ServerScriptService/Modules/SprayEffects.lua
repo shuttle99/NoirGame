@@ -141,6 +141,11 @@ local sprayEffects = {
     end,
     ["RainbowSpray"] = function(char)
         local plr = game.Players:GetPlayerFromCharacter(char)
+		for _, part in pairs(char:GetDescendants()) do
+			if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+               	part:Destroy()
+			end
+		end
         for _, texture in pairs(game.ReplicatedStorage.ItemModels.RainbowSpray:GetDescendants()) do
             if texture:IsA("Decal") then
                 texture:Clone().Parent = char:FindFirstChild(texture.Parent.Name)
@@ -153,6 +158,11 @@ local sprayEffects = {
     end,
     ["TicketSpray"] = function(char)
         local plr = game.Players:GetPlayerFromCharacter(char)
+		for _, part in pairs(char:GetDescendants()) do
+			if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+               	part:Destroy()
+			end
+		end
         for _, texture in pairs(game.ReplicatedStorage.ItemModels.TicketSpray:GetDescendants()) do
             if texture:IsA("Decal") then
                 texture:Clone().Parent = char:FindFirstChild(texture.Parent.Name)
@@ -165,6 +175,11 @@ local sprayEffects = {
     end,
     ["MonochromeSpray"] = function(char)
         local plr = game.Players:GetPlayerFromCharacter(char)
+		for _, part in pairs(char:GetDescendants()) do
+			if part:IsA("Shirt") or part:IsA("Pants") or part:IsA("Decal") then 
+               	part:Destroy()
+			end
+		end
         for _, texture in pairs(game.ReplicatedStorage.ItemModels.MonochromeSpray:GetDescendants()) do
             if texture:IsA("Decal") then
                 texture:Clone().Parent = char:FindFirstChild(texture.Parent.Name)

@@ -1,8 +1,12 @@
 local storeContainer = {}
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 
 local itemModels = ReplicatedStorage:WaitForChild("ItemModels")
+
+local Events = ReplicatedStorage:WaitForChild("Events")
+local queryStoreData = Events:WaitForChild("QueryStoreData")
 
 storeContainer.Knives = {}
 storeContainer.Sprays = {}
@@ -20,20 +24,46 @@ function storeContainer:Init()
 		elseif folder.Name == "Vigilante" then
 			reference = "Guns"
 		end
-		for _, item in pairs(folder:GetChildren()) do
-			if itemModels:FindFirstChild(item.Name) and item.Name ~= "Spray" then
-				local itemModel = itemModels:FindFirstChild(item.Name)
-				print(itemModel.Name)
-				storeContainer[reference][itemModel.Name] = {
-					["Name"] = itemModel:WaitForChild("Name").Value,
-					["Description"] = itemModel:WaitForChild("Description").Value,
-					["Price"] = itemModel:WaitForChild("Price").Value
-				}
-				if itemModel:FindFirstChild("Gamepass") then
-					storeContainer[reference][item.Name]["Gamepass"] = itemModel.Gamepass.Value
+		if folder.Name == "Vandal" then
+			for _, item in pairs(folder.Sprays:GetChildren()) do
+				if itemModels:FindFirstChild(item.Name) and item.Name ~= "Spray" then
+					local itemModel = itemModels:FindFirstChild(item.Name)
+					if not itemModel:FindFirstChild("Code") then
+						storeContainer[reference][itemModel.Name] = {
+							["Name"] = itemModel:WaitForChild("Name").Value,
+							["Description"] = itemModel:WaitForChild("Description").Value,
+							["Price"] = itemModel:WaitForChild("Price").Value
+						}
+						if itemModel:FindFirstChild("Gamepass") then
+							storeContainer[reference][item.Name]["Gamepass"] = itemModel.Gamepass.Value
+						end
+					end
+				end
+			end
+		else
+			for _, item in pairs(folder:GetChildren()) do
+				if itemModels:FindFirstChild(item.Name) and item.Name ~= "Spray" then
+					local itemModel = itemModels:FindFirstChild(item.Name)
+					if not itemModel:FindFirstChild("Code") then
+						print(itemModel.Name)
+						storeContainer[reference][itemModel.Name] = {
+							["Name"] = itemModel:WaitForChild("Name").Value,
+							["Description"] = itemModel:WaitForChild("Description").Value,
+							["Price"] = itemModel:WaitForChild("Price").Value
+						}
+						if itemModel:FindFirstChild("Gamepass") then
+							storeContainer[reference][item.Name]["Gamepass"] = itemModel.Gamepass.Value
+						end
+					end
 				end
 			end
 		end
+	end
+end
+
+if RunService:IsServer() then
+	queryStoreData.OnServerInvoke = function()
+		return storeContainer
 	end
 end
 

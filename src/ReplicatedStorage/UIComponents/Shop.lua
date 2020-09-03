@@ -14,8 +14,11 @@ local itemModels = ReplicatedStorage:WaitForChild("ItemModels")
 
 --// Modules
 local viewport = require(shared:WaitForChild("ViewportClass"))
-local storeContainer = require(shared:WaitForChild("StoreContainer"))
+local shopContainer = require(shared:WaitForChild("StoreContainer"))
 local maid = require(shared:WaitForChild("Maid"))
+
+--// Events
+local queryStoreData = events:WaitForChild("QueryStoreData")
 
 --// Globals
 local knives
@@ -41,6 +44,7 @@ local connection
 local repData
 local shopItemViewport
 local fovTween
+local storeContainer = queryStoreData:InvokeServer()
 
 --// Locals
 local camera = game.Workspace.CurrentCamera
@@ -127,6 +131,7 @@ end
 --// USE A MAID IN UR CODE TO MANAGE MEMORY LEAKS
 --// Initialize the icons and viewports for the shop when player joins
 function shop:Init()
+    print(storeContainer.Knives.Machete.Price)
     for _, tab in pairs(footer:GetChildren()) do
         print(tab.ClassName)
         if tab:IsA("TextButton") and tab.Name ~= "Gamepasses" then
