@@ -17,7 +17,6 @@ local playerHandler = require(Modules:WaitForChild("PlayerHandler"))
 --// Initialize player when they join
 Players.PlayerAdded:Connect(function(player)
     playerHandler:RegisterPlayer(player)
-    --roundHandler:CheckForPlayers()
 
     player.CharacterAdded:Connect(function(char)
         char.Humanoid.Died:Connect(function()
