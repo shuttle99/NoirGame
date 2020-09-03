@@ -92,9 +92,40 @@ function inventory:Init()
         end)
     end
 
+    local function toggleGolden(frame, enabled, category)
+        if enabled then
+            toggleGold:InvokeServer(enabled, category)
+            frame.Text = "X"
+        else
+            toggleGold:InvokeServer(enabled, category)
+            frame.Text = ""
+        end
+    end
+
     --// Edit whether or not the player has golden weapons
     self._maid:GiveTask(self.ui.GunsFrame.GoldCheck.MouseButton1Click:Connect(function()
-        return self.plrData.GoldenGun.Value == true and toggleGold:InvokeServer(false, "Gun") or toggleGold:InvokeServer(true, "Gun")
+        print("Click")
+        if self.plrData.GoldenGun.Value == true then 
+            toggleGolden(self.ui.GunsFrame.GoldCheck, false, "Gun") 
+        else 
+            toggleGolden(self.ui.GunsFrame.GoldCheck, true, "Gun") 
+        end
+    end))
+    
+    self._maid:GiveTask(self.ui.SpraysFrame.GoldCheck.MouseButton1Click:Connect(function()
+        if self.plrData.GoldenGun.Value == true then 
+            toggleGolden(self.ui.SpraysFrame.GoldCheck, false, "Spray") 
+        else 
+            toggleGolden(self.ui.SpraysFrame.GoldCheck, true, "Spray") 
+        end
+    end))
+
+    self._maid:GiveTask(self.ui.KnivesFrame.GoldCheck.MouseButton1Click:Connect(function()
+        if self.plrData.GoldenKnife.Value == true then 
+            toggleGolden(self.ui.KnivesFrame.GoldCheck, false, "Knife") 
+        else 
+            toggleGolden(self.ui.KnivesFrame.GoldCheck, true, "Knife") 
+        end
     end))
 
     self:Enable()
