@@ -24,7 +24,7 @@ end
 
 function statIncrementer:GiveCoins(amt, plr)
     local plrDataStore = ds:Get(plr)
-    if plr:FindFirstChild("VIP") then
+    if plr:FindFirstChild("VIP") and plrDataStore then
         plrDataStore.Cash:Increment(amt * 2)
     else
         plrDataStore.Cash:Increment(amt)
@@ -33,7 +33,9 @@ end
 
 function statIncrementer:RemoveCoins(amt, plr)
     local plrDataStore = ds:Get(plr)
-    plrDataStore.Cash:Increment(-amt)
+    if plrDataStore then
+        plrDataStore.Cash:Increment(-amt)
+    end
 end
 
 function statIncrementer:GiveExp(amt, plr)
@@ -55,7 +57,7 @@ function statIncrementer:GiveTickets(amt, plr)
     local plrDataStore = ds:Get(plr)
 
     --// Premium check
-    if plr.MembershipType == Enum.MembershipType.Premium then
+    if plr.MembershipType == Enum.MembershipType.Premium and plrDataStore then
         plrDataStore.Tickets:Increment(amt * 2)
     else
         plrDataStore.Tickets:Increment(amt)
@@ -64,7 +66,7 @@ end
 
 toggleGold.OnServerInvoke = function(plr, enabled, category)
     local plrDataStore = ds:Get(plr)
-    if plr:FindFirstChild("Golden") then
+    if plr:FindFirstChild("Golden") and plrDataStore then
         --// Toggle the golden category when UI button is clicked
         plrDataStore["Golden" .. category]:Set(enabled)
         return true

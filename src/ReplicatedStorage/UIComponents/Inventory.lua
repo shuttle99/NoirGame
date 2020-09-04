@@ -95,10 +95,14 @@ function inventory:Init()
     local function toggleGolden(frame, enabled, category)
         if enabled then
             toggleGold:InvokeServer(enabled, category)
-            frame.Text = "X"
+            if self.plr:FindFirstChild("Golden") then
+                frame.Text = "X"
+            end
         else
             toggleGold:InvokeServer(enabled, category)
-            frame.Text = ""
+            if self.plr:FindFirstChild("Golden") then
+                frame.Text = ""
+            end
         end
     end
 
