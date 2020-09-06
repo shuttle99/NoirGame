@@ -81,7 +81,6 @@ function original.new(players, roundTime)
 	end
 
 	for player, roles in pairs(self.roles) do
-		print(player.Name)
 		table.insert(self.spectateList, player)
 		if roles ~= "Murderer" then
 			table.insert(self.allButMurderer, player)
@@ -103,7 +102,6 @@ function original.new(players, roundTime)
 	end)
 
 	ServerStorage.MurdererValue.Value = self.murderer.plr.Name
-	print(#self.allButMurderer .. " is the length of the all but murderer table.")
 	--// Begin the round
 	self:PrepareRound()
 
@@ -188,6 +186,28 @@ function original:StartRound()
 	--// Start the timer
 	self.timer:Start()
 
+	local function checkForItem(item)
+		if game.Workspace.Drops:FindFirstChildOfClass("Tool") then
+			local tool = game.Workspace.Drops:FindFirstChildOfClass("Tool")
+			if item == "Spray" then
+				if tool.Handle:FindFirstChild("EmitFrom") then
+					return true
+				end
+			elseif item == "Gun" then
+				if tool:FindFirstChild("Barrel") then
+					return true
+				end
+			end
+		end
+		return false
+	end
+
+	self._maid:GiveTask(game.Players.PlayerRemoving:Connect(function(plr)
+		if table.find(self.players, plr) then
+			table.remove(self.players, table.find(self.players, plr))
+		end
+	end))
+
 	--// Enable proximity detection
 	Proximity:Enable(self.allButMurderer)
 
@@ -198,10 +218,14 @@ function original:StartRound()
 		if self.vandal then
 			local vandalChar = self.vandal.plr.Character or self.vandal.plr.CharacterAdded:Wait()
 			vandalPosition = vandalChar.HumanoidRootPart.Position
+		elseif not checkForItem("Spray") then
+			self:GiveVandal(random:NextInteger(1, #self.innocents).plr)
 		end
 		if self.vigilante then
 			local vigilanteChar = self.vigilante.plr.Character or self.vigilante.plr.CharacterAdded:Wait()
 			vigilantePosition = vigilanteChar.HumanoidRootPart.Position
+		elseif not checkForItem("Gun") then
+			self:GiveVigilante(random:NextInteger(1, #self.innocents).plr)
 		end
 	end))
 
@@ -249,15 +273,15 @@ function original:EndRound(condition)
 	self:EnableUI()
 	Proximity:Disable()
 	EventTable["VictoryScreen"]:FireAllClients(condition)
+	EventTable["LoadEvent"]:FireAllClients(false)
 
-	for _, player in pairs(game.Players:GetPlayers()) do
+	for _, player in pairs(self.spectateList) do
 		player:LoadCharacter()
 	end
 	game.Workspace.CurrentMap:ClearAllChildren()
 	game.Workspace.Drops:ClearAllChildren()
 
 	for _, player in pairs(self.players) do
-		print(player.Name)
 		StatIncrementer:GiveCoins(100, player)
 		StatIncrementer:GiveExp(100, player)
 	end
@@ -267,17 +291,27 @@ function original:EndRound(condition)
 	self.timer:Stop()
 end
 
---TODO implement setrole
+local function clearInventory(player)
+	player.Backpack:ClearAllChildren()
+	if player.Character then
+		for _, item in pairs(player.Character:GetChildren()) do
+			if item:IsA("Tool") then
+				item:Destroy()
+			end
+		end
+	end
+end
 
 --// Event connections
 function original:CheckDeath(player)
+	clearInventory(player)
 	Proximity:DisablePlayer(player)
+	self:Spectate(player)
 	EventTable["UpdateSpectate"]:FireAllClients(player)
 	EventTable["ToggleVisibility"]:FireClient(player, self.murderer.plr, true)
 	local playerRole
 	if table.find(self.allButMurderer, player) then
 		table.remove(self.allButMurderer, table.find(self.allButMurderer, player))
-		print(#self.allButMurderer .. " is the length of the table once one player has been killed")
 	end
 	for plr, roles in pairs(self.roles) do
 		if plr == player then
@@ -296,7 +330,6 @@ function original:CheckDeath(player)
 			table.remove(self.spectateList, i)
 		end
 	end
-	EventTable["EnableSpectate"]:FireClient(player, self.spectateList)
 	if playerRole == "Murderer" then
 		self:EndRound("InnocentsWin") -- Win condition 2
 	else
@@ -305,6 +338,14 @@ function original:CheckDeath(player)
 		end
 	end
 	EventTable["UpdatePlayersRemaining"]:FireAllClients(#self.allButMurderer)
+	EventTable["EnableInventory"]:FireClient(player)
+	EventTable["EnableShop"]:FireClient(player)
+	EventTable["EnableCodeUI"]:FireClient(player)
+end
+
+--// Enable spectate for player in progress
+function original:Spectate(player)
+	EventTable["EnableSpectate"]:FireClient(player, self.spectateList)
 end
 
 --Return

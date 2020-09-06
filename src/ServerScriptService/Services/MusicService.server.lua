@@ -12,6 +12,9 @@ local songPlaying = Workspace.Music:FindFirstChild("FirstSong")
 local function chooseSong()
     songPlaying = music[random:NextInteger(1, #music)]
     songPlaying:Play()
+    songPlaying.Ended:Connect(function()
+        chooseSong()
+    end)
 end
 
 --// Connections

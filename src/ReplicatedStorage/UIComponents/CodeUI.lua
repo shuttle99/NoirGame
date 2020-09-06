@@ -47,7 +47,6 @@ function codeUI:Init()
    end))
 
    self._maid:GiveTask(self.button.MouseButton1Click:Connect(function()
-        print("Click connection")
        if self.ui.Visible then
            self:Hide()
        else

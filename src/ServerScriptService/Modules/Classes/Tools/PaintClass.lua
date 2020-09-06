@@ -58,7 +58,6 @@ function paintClass.new(plr)
 end
 
 function paintClass:Activate()
-	print("Called")
 	local char = self.plr.Character
 	local equip = char:WaitForChild("Humanoid"):LoadAnimation(self.item.EquipAnim)
 	local idle = char.Humanoid:LoadAnimation(self.item.IdleAnim)
@@ -96,16 +95,13 @@ function paintClass:Activate()
 			for _, v in pairs(GetTouchingParts(part)) do
 				if v then        
 					if v.Parent:FindFirstChild("Humanoid") and v.Name == "HumanoidRootPart" then
-						print(v.Name)
 						--Check if murderer
 						for _, x in pairs(v.Parent:GetChildren()) do
 							if x.Name ~= "HumanoidRootPart" and x:IsA("BasePart") then
 								if x.Parent.Name == self.murderer.Value then
 									local murdererChar = x.Parent
-									print(murdererChar.Name)
 									sprayEffects[self.dataObj["EquippedSpray"]:Get()](murdererChar)
 									local sprayModel = game.ReplicatedStorage.ItemModels:FindFirstChild(self.dataObj["EquippedSpray"]:Get())
-									--print(sprayModel.Name)
 									--game.Players:FindFirstChild(self.murderer.Value):ClearCharacterAppearance()
 
 									--[[local accessories = {}
@@ -142,7 +138,7 @@ function paintClass:DropItem(pos)
 
 	replicatedItemModel.Handle.Touched:Connect(function(hit)
 		if hit.Parent:FindFirstChild("Humanoid") then
-			if hit.Parent.Name ~= self.plr.Name and hit.Parent.Name ~= self.murderer.Value then
+			if hit.Parent.Name ~= self.plr.Name and hit.Parent.Name ~= self.murderer.Value and hit.Parent.Humanoid.Health > 0 then
 				if #game.Players:GetPlayerFromCharacter(hit.Parent).Backpack:GetChildren() == 0 then
 					setRole:Fire("Vandal", game.Players:GetPlayerFromCharacter(hit.Parent))
 					replicatedItemModel:Destroy()

@@ -1,5 +1,4 @@
 local RoundHandler = {}
-print("Round handler successfully required")
 
 --// Services
 local ServerScriptService = game:GetService("ServerScriptService")
@@ -78,7 +77,6 @@ local function startRound()
 end
 
 function RoundHandler:RegisterDeath(player)
-    print("Death detected")
     if round then
         round:CheckDeath(player)
     end
@@ -89,6 +87,13 @@ function RoundHandler:RemovePlayer(player)
         table.remove(PlayerHandler.PlayerList, table.find(PlayerHandler.PlayerList, player))
     end
 end
+
+--// If player joins and round is in progress, then turn on the spectate
+game.Players.PlayerAdded:Connect(function(player)
+    if round then
+        round:Spectate(player)
+    end
+end)
 
 function RoundHandler:CheckForPlayers()
     if #PlayerHandler.PlayerList >= 4 then

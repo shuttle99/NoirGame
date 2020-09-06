@@ -23,56 +23,67 @@ local function getLevel(xp)
 end
 
 function statIncrementer:GiveCoins(amt, plr)
-    local plrDataStore = ds:Get(plr)
-    if plr:FindFirstChild("VIP") and plrDataStore then
-        plrDataStore.Cash:Increment(amt * 2)
-    else
-        plrDataStore.Cash:Increment(amt)
+    if plr then
+        local plrDataStore = ds:Get(plr)
+        if not plrDataStore then return end
+        if plr:FindFirstChild("VIP") then
+            plrDataStore.Cash:Increment(amt * 2)
+        else
+            plrDataStore.Cash:Increment(amt)
+        end
     end
 end
 
 function statIncrementer:RemoveCoins(amt, plr)
-    local plrDataStore = ds:Get(plr)
-    if plrDataStore then
+    if plr then
+        local plrDataStore = ds:Get(plr)
+        if not plrDataStore then return end
         plrDataStore.Cash:Increment(-amt)
     end
 end
 
 function statIncrementer:GiveExp(amt, plr)
-    --// Datastore init
-    local plrDataStore = ds:Get(plr)
+    if plr then
+        --// Datastore init
+        local plrDataStore = ds:Get(plr)
+        if not plrDataStore then return end
+        --// Increment experience
+        plrDataStore.Experience:Increment(amt)
 
-    --// Increment experience
-    plrDataStore.Experience:Increment(amt)
+        --// Set new level
+        local level = getLevel(plrDataStore.Experience:Get())
+        plrDataStore.Level:Set(math.floor(level))
 
-    --// Set new level
-    local level = getLevel(plrDataStore.Experience:Get())
-    plrDataStore.Level:Set(math.floor(level))
-
-    --// Make visual updates
-    expUpdate:FireClient(plr, amt, level)
+        --// Make visual updates
+        expUpdate:FireClient(plr, amt, level)
+    end
 end
 
 function statIncrementer:GiveTickets(amt, plr)
-    local plrDataStore = ds:Get(plr)
-
-    --// Premium check
-    if plr.MembershipType == Enum.MembershipType.Premium and plrDataStore then
-        plrDataStore.Tickets:Increment(amt * 2)
-    else
-        plrDataStore.Tickets:Increment(amt)
+    if plr then
+        local plrDataStore = ds:Get(plr)
+        if not plrDataStore then return end
+        --// Premium check
+        if plr.MembershipType == Enum.MembershipType.Premium then
+            plrDataStore.Tickets:Increment(amt * 2)
+        else
+            plrDataStore.Tickets:Increment(amt)
+        end
     end
 end
 
 toggleGold.OnServerInvoke = function(plr, enabled, category)
-    local plrDataStore = ds:Get(plr)
-    if plr:FindFirstChild("Golden") and plrDataStore then
-        --// Toggle the golden category when UI button is clicked
-        plrDataStore["Golden" .. category]:Set(enabled)
-        return true
-    else 
-        MarketplaceService:PromptGamePassPurchase(plr, 10505111) 
-        return false
+    if plr then
+        local plrDataStore = ds:Get(plr)
+        if not plrDataStore then return end
+        if plr:FindFirstChild("Golden")then
+            --// Toggle the golden category when UI button is clicked
+            plrDataStore["Golden" .. category]:Set(enabled)
+            return true
+        else 
+            MarketplaceService:PromptGamePassPurchase(plr, 10505111) 
+            return false
+        end
     end
 end
 

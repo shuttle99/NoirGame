@@ -108,7 +108,6 @@ function inventory:Init()
 
     --// Edit whether or not the player has golden weapons
     self._maid:GiveTask(self.ui.GunsFrame.GoldCheck.MouseButton1Click:Connect(function()
-        print("Click")
         if self.plrData.GoldenGun.Value == true then 
             toggleGolden(self.ui.GunsFrame.GoldCheck, false, "Gun") 
         else 

@@ -9,10 +9,12 @@ local BadgeService = game:GetService("BadgeService")
 --// Folders
 local Modules = ServerScriptService:WaitForChild("Modules")
 local Events = ReplicatedStorage:WaitForChild("Events")
+local Shared = ReplicatedStorage:WaitForChild("Shared")
 
 --// Modules
 local gamepasses = require(Modules:WaitForChild("Gamepasses"))
 local ds = require(Modules:WaitForChild("Init"))
+local scheduler = require(Shared:WaitForChild("Scheduler"))
 
 --// Events
 local TogglePlayerInGame = Events:WaitForChild("TogglePlayerInGame")
@@ -44,7 +46,6 @@ function PlayerHandler:RegisterPlayer(player)
 	ticketStat.Parent = leaderstats
 
 	dataObj.Tickets:OnUpdate(function(val)
-		ticketStat.Value = val
 	end)
 
 	dataObj.Level:OnUpdate(function(val)
@@ -53,6 +54,12 @@ function PlayerHandler:RegisterPlayer(player)
 
 	dataObj.Cash:OnUpdate(function(val)
 		cashStat.Value = val
+	end)
+	
+	local visitTimer = scheduler.new(3)
+	visitTimer:Start()
+	visitTimer.Ended:Connect(function()
+		dataObj.Visits:Increment(1)
 	end)
 end
 

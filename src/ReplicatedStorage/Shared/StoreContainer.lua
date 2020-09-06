@@ -45,7 +45,6 @@ function storeContainer:Init()
 				if itemModels:FindFirstChild(item.Name) and item.Name ~= "Spray" then
 					local itemModel = itemModels:FindFirstChild(item.Name)
 					if not itemModel:FindFirstChild("Code") then
-						print(itemModel.Name)
 						storeContainer[reference][itemModel.Name] = {
 							["Name"] = itemModel:WaitForChild("Name").Value,
 							["Description"] = itemModel:WaitForChild("Description").Value,

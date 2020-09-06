@@ -68,15 +68,11 @@ end
 
 --// Makes UI visual
 function spectate:Render()
-    print("Rendered the spectate ui")
     --// Make Spectate UI Visible
     self.ui.Visible = true
     self.button.Parent = nil
 
     disableShop:Fire()
-    for _, v in pairs(self.plrList) do
-        print(v)
-    end
 
     self:SetCameraView(self.plrList[self.iterator].Character or self.plrList[self.iterator].CharacterAdded:Wait())
 
@@ -164,7 +160,6 @@ function spectate:RemovePlayer(plrToRemove)
         if v.Name == plrToRemove.Name then
             table.remove(self.plrList, i)
         end
-        print(v.Name)
      end
 end
 

@@ -17,5 +17,7 @@ return {
 	--// Gamepass specific
 	GoldenSpray = false,
 	GoldenKnife = false,
-	GoldenGun = false
+	GoldenGun = false,
+
+	Visits = 0
 }

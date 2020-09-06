@@ -68,10 +68,10 @@ function gunClass:Activate()
 	
 	--// Record item activation on client
 	gunActivation:FireClient(self.plr, self.item, self._event)
+
 	--// Fire the ray
 	self._maid:GiveTask(self._event.OnServerEvent:Connect(function(plr, unitRay)
 		if not self.debounce then
-			fireAnim:Play()
 			self.debounce = true
 			local rayParams = RaycastParams.new()
 			local result = workspace:Raycast(self.item.Barrel.Position, unitRay.Direction * 3000, rayParams)
@@ -89,6 +89,8 @@ function gunClass:Activate()
 				end
 				--// Vector visualization
 				Draw.vector(self.item.Barrel.Position, (result.Position - self.item.Barrel.Position), Color3.new(255, 255, 255), workspace.Rays, .35, .35)
+				fireAnim:Play()
+				self.item.Barrel.GunshotSound:Play()
 				wait(.1)
 				game.Workspace.Rays:ClearAllChildren()
 				wait(1.9)
@@ -104,7 +106,7 @@ function gunClass:DropItem(pos)
 	replicatedItemModel:SetPrimaryPartCFrame(CFrame.new(pos))
 	replicatedItemModel.Handle.Touched:Connect(function(hit)
 		if hit.Parent:FindFirstChild("Humanoid") then
-			if hit.Parent.Name ~= self.plr.Name and hit.Parent.Name ~= self.murderer.Value then
+			if hit.Parent.Name ~= self.plr.Name and hit.Parent.Name ~= self.murderer.Value and hit.Parent.Humanoid.Health > 0 then
 				if #game.Players:GetPlayerFromCharacter(hit.Parent).Backpack:GetChildren() == 0 then
 					setRole:Fire("Vigilante", game.Players:GetPlayerFromCharacter(hit.Parent))
 					replicatedItemModel:Destroy()

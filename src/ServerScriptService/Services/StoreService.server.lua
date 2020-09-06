@@ -26,7 +26,6 @@ function checkForItem(plr, item)
         plrDataStore.EquippedKnife:Set(item)
         return true
     elseif table.find(plrDataStore.Guns:Get(), item) then
-        print("Gun equipped")
         plrDataStore.EquippedGun:Set(item)
         return true
     elseif table.find(plrDataStore.Sprays:Get(), item) then

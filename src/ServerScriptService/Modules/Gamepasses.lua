@@ -19,7 +19,6 @@ local dataProfile = require(modules.Init)
 local giveTag = events:WaitForChild("GiveTag")
 
 local function checkForItem(plr, item)
-    print(plr.Name)
     local plrDataStore = dataProfile:Get(plr)
     if table.find(plrDataStore.Knives:Get(), item) then
         --plrDataStore.EquippedKnife:Set(item)
@@ -76,7 +75,6 @@ local passTable = {
     --// VIP from current game
     [10544262] = function(plr)
         if not plr:FindFirstChild("VIP") then
-            print("User is vip")
             giveItem("FuturisticKunai", "Knives",plr)
             local vipValue = Instance.new("BoolValue")
             vipValue.Name = "VIP"
@@ -87,7 +85,6 @@ local passTable = {
     --// VIP from current build
     [11292444] = function(plr)
         if not plr:FindFirstChild("VIP") then
-            print("User is vip")
             giveItem("FuturisticKunai", "Knives",plr)
             local vipValue = Instance.new("BoolValue")
             vipValue.Name = "VIP"

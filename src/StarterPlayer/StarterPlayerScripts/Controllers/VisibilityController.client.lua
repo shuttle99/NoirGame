@@ -16,13 +16,11 @@ local checkVandal = events.CheckVandal
 
 --// Local Functions
 local function hideMurderer(murderer)
-	print("Hiding")
 	local murdererChar = murderer.Character or murderer.CharacterAdded:Wait()
 	murdererChar.Parent = game.ReplicatedStorage
 end
 
 local function showMurderer(murderer)
-	print("Showing")
 	local murdererChar = murderer.Character
 	murdererChar.Parent = game.Workspace
 end

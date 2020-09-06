@@ -111,26 +111,19 @@ local newSpectate
 --// Spectate Init
 enableSpectate.OnClientEvent:Connect(function(plrList)
 	if newSpectate then
-		print("Previous spectate UI disabled")
 		newSpectate:Destroy()
 	end
-	for _, v in pairs(plrList) do
-		print(v.Name .. " is the pre-object character name")
-	end
 	newSpectate = spectate.new(plr, plrList)
-	print("Spectate UI Enabled")
 	newSpectate:Enable()
 end)
 
 updateSpectate.OnClientEvent:Connect(function(plrToRemove)
-	print("Spectate updated")
 	if newSpectate then
 		newSpectate:RemovePlayer(plrToRemove)
 	end
 end)
 
 disableSpectate.OnClientEvent:Connect(function()
-	print("Spectate UI disabled")
 	if newSpectate then
 		newSpectate:Destroy()
 		newSpectate = nil
@@ -299,3 +292,15 @@ updatePlayersRemaining.OnClientEvent:Connect(function(playersLeft)
 	playersRemaining.Text = "Innocents remaining: " .. playersLeft
 end)
 
+--// How to play
+local replicatedData = replicatedStorage:WaitForChild("ReplicatedData")
+local plrData = replicatedData:WaitForChild(plr.UserId)
+local howToPlay = plrUI:WaitForChild("HowToPlay")
+
+if plrData.Visits.Value == 0 then
+	howToPlay.Visible = true
+
+	howToPlay.ExitButton.MouseButton1Click:Connect(function()
+		howToPlay.Visible = false
+	end)
+end

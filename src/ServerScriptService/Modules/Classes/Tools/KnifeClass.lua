@@ -29,7 +29,6 @@ function knifeClass.new(plr)
 	
 	self.item = game.ServerStorage.Assets.Items.Murderer[self.dataObj["EquippedKnife"]:Get()]:Clone()
 	if self.dataObj.GoldenKnife:Get() == true then
-		print("User has the golden knife enabled")
 		for _, part in pairs(self.item:GetDescendants()) do
 			if part:IsA("BasePart") then
 				part.Color = Color3.fromRGB(249, 166, 2)
@@ -44,7 +43,6 @@ function knifeClass.new(plr)
 end
 
 function knifeClass:Activate()
-	print("Activation")
 	self.item.Parent = self.plr.Backpack
 	local char = self.plr.Character or self.plr.CharacterAdded:Wait()
 

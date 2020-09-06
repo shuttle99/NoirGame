@@ -24,7 +24,6 @@ storeContainer:Init()
 
 --// Initialize player when they join
 Players.PlayerAdded:Connect(function(player)
-    print("Fired")
     playerHandler:RegisterPlayer(player)
 
     player.CharacterAdded:Connect(function(char)

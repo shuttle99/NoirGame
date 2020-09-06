@@ -19,7 +19,7 @@ local purchaseHistoryStore = DataStoreService:GetDataStore("PurchaseHistory")
 local products = {
     --// 100 CASH dev product
     [1082626880] = function(plr)
-        statIncrementer:GiveCoins(100, plr)
+        statIncrementer:GiveCoins(800, plr)
         return "Transaction Completed"
     end
 }

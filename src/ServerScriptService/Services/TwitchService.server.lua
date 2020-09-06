@@ -47,7 +47,6 @@ local checkTwitch = game.ReplicatedStorage.Events:WaitForChild("CheckTwitch")
 local playersSeenNotification = {}
 
 game.Players.PlayerAdded:Connect(function(plr)
-    print("e")
     GetNewValues()
     if livestreaming == "live" then
         twitchEvent:FireClient(plr)

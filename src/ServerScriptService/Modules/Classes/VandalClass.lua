@@ -36,8 +36,9 @@ function vandalClass:GiveAppearance()
 	local char = characters.Vandal:FindFirstChildOfClass("Model"):Clone()
 	char.Name = "StarterCharacter"
 	char.Parent = game.StarterPlayer
-	self.plr:LoadCharacter()
-	print("Character loaded")
+	if game.Players:FindFirstChild(self.plr.Name) then
+		self.plr:LoadCharacter()
+	end
 	char:Destroy()
 end
 

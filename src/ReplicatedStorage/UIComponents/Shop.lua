@@ -14,8 +14,8 @@ local itemModels = ReplicatedStorage:WaitForChild("ItemModels")
 
 --// Modules
 local viewport = require(shared:WaitForChild("ViewportClass"))
-local shopContainer = require(shared:WaitForChild("StoreContainer"))
 local maid = require(shared:WaitForChild("Maid"))
+local scheduler = require(shared:WaitForChild("Scheduler"))
 
 --// Events
 local queryStoreData = events:WaitForChild("QueryStoreData")
@@ -104,6 +104,7 @@ function shop.new(plr)
                         connection = purchasePage.BackButton.MouseButton1Click:Connect(function()
                             self.ui.ShopFrame.Footer.Visible = true
                             purchasePage.Visible = false
+                            purchasePage.InfoFrame.PurchaseButton.Text = "Purchase"
                             tabs[i]()
                             connection:Disconnect()
                         end)
@@ -114,7 +115,7 @@ function shop.new(plr)
                                 local clonePanel = invPanel:Clone()
                                 clonePanel.Parent = self.plr.PlayerGui.GameUI.InventoryFrame.InventoryBG[i]
                                 viewport.new(itemModels[itemName], clonePanel.ViewportFrame, true)
-                                connection:Disconnect()
+                                purchasePage.InfoFrame.PurchaseButton.Text = "Item Purchased!"
                             end
                         end)
                     --// Item requires gamepasses
@@ -131,9 +132,7 @@ end
 --// USE A MAID IN UR CODE TO MANAGE MEMORY LEAKS
 --// Initialize the icons and viewports for the shop when player joins
 function shop:Init()
-    print(storeContainer.Knives.Machete.Price)
     for _, tab in pairs(footer:GetChildren()) do
-        print(tab.ClassName)
         if tab:IsA("TextButton") and tab.Name ~= "Gamepasses" then
             for item, _ in pairs(storeContainer[tab.Name]) do
                 local newPanel = self.panel:Clone()
@@ -176,12 +175,11 @@ function shop:Render()
             self.ui.ShopFrame.Currency.Cash.Amount.Text = self.replicatedData.Cash.Value
         end))
 
-        --[[self._maid:GiveTask(self.ui.ShopFrame.Currency.Cash.BuyMore.MouseButton1Click:Connect(function()
+        self._maid:GiveTask(self.ui.ShopFrame.Currency.Cash.BuyMore.MouseButton1Click:Connect(function()
             self._toggleCashPurchase:Fire(self.plr, true)
-        end))]]
+        end))
 
         self.ui.ShopFrame.Footer.Visible = true
-        print("render")
         self.debounce = true
         for _, player in pairs(game.Players:GetPlayers()) do
             local char = player.Character or player.CharacterAdded:Wait()
@@ -246,7 +244,6 @@ end
 
 --// Plays the animation to to hide the shop
 function shop:Derender()
-    print("Derendering")
     self.open = false
     for _, player in pairs(game.Players:GetPlayers()) do
         local char = player.Character or player.CharacterAdded:Wait()
@@ -277,7 +274,6 @@ end
 
 --// Prevents user from opening the shop
 function shop:Disable()
-    print("Shop ui is disabled")
     if self.enabled then
         self.enabled = false
         self._maid:DoCleaning()
@@ -295,16 +291,12 @@ end
 function shop:Enable()
     if not self.enabled then
         self.enabled = true
-        print("Called the enable function")
         self.openButton.Parent = self.plr.PlayerGui.GameUI
         self._maid:GiveTask(self.openButton.MouseButton1Click:Connect(function()
-            print("Click")
             if self.open and not self.debounce then
-                print("Rendering without else")
                 self:Derender()
                 --connection:Disconnect()
             else
-                print("Rendering from the else")
                 self:Render()
                 --connection:Disconnect()
             end

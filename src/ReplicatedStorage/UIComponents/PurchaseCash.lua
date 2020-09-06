@@ -26,6 +26,10 @@ end
 function cashPurchase:Show()
     self.ui.Visible = true
 
+    self.ui.ExitButton.MouseButton1Click:Connect(function()
+        self:Hide()
+    end)
+
     for _, element in pairs(self.ui.ScrollingFrame:GetChildren()) do
         if element:IsA("Frame") then
             element.Purchase.MouseButton1Click:Connect(function()

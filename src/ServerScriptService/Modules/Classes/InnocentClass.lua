@@ -34,7 +34,9 @@ function innocentClass:GiveAppearance()
 	local char = innoCharacters[ranChar]:Clone()
 	char.Name = "StarterCharacter"
 	char.Parent = game.StarterPlayer
-	self.plr:LoadCharacter()
+	if game.Players:FindFirstChild(self.plr.Name) then
+		self.plr:LoadCharacter()
+	end
 	char:Destroy()
 end
 
