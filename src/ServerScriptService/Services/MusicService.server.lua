@@ -8,18 +8,23 @@ local music = Workspace.Music:GetChildren()
 local random = Random.new()
 local songPlaying = Workspace.Music:FindFirstChild("FirstSong")
 
+local connection
+
 --// Play random audio
 local function chooseSong()
     songPlaying = music[random:NextInteger(1, #music)]
     songPlaying:Play()
-    songPlaying.Ended:Connect(function()
+    connection = songPlaying.Ended:Connect(function()
         chooseSong()
+        connection:Disconnect()
     end)
 end
 
 --// Connections
-songPlaying.Ended:Connect(function()
+connection = songPlaying.Ended:Connect(function()
     chooseSong()
+    connection:Disconnect()
 end)
 
+--// Init
 songPlaying:Play()
