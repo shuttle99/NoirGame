@@ -194,7 +194,6 @@ local secondTween
 enableProximity.OnClientEvent:Connect(function()
 	if not enabled then
 		enabled = true
-		secondTween:Cancel()
 		staticFrame.Visible = true
 
 		firstTween = TweenService:Create(staticFrame[1], TweenInfo.new(.1), {ImageTransparency = 0.8})
