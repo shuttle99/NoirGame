@@ -31,13 +31,14 @@ function proximity:Enable(plrList)
             local distance = plr:DistanceFromCharacter(murderer:WaitForChild("HumanoidRootPart").Position)
             if distance < 20 then
                 if not table.find(enableTable, plr) then
+                    table.insert(enableTable, plr)
                     enableProximity:FireClient(plr)
                 end
             else
-                disableProximity:FireClient(plr)
                 for i, player in pairs(enableTable) do
                     if player == plr then
                         table.remove(enableTable, i)
+                        disableProximity:FireClient(plr)
                     end
                 end
             end
