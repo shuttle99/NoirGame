@@ -197,11 +197,8 @@ enableProximity.OnClientEvent:Connect(function()
 		secondTween:Cancel()
 		staticFrame.Visible = true
 
-<<<<<<< Updated upstream
 		firstTween = TweenService:Create(staticFrame[1], TweenInfo.new(.1), {ImageTransparency = 0.8})
-=======
-		firstTween = TweenService:Create(staticFrame[1], TweenInfo.new(.4), {ImageTransparency = 0.8})
->>>>>>> Stashed changes
+
 		firstTween:Play()
 
 		firstTween.Completed:Wait()
@@ -222,11 +219,7 @@ disableProximity.OnClientEvent:Connect(function()
 	print("Disabled")
 	enabled = false
 	for _, element in pairs(staticFrame:GetChildren()) do
-<<<<<<< Updated upstream
 		secondTween = TweenService:Create(element, TweenInfo.new(0.3), {ImageTransparency = 1})
-=======
-		secondTween = TweenService:Create(element, TweenInfo.new(0.4), {ImageTransparency = 1})
->>>>>>> Stashed changes
 		secondTween:Play()
 	end
 	staticFrame.Visible = false
