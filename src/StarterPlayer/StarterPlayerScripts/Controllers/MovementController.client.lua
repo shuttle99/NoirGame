@@ -33,7 +33,7 @@ ToggleJump.OnClientEvent:Connect(function(enabled)
             elseif newState == Enum.HumanoidStateType.Landed then
                 if isJumping then
                     isJumping = false
-                    wait(1.5)
+                    wait(.7)
                     humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, true)
                 end
             end

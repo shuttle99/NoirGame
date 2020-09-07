@@ -203,7 +203,6 @@ enableProximity.OnClientEvent:Connect(function()
 		while staticFrame.Visible do
 			wait(.1)
 			for i = 3, 1, -1 do
-				print(i)
 				for _, element in pairs(staticFrame:GetChildren()) do
 					element.ImageTransparency = 1
 				end

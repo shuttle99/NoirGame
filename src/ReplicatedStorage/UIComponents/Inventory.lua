@@ -235,7 +235,10 @@ function inventory:ShowGuns()
 end
 
 function inventory:ShowGamepasses()
-    print("Doesn't do much")
+    knives.Visible = false
+    guns.Visible = false
+    sprays.Visible = false
+    boosts.Visible = true
 end
 
 return inventory

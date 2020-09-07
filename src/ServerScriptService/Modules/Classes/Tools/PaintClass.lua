@@ -139,11 +139,9 @@ function paintClass:DropItem(pos)
 	replicatedItemModel.Handle.Touched:Connect(function(hit)
 		if hit.Parent:FindFirstChild("Humanoid") then
 			if hit.Parent.Name ~= self.plr.Name and hit.Parent.Name ~= self.murderer.Value and hit.Parent.Humanoid.Health > 0 then
-				if #game.Players:GetPlayerFromCharacter(hit.Parent).Backpack:GetChildren() == 0 then
-					setRole:Fire("Vandal", game.Players:GetPlayerFromCharacter(hit.Parent))
-					replicatedItemModel:Destroy()
-					self._maid:Destroy()
-				end
+				setRole:Fire("Vandal", game.Players:GetPlayerFromCharacter(hit.Parent))
+				replicatedItemModel:Destroy()
+				self._maid:Destroy()
 			end
 		end
 	end)

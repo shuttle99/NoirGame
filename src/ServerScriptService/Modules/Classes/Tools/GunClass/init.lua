@@ -107,14 +107,12 @@ function gunClass:DropItem(pos)
 	replicatedItemModel.Handle.Touched:Connect(function(hit)
 		if hit.Parent:FindFirstChild("Humanoid") then
 			if hit.Parent.Name ~= self.plr.Name and hit.Parent.Name ~= self.murderer.Value and hit.Parent.Humanoid.Health > 0 then
-				if #game.Players:GetPlayerFromCharacter(hit.Parent).Backpack:GetChildren() == 0 then
-					setRole:Fire("Vigilante", game.Players:GetPlayerFromCharacter(hit.Parent))
-					replicatedItemModel:Destroy()
-					if self._event then
-						self._event:Destroy()
+				setRole:Fire("Vigilante", game.Players:GetPlayerFromCharacter(hit.Parent))
+				replicatedItemModel:Destroy()
+				if self._event then
+					self._event:Destroy()
 				end
-					self._maid:Destroy()
-				end
+				self._maid:Destroy()
 			end
 		end
 	end)

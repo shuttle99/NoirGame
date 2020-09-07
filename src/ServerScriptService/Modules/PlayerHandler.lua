@@ -10,6 +10,8 @@ local BadgeService = game:GetService("BadgeService")
 local Modules = ServerScriptService:WaitForChild("Modules")
 local Events = ReplicatedStorage:WaitForChild("Events")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
+local UIComponents = ReplicatedStorage:WaitForChild("UIComponents")
+local UIEvents=  UIComponents:WaitForChild("UIEvents")
 
 --// Modules
 local gamepasses = require(Modules:WaitForChild("Gamepasses"))
@@ -20,7 +22,7 @@ local scheduler = require(Shared:WaitForChild("Scheduler"))
 local TogglePlayerInGame = Events:WaitForChild("TogglePlayerInGame")
 
 function PlayerHandler:RegisterPlayer(player)
-    local dataObj = ds.new(player)
+	local dataObj = ds.new(player)
     table.insert(PlayerHandler.PlayerList, player)
 
     BadgeService:AwardBadge(player.UserId, 2124573793)

@@ -15,10 +15,10 @@ local itemModels = ReplicatedStorage:WaitForChild("ItemModels")
 --// Modules
 local viewport = require(shared:WaitForChild("ViewportClass"))
 local maid = require(shared:WaitForChild("Maid"))
-local scheduler = require(shared:WaitForChild("Scheduler"))
 
 --// Events
 local queryStoreData = events:WaitForChild("QueryStoreData")
+local gamepassPurchase = events:WaitForChild("GamepassPurchase")
 
 --// Globals
 local knives
@@ -51,6 +51,7 @@ local camera = game.Workspace.CurrentCamera
 local random = Random.new()
 local invPanel = script.Parent:WaitForChild("InventoryPanel")
 
+
 --// Panels table
 local shopPanels = {}
 
@@ -77,6 +78,37 @@ function shop.new(plr)
     footer = self.ui.ShopFrame.Footer
 
     self:Init()
+
+    for _, item in pairs(gamepasses:GetChildren()) do
+        if item:IsA("Frame") then
+            if MarketplaceService:UserOwnsGamePassAsync(plr.UserId, item.GamepassID.Value) then
+                item:Destroy()
+            else
+                item:WaitForChild("PurchaseButton").MouseButton1Click:Connect(function()
+                    MarketplaceService:PromptGamePassPurchase(plr, item.GamepassID.Value)
+                end)
+            end
+        end
+    end
+
+    gamepasses.ChildRemoved:Connect(function()
+        if #gamepasses:GetChildren() == 2 then
+            gamepasses.EmptyLabel.Visible = true
+        end
+    end)
+
+    gamepassPurchase.OnClientEvent:Connect(function(id)
+        print("Purchase")
+        for _, item in pairs(gamepasses:GetChildren()) do
+            if item:FindFirstChild("GamepassID") then
+                print(id)
+                print(item.GamepassID.Value)
+                if tostring(item.GamepassID.Value) == tostring(id) then
+                    item:Destroy()
+                end
+            end
+        end
+    end)
 
     for itemName, itemPanel in pairs(shopPanels) do
         itemPanel.MouseButton1Click:Connect(function()
@@ -133,12 +165,14 @@ end
 --// Initialize the icons and viewports for the shop when player joins
 function shop:Init()
     for _, tab in pairs(footer:GetChildren()) do
-        if tab:IsA("TextButton") and tab.Name ~= "Gamepasses" then
-            for item, _ in pairs(storeContainer[tab.Name]) do
-                local newPanel = self.panel:Clone()
-                newPanel.Parent = self.ui.ShopFrame.ShopBG[tab.Name]
-                viewport.new(game.ReplicatedStorage.ItemModels[item], newPanel.ViewportFrame, true)
-                shopPanels[item] =  newPanel
+        if tab:IsA("TextButton") then
+            if tab.Name ~= "Gamepasses" then
+                for item, _ in pairs(storeContainer[tab.Name]) do
+                    local newPanel = self.panel:Clone()
+                    newPanel.Parent = self.ui.ShopFrame.ShopBG[tab.Name]
+                    viewport.new(game.ReplicatedStorage.ItemModels[item], newPanel.ViewportFrame, true)
+                    shopPanels[item] =  newPanel
+                end
             end
             tab.MouseButton1Click:Connect(function()
                 tabs[tab.Name]()
@@ -317,6 +351,9 @@ function shop:ShowKnives()
     guns.Visible = false
     gamepasses.Visible = false
     sprays.Visible = false
+    if #knives:GetChildren() == 2 then
+        knives.EmptyLabel.Visible = true
+    end
 end
 
 --// Show the gun shop menu
@@ -331,6 +368,10 @@ function shop:ShowGuns()
     guns.Visible = true
     gamepasses.Visible = false
     sprays.Visible = false
+
+    if #guns:GetChildren() == 2 then
+        guns.EmptyLabel.Visible = true
+    end
 end
 
 --// Show the gamepass shop menu
@@ -339,6 +380,9 @@ function shop:ShowGamepasses()
     guns.Visible = false
     gamepasses.Visible = true
     sprays.Visible = false
+    if #gamepasses:GetChildren() == 2 then
+        gamepasses.EmptyLabel.Visible = true
+    end
 end
 
 --// Show the sprays shop menu
@@ -353,6 +397,9 @@ function shop:ShowSprays()
     guns.Visible = false
     gamepasses.Visible = false
     sprays.Visible = true
+    if #sprays:GetChildren() == 2 then
+        sprays.EmptyLabel.Visible = true
+    end
 end
 
 --// Show the character shop menu

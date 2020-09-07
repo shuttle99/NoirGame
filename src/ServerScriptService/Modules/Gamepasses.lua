@@ -17,6 +17,7 @@ local dataProfile = require(modules.Init)
 
 --// Events
 local giveTag = events:WaitForChild("GiveTag")
+local gamepassPurchase = events:WaitForChild("GamepassPurchase")
 
 local function checkForItem(plr, item)
     local plrDataStore = dataProfile:Get(plr)
@@ -96,6 +97,7 @@ local passTable = {
 MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(plr, id, successful)
     if successful then
         passTable[id](plr)
+        gamepassPurchase:FireClient(plr, id)
     end
 end)
 
