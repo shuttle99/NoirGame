@@ -244,7 +244,7 @@ function original:StartRound()
 end
 
 function original:GiveVandal(player)
-	for i, innocent in pairs(self.innocents) do
+	--[[for i, innocent in pairs(self.innocents) do
 		if innocent.plr == player then
 			innocent:Disable()
 			table.remove(self.innocents, i)
@@ -253,11 +253,15 @@ function original:GiveVandal(player)
 			self.vandal.item:Activate()
 			EventTable["ToggleVisibility"]:FireClient(player, self.murderer.plr, true)
 		end
-	end
+	end]]
+	self.roles[player] = "Vandal"
+	self.vandal = Vandal.new(player)
+	self.vandal.item:Activate()
+	EventTable["ToggleVisibility"]:FireClient(player, self.murderer.plr, true)
 end
 
 function original:GiveVigilante(player)
-	for i, innocent in pairs(self.innocents) do
+	--[[for i, innocent in pairs(self.innocents) do
 		if innocent.plr == player then
 			innocent:Disable()
 			table.remove(self.innocents, i)
@@ -265,7 +269,10 @@ function original:GiveVigilante(player)
 			self.vigilante = Vigilante.new(player)
 			self.vigilante.item:Activate()
 		end
-	end
+	end]]
+	self.roles[player] = "Vigilante"
+	self.vigilante = Vigilante.new(player)
+	self.vigilante.item:Activate()
 end
 
 function original:EndRound(condition)
