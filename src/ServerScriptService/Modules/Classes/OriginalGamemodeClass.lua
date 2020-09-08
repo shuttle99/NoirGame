@@ -32,7 +32,6 @@ local Proximity = require(modules:WaitForChild("ProximityDetection"))
 local random = Random.new()
 local vandalPosition
 local vigilantePosition
-local allButMurderer
 
 --//Events
 local EventTable = {}
@@ -239,7 +238,7 @@ function original:StartRound()
 	self._maid:GiveTask(self.timer.Tick:Connect(function()
 		EventTable["TimerUpdateEvent"]:FireAllClients(self.timer.CurrentTime)
 
-		if self.timer.CurrentTime == 30 then
+		if self.timer.CurrentTime == 90 then
 			local murdererChar = self.murderer.plr.Character
 			if murdererChar.Revealed.Value == false then
 				EventTable["ToggleVisibility"]:FireAllClients(self.murderer.plr, true)

@@ -104,6 +104,7 @@ function RoundHandler:CheckForPlayers()
     end
 end
 
+--// Init
 intermission()
 
 return RoundHandler

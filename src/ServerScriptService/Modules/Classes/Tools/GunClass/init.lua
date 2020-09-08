@@ -72,7 +72,7 @@ function gunClass:Activate()
 	--// Fire the ray
 	self._maid:GiveTask(self._event.OnServerEvent:Connect(function(plr, unitRay)
 		if not self.debounce then
-			self.debounce = true
+			self.debounce = true 
 			local rayParams = RaycastParams.new()
 			rayParams.FilterType = Enum.RaycastFilterType.Blacklist
 			rayParams.FilterDescendantsInstances = {self.plr.Character}

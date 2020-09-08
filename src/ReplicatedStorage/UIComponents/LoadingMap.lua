@@ -20,7 +20,7 @@ local tips = {
     "Join VectorThree for exclusive in-game perks!",
     "We are going to be adding new game modes + perks for innocents soon! The game is still in an early state.",
     "Want to give us ideas? Tweet @NoirTheGame on Twitter!",
-    "Use Spray Paint to reveal the Murderer!"
+    "The MURDERER has a nametag to help you find them as Vandal!"
 }
 
 function loading.new(plr)
@@ -44,15 +44,17 @@ function loading:Show()
 end
 
 function loading:Hide()
-    frameTween = TweenService:Create(self.ui.LoadingLabel, TweenInfo.new(.5, Enum.EasingStyle.Quint), {ImageTransparency = 1})
-    textTween = TweenService:Create(self.ui.TipLabel, TweenInfo.new(.5, Enum.EasingStyle.Quint), {TextTransparency = 1})
+    if self.ui:FindFirstChild("LoadingLabel") then
+        frameTween = TweenService:Create(self.ui.LoadingLabel, TweenInfo.new(.5, Enum.EasingStyle.Quint), {ImageTransparency = 1})
+        textTween = TweenService:Create(self.ui.TipLabel, TweenInfo.new(.5, Enum.EasingStyle.Quint), {TextTransparency = 1})
 
-    frameTween:Play()
-    textTween:Play()
+        frameTween:Play()
+        textTween:Play()
 
-    textTween.Completed:Wait()
+        textTween.Completed:Wait()
 
-    self.ui:Destroy()
+        self.ui:Destroy()
+    end
 end
 
 return loading
