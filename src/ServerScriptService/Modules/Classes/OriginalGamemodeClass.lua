@@ -218,7 +218,7 @@ function original:StartRound()
 		if self.timer.CurrentTime == 110 then
 			local murdererChar = self.murderer.plr.Character
 			if murdererChar.Revealed.Value == false then
-				EventTable["VisibilityToggle"]:FireAllClients(self.murderer.plr, true)
+				EventTable["ToggleVisibility"]:FireAllClients(self.murderer.plr, true)
 				self.murderer:Enrage()
 			end
 		end

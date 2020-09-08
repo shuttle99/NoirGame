@@ -39,6 +39,6 @@ ToggleJump.OnClientEvent:Connect(function(enabled)
             end
         end))
     else
-        _maid:DoCleaning()
+        _maid:DoCleaning    ()
     end
 end)

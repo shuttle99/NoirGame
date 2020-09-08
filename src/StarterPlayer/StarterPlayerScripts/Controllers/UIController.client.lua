@@ -314,3 +314,11 @@ local rageEffect = uiEvents:WaitForChild("RageEffect")
 rageEffect.OnClientEvent:Connect(function()
 	Lighting.RageEffect.Enabled = not Lighting.RageEffect.Enabled
 end)
+
+--// Hints
+local toggleHints = uiEvents:WaitForChild("ToggleHints")
+local hints = plrUI:WaitForChild("Hints")
+
+toggleHints.OnClientEvent:Connect(function(uiName, visible)
+	hints[uiName].Visible = visible
+end)
