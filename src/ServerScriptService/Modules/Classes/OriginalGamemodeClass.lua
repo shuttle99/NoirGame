@@ -132,6 +132,11 @@ function original:EnableUI()
 	EventTable["EnableCodeUI"]:FireAllClients()
 	EventTable["DisableSpectate"]:FireAllClients()
 	EventTable["TogglePlayersRemaining"]:FireAllClients(false, #self.allButMurderer)
+	EventTable["ToggleHints"]:FireAllClients("MurdererRevealedSelf", false)
+	EventTable["ToggleHints"]:FireAllClients("MurdererRevealed", false)
+	EventTable["ToggleHints"]:FireAllClients("UseSprayPaint", false)
+	EventTable["ToggleHints"]:FireAllClients("Enraged", false)
+	EventTable["ToggleHints"]:FireAllClients("EnragedSelf", false)
 end
 
 function original:PrepareRound()
@@ -186,6 +191,19 @@ function original:StartRound()
 	--// Start the timer
 	self.timer:Start()
 
+	self._maid:GiveTask(self.murderer.plr.Character.Revealed.Changed:Connect(function()
+		local revealTimer = Scheduler.new(3)
+		for _, player in pairs(self.allButMurderer) do
+			EventTable["ToggleHints"]:FireClient(player, "MurdererRevealed", true)
+		end
+		EventTable["ToggleHints"]:FireClient(self.murderer.plr, "MurdererRevealedSelf", true)
+		revealTimer:Start()
+		self._maid:GiveTask(revealTimer.Ended:Connect(function()
+			EventTable["ToggleHints"]:FireAllClients("MurdererRevealedSelf", false)
+			EventTable["ToggleHints"]:FireAllClients("MurdererRevealed", false)
+		end))
+	end))
+
 	local function checkForItem(item)
 		if game.Workspace.Drops:FindFirstChildOfClass("Tool") then
 			local tool = game.Workspace.Drops:FindFirstChildOfClass("Tool")
@@ -220,6 +238,10 @@ function original:StartRound()
 			if murdererChar.Revealed.Value == false then
 				EventTable["ToggleVisibility"]:FireAllClients(self.murderer.plr, true)
 				self.murderer:Enrage()
+				EventTable["ToggleHints"]:FireClient(self.murderer.plr, "EnragedSelf", true)
+				for _, player in pairs(self.allButMurderer) do
+					EventTable["ToggleHints"]:FireClient(player, "Enraged", true)
+				end
 			end
 		end
 

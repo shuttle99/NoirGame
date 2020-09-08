@@ -10,10 +10,13 @@ local replicatedAssets = replicatedStorage.ItemModels
 local events = replicatedStorage.Events
 local modules = serverScriptService.Modules
 local shared = replicatedStorage.Shared
+local uiComponents = replicatedStorage:WaitForChild("UIComponents")
+local uiEvents = uiComponents:WaitForChild("UIEvents")
 
 --// Events
 local setRole = events.SetRole
 local toggleVisibility = events.ToggleVisibility
+local toggleHints = uiEvents:WaitForChild("ToggleHints")
 
 --// Modules
 local sprayEffects = require(modules.SprayEffects)
@@ -58,6 +61,7 @@ function paintClass.new(plr)
 end
 
 function paintClass:Activate()
+	toggleHints:FireClient(self.plr, "UseSprayPaint", true)
 	local char = self.plr.Character
 	local equip = char:WaitForChild("Humanoid"):LoadAnimation(self.item.EquipAnim)
 	local idle = char.Humanoid:LoadAnimation(self.item.IdleAnim)
@@ -103,6 +107,7 @@ function paintClass:Activate()
 									sprayEffects[self.dataObj["EquippedSpray"]:Get()](murdererChar)
 									local sprayModel = game.ReplicatedStorage.ItemModels:FindFirstChild(self.dataObj["EquippedSpray"]:Get())
 									murdererChar.Revealed.Value = true
+									toggleHints:FireClient(self.plr, "UseSprayPaint", false)
 									part:Destroy()
 									toggleVisibility:FireAllClients(game.Players:GetPlayerFromCharacter(murdererChar), true)
 								end
