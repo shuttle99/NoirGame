@@ -23,16 +23,19 @@ local maid = require(Shared.Maid)
 --// Events
 local notif = replicatedStorage.UIComponents.UIEvents.RoleNotification
 local toggleJump = events.ToggleJump
+local rageEffect = replicatedStorage.UIComponents.UIEvents.RageEffect
 
 
 function murdererClass.new(plr)
 	local self = setmetatable({
 		plr = plr,
 		tool = knifeClass.new(plr),
-		revealed = false,
+		revealed = Instance.new("BoolValue"),
 
 		_maid = maid.new()
 	}, murdererClass)
+
+	self.revealed.Name = "Revealed"
 
 	return self
 end
@@ -41,6 +44,7 @@ function murdererClass:GiveAppearance()
 	local char = characters.Murderer:FindFirstChildOfClass("Model"):Clone()
 	char.Name = "StarterCharacter"
 	char.Parent = game.StarterPlayer
+	self.revealed.Parent = char
 	if game.Players:FindFirstChild(self.plr.Name) then
 		self.plr:LoadCharacter()
 	end
@@ -61,6 +65,14 @@ function murdererClass:Enable(gamemode)
 	local humanoid = char.Humanoid
 
 	toggleJump:FireClient(self.plr, true)
+end
+
+function murdererClass:Enrage()
+	local char = self.plr.Character or self.plr.CharacterAdded:Wait()
+	local humanoid = char:WaitForChild("Humanoid")
+	humanoid.WalkSpeed = 19
+
+	rageEffect:FireClient(self.plr)
 end
 
 function murdererClass:Disable()

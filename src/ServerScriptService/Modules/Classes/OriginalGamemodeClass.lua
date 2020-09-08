@@ -215,6 +215,14 @@ function original:StartRound()
 	self._maid:GiveTask(self.timer.Tick:Connect(function()
 		EventTable["TimerUpdateEvent"]:FireAllClients(self.timer.CurrentTime)
 
+		if self.timer.CurrentTime == 110 then
+			local murdererChar = self.murderer.plr.Character
+			if murdererChar.Revealed.Value == false then
+				EventTable["VisibilityToggle"]:FireAllClients(self.murderer.plr, true)
+				self.murderer:Enrage()
+			end
+		end
+
 		if self.vandal then
 			local vandalChar = self.vandal.plr.Character or self.vandal.plr.CharacterAdded:Wait()
 			vandalPosition = vandalChar.HumanoidRootPart.Position

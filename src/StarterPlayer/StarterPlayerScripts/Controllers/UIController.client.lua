@@ -7,6 +7,9 @@ local plr = game.Players.LocalPlayer
 local uiEvents = UIComponents:WaitForChild("UIEvents")
 local connection
 
+--// Services
+local Lighting = game:GetService("Lighting")
+
 --// Folders
 local shared = replicatedStorage:WaitForChild("Shared")
 local itemModels = replicatedStorage:WaitForChild("ItemModels")
@@ -305,3 +308,9 @@ if plrData.Visits.Value == 0 then
 		howToPlay.Visible = false
 	end)
 end
+
+--// Rage effect
+local rageEffect = uiEvents:WaitForChild("RageEffect")
+rageEffect.OnClientEvent:Connect(function()
+	Lighting.RageEffect.Enabled = not Lighting.RageEffect.Enabled
+end)
