@@ -244,33 +244,22 @@ function original:StartRound()
 end
 
 function original:GiveVandal(player)
-	--[[for i, innocent in pairs(self.innocents) do
-		if innocent.plr == player then
-			innocent:Disable()
-			table.remove(self.innocents, i)
-			self.roles[player] = "Vandal"
-			self.vandal = Vandal.new(player)
-			self.vandal.item:Activate()
-			EventTable["ToggleVisibility"]:FireClient(player, self.murderer.plr, true)
-		end
-	end]]
-	self.roles[player] = "Vandal"
+	if self.roles[player] == "Vigilante" then
+		self.roles[player] = "VandalVigilante"
+	else
+		self.roles[player] = "Vandal"
+	end
 	self.vandal = Vandal.new(player)
 	self.vandal.item:Activate()
 	EventTable["ToggleVisibility"]:FireClient(player, self.murderer.plr, true)
 end
 
 function original:GiveVigilante(player)
-	--[[for i, innocent in pairs(self.innocents) do
-		if innocent.plr == player then
-			innocent:Disable()
-			table.remove(self.innocents, i)
-			self.roles[player] = "Vigilante"
-			self.vigilante = Vigilante.new(player)
-			self.vigilante.item:Activate()
-		end
-	end]]
-	self.roles[player] = "Vigilante"
+	if self.roles[player] == "Vandal" then
+		self.roles[player] = "VandalVigilante" 
+	else
+		self.roles[player] = "Vigilante"
+	end
 	self.vigilante = Vigilante.new(player)
 	self.vigilante.item:Activate()
 end
@@ -303,6 +292,7 @@ local function clearInventory(player)
 	if player.Character then
 		for _, item in pairs(player.Character:GetChildren()) do
 			if item:IsA("Tool") then
+				print("Tool")
 				item:Destroy()
 			end
 		end
@@ -326,6 +316,9 @@ function original:CheckDeath(player)
 				self.vandal:Disable(vandalPosition)
 			elseif roles == "Vigilante" then
 				self.vigilante:Disable(vigilantePosition)
+			elseif roles == "VandalVigilante" then
+				self.vandal:Disable(vandalPosition)
+				self.vigilante:Disable(vandalPosition)
 			end
 			self.roles[plr] = nil
 			self[roles] = nil

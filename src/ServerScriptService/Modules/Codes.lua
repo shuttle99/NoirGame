@@ -49,6 +49,9 @@ local codesTable = {
     end,
     ["SMOLBOI"] = function(plr)
         checkForItem(plr, "MiniMe", "Knives")
+    end,
+    ["JASPER"] = function(plr)
+        checkForItem(plr, "JasperKnife", "Knives")
     end
 }
 

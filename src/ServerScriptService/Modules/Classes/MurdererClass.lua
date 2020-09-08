@@ -29,6 +29,7 @@ function murdererClass.new(plr)
 	local self = setmetatable({
 		plr = plr,
 		tool = knifeClass.new(plr),
+		revealed = false,
 
 		_maid = maid.new()
 	}, murdererClass)

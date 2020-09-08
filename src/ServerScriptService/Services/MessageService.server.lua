@@ -19,4 +19,7 @@ chatService.SpeakerAdded:Connect(function(speakerAdded)
     if plr:FindFirstChild("Golden") then
         speaker:SetExtraData("Tags", {{TagText = "GOLDEN", TagColor = Color3.fromRGB(255, 166, 0)}})
     end
+    if plr.Name == "CheekySquid" or plr.Name == "jasper_creations" then
+        speaker:SetExtraData("Tags", {{TagText = "DEV", TagColor = Color3.fromRGB(255, 4, 180)}})
+    end
 end)
