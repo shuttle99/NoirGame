@@ -74,6 +74,8 @@ function gunClass:Activate()
 		if not self.debounce then
 			self.debounce = true
 			local rayParams = RaycastParams.new()
+			rayParams.FilterType = Enum.RaycastFilterType.Blacklist
+			rayParams.FilterDescendantsInstances = {self.plr.Character}
 			local result = workspace:Raycast(self.item.Barrel.Position, unitRay.Direction * 3000, rayParams)
 			if result then
 				if result.Instance then

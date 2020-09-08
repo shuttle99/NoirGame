@@ -115,6 +115,7 @@ function original:TeleportPlayer(player)
 	local character = player.Character or player.CharacterAdded:Wait()
 	local spawn = spawns[random:NextInteger(1, # spawns)]
 	character.HumanoidRootPart.CFrame = CFrame.new(spawn.Position + Vector3.new(0, 3, 0))
+	EventTable["FixFOV"]:FireAllClients()
 	spawn:Destroy()
 end
 
@@ -124,6 +125,7 @@ function original:DisableUI()
 	EventTable["DisableSpectate"]:FireAllClients()
 	EventTable["DisableCodeUI"]:FireAllClients()
 	EventTable["TogglePlayersRemaining"]:FireAllClients(true, #self.allButMurderer)
+	EventTable["Desaturate"]:FireAllClients(true)
 end
 
 function original:EnableUI()
@@ -137,6 +139,7 @@ function original:EnableUI()
 	EventTable["ToggleHints"]:FireAllClients("UseSprayPaint", false)
 	EventTable["ToggleHints"]:FireAllClients("Enraged", false)
 	EventTable["ToggleHints"]:FireAllClients("EnragedSelf", false)
+	EventTable["RageEffect"]:FireAllClients(false)
 end
 
 function original:PrepareRound()
@@ -191,8 +194,11 @@ function original:StartRound()
 	--// Start the timer
 	self.timer:Start()
 
+	EventTable["Desaturate"]:FireAllClients(false)
+
 	self._maid:GiveTask(self.murderer.plr.Character.Revealed.Changed:Connect(function()
 		local revealTimer = Scheduler.new(3)
+		Proximity:Disable()
 		for _, player in pairs(self.allButMurderer) do
 			EventTable["ToggleHints"]:FireClient(player, "MurdererRevealed", true)
 		end
@@ -371,6 +377,7 @@ function original:CheckDeath(player)
 	EventTable["EnableInventory"]:FireClient(player)
 	EventTable["EnableShop"]:FireClient(player)
 	EventTable["EnableCodeUI"]:FireClient(player)
+	EventTable["Desaturate"]:FireClient(player, true)
 end
 
 --// Enable spectate for player in progress

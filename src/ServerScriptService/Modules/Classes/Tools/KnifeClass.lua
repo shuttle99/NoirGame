@@ -61,13 +61,14 @@ function knifeClass:Activate()
 			connection:Disconnect()
 		end
 	end))
+	local connection2
 	self._maid:GiveTask(self.item.Activated:Connect(function()
 		if not self.debounce then
 			self.debounce = true
 			animTable[anim]:Play()
 			connection = self.item.Handle.Touched:Connect(function(hit)
 				if hit.Parent:FindFirstChild("Humanoid") and hit.Parent.Name ~= self.plr.Name then
-					if hit.Parent.Humanoid.Health > 0 then
+					if hit.Parent.Humanoid.Health > 0 and self.debounce then
 						self.item.Handle:FindFirstChild("Hit" .. sound):Play()
 						hit.Parent.Humanoid.Health = 0
 						statIncrementer:GiveCoins(10, self.plr)

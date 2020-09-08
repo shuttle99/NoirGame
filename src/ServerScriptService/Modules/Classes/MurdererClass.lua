@@ -72,7 +72,7 @@ function murdererClass:Enrage()
 	local humanoid = char:WaitForChild("Humanoid")
 	humanoid.WalkSpeed = 19
 
-	rageEffect:FireClient(self.plr)
+	rageEffect:FireClient(self.plr, true)
 end
 
 function murdererClass:Disable()

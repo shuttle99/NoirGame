@@ -143,7 +143,7 @@ loadEvent.OnClientEvent:Connect(function(enable)
 	if enable then
 		loadingScreenObject = loadingScreen.new(plr)
 		loadingScreenObject:Show()
-	elseif enable == false then
+	elseif enable == false and loadingScreenObject then
 		loadingScreenObject:Hide()
 	end
 end)
@@ -311,8 +311,8 @@ end
 
 --// Rage effect
 local rageEffect = uiEvents:WaitForChild("RageEffect")
-rageEffect.OnClientEvent:Connect(function()
-	Lighting.RageEffect.Enabled = not Lighting.RageEffect.Enabled
+rageEffect.OnClientEvent:Connect(function(visible)
+	Lighting.RageEffect.Enabled = visible
 end)
 
 --// Hints
@@ -321,4 +321,11 @@ local hints = plrUI:WaitForChild("Hints")
 
 toggleHints.OnClientEvent:Connect(function(uiName, visible)
 	hints[uiName].Visible = visible
+end)
+
+--// Desaturate
+local desaturate = uiEvents:WaitForChild("Desaturate")
+
+desaturate.OnClientEvent:Connect(function(visible)
+	Lighting.Desaturate.Enabled = visible
 end)
