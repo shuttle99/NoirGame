@@ -145,22 +145,24 @@ end
 
 function spectate:RemovePlayer(plrToRemove)
     --// If player leaves then they are nil so fix this
-    if self.plrList[self.iterator].Name == plrToRemove.Name then
-        if self.iterator + 1 > #self.plrList then
-            self.iterator = 1
-        else
-            self.iterator += 1
+    if plrToRemove then
+        if self.plrList[self.iterator].Name == plrToRemove.Name then
+            if self.iterator + 1 > #self.plrList then
+                self.iterator = 1
+            else
+                self.iterator += 1
+            end
+            if self.ui.Visible then
+                self:SetCameraView(self.plrList[self.iterator].Character or self.plrList[self.iterator].CharacterAdded:Wait())
+            end
         end
-        if self.ui.Visible then
-            self:SetCameraView(self.plrList[self.iterator].Character or self.plrList[self.iterator].CharacterAdded:Wait())
+        
+        for i, v in pairs(self.plrList) do
+            if v.Name == plrToRemove.Name then
+                table.remove(self.plrList, i)
+            end
         end
     end
-    
-    for i, v in pairs(self.plrList) do
-        if v.Name == plrToRemove.Name then
-            table.remove(self.plrList, i)
-        end
-     end
 end
 
 --// Just do it bro

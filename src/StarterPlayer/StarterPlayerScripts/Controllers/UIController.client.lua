@@ -331,7 +331,14 @@ local toggleHints = uiEvents:WaitForChild("ToggleHints")
 local hints = plrUI:WaitForChild("Hints")
 
 toggleHints.OnClientEvent:Connect(function(uiName, visible)
-	hints[uiName].Visible = visible
+	local tween
+	if visible then
+		hints[uiName].Visible = visible
+		tween = TweenService:Create(hints[uiName], TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = UDim2.fromScale(0,0)})
+	else
+		tween = TweenService:Create(hints[uiName], TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {Position = UDim2.fromScale(0, -3)})
+	end
+	tween:Play()
 end)
 
 --// Desaturate
