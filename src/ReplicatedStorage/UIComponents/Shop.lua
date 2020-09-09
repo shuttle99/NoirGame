@@ -148,6 +148,8 @@ function shop.new(plr)
                                 clonePanel.Parent = self.plr.PlayerGui.GameUI.InventoryFrame.InventoryBG[i]
                                 viewport.new(itemModels[itemName], clonePanel.ViewportFrame, true)
                                 purchasePage.InfoFrame.PurchaseButton.Text = "Item Purchased!"
+                            else
+                                self._toggleCashPurchase:Fire(self.plr, true)
                             end
                         end)
                     --// Item requires gamepasses
@@ -259,8 +261,8 @@ function shop:Render()
                 char.Parent = game.ReplicatedStorage
             end
 
-            local tapeA = game.Workspace.Projector.TapeA
-            local tapeB = game.Workspace.Projector.TapeB
+            local tapeA = game.Workspace.Lobby.Projector.TapeA
+            local tapeB = game.Workspace.Lobby.Projector.TapeB
             local tapeATween = TweenService:Create(tapeA, TweenInfo.new(.1), {Orientation = tapeA.Orientation + Vector3.new(0,0,8)})
             local tapeBTween = TweenService:Create(tapeB, TweenInfo.new(.1), {Orientation = tapeB.Orientation + Vector3.new(0,0,5)})
             local beamInfluence = random:NextNumber(0, .45)

@@ -52,6 +52,9 @@ local codesTable = {
     end,
     ["JASPER"] = function(plr)
         checkForItem(plr, "JasperKnife", "Knives")
+    end,
+    ["TRUST"] = function(plr)
+        statIncrementer:GiveCoins(300, plr)
     end
 }
 

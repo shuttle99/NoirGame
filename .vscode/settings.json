@@ -13,6 +13,7 @@
         "script",
         "UDim2",
         "Instance",
-        "tick"
+        "tick",
+        "RaycastParams"
     ]
 }

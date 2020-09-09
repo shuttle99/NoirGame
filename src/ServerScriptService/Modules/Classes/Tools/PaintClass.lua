@@ -97,7 +97,7 @@ function paintClass:Activate()
             part.Transparency = 1
             self.item.Handle.EmitFrom:FindFirstChildOfClass("ParticleEmitter").Enabled = true
 			for _, v in pairs(GetTouchingParts(part)) do
-				if v then        
+				if v ~= nil then    
 					if v.Parent:FindFirstChild("Humanoid") and v.Name == "HumanoidRootPart" then
 						--Check if murderer
 						for _, x in pairs(v.Parent:GetChildren()) do

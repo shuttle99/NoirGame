@@ -72,31 +72,33 @@ function gunClass:Activate()
 	--// Fire the ray
 	self._maid:GiveTask(self._event.OnServerEvent:Connect(function(plr, unitRay)
 		if not self.debounce then
-			self.debounce = true 
+			self.debounce = true
 			local rayParams = RaycastParams.new()
 			rayParams.FilterType = Enum.RaycastFilterType.Blacklist
 			rayParams.FilterDescendantsInstances = {self.plr.Character}
-			local result = workspace:Raycast(self.item.Barrel.Position, unitRay.Direction * 3000, rayParams)
-			if result then
-				if result.Instance then
-					local part = result.Instance
-					if part.Parent:FindFirstChild("Humanoid") then
-						--// Check if player is murderer
-						if game.ServerStorage:FindFirstChild("MurdererValue") then
-							if part.Parent.Name == game.ServerStorage.MurdererValue.Value then
-								part.Parent.Humanoid.Health = 0
+			if self.item.Barrel ~= nil then
+				local result = workspace:Raycast(self.item.Barrel.Position, unitRay.Direction * 3000, rayParams)
+				if result then
+					if result.Instance then
+						local part = result.Instance
+						if part.Parent:FindFirstChild("Humanoid") then
+							--// Check if player is murderer
+							if game.ServerStorage:FindFirstChild("MurdererValue") then
+								if part.Parent.Name == game.ServerStorage.MurdererValue.Value then
+									part.Parent.Humanoid.Health = 0
+								end
 							end
 						end
 					end
+					--// Vector visualization
+					Draw.vector(self.item.Barrel.Position, (result.Position - self.item.Barrel.Position), Color3.new(255, 255, 255), workspace.Rays, .35, .35)
+					fireAnim:Play()
+					self.item.Barrel.GunshotSound:Play()
+					wait(.1)
+					game.Workspace.Rays:ClearAllChildren()
+					wait(1.9)
+					self.debounce = false
 				end
-				--// Vector visualization
-				Draw.vector(self.item.Barrel.Position, (result.Position - self.item.Barrel.Position), Color3.new(255, 255, 255), workspace.Rays, .35, .35)
-				fireAnim:Play()
-				self.item.Barrel.GunshotSound:Play()
-				wait(.1)
-				game.Workspace.Rays:ClearAllChildren()
-				wait(1.9)
-				self.debounce = false
 			end
 		end
 	end))
