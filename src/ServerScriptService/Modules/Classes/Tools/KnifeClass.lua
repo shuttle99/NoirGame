@@ -12,6 +12,7 @@ local shared = replicatedStorage:WaitForChild("Shared")
 local data = require(game.ServerScriptService.Modules.Init)
 local statIncrementer = require(game.ServerScriptService.Modules.StatIncrementer)
 local maid = require(shared:WaitForChild("Maid"))
+local Scheduler = require(shared:WaitForChild("Scheduler"))
 
 function knifeClass.new(plr)
 	local self = setmetatable({
@@ -68,14 +69,18 @@ function knifeClass:Activate()
 			--// Implement raycast
 			local rayParams = RaycastParams.new()
 			rayParams.FilterType = Enum.RaycastFilterType.Blacklist
-			rayParams.FilterDescendantsInstances = {self.plr.Character}
+			rayParams.FilterDescendantsInstances = {self.plr.Character, self.item}
 			
 			local origin = self.plr.Character.HumanoidRootPart
-			local result = workspace:Raycast(origin.Position, origin.CFrame.LookVector * 2, rayParams)
+			local result = workspace:Raycast(origin.Position, origin.CFrame.LookVector * 5, rayParams)
 
 			if result then
-				if result.Parent:FindFirstChild("Humanoid") then
-					result.Parent.Humanoid.Health = 0
+				if result.Instance.Parent:FindFirstChild("Humanoid") then
+					local animKillTime = Scheduler.new(animTable[anim].length/3)
+					animKillTime:Start()
+					self._maid:GiveTask(animKillTime.Ended:Connect(function()
+						result.Instance.Parent.Humanoid.Health = 0
+					end))
 				end
 			end
 			wait(animTable[anim].length)
