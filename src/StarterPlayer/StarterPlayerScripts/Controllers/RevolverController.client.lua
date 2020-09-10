@@ -49,7 +49,9 @@ gunActivation.OnClientEvent:Connect(function(item, event)
 					end
 					--// Vector visualization
 				Draw.vector(plr.Character.HumanoidRootPart.Position, (result.Position - plr.Character.HumanoidRootPart.Position), Color3.new(255, 255, 255), workspace.Rays, .35, .35)
-				end
+				wait(.1)
+				game.Workspace.Rays:ClearAllChildren()
+			end
 			--_maid:DoCleaning()
 			end
 			wait(2)
