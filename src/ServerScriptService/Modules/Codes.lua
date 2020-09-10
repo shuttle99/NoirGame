@@ -11,7 +11,7 @@ local uiEvents = uiComponents:WaitForChild("UIEvents")
 
 --// Modules
 local data = require(modules:WaitForChild("Init"))
-local statIncrementer = modules:WaitForChild("StatIncrementer")
+local statIncrementer = require(modules:WaitForChild("StatIncrementer"))
 
 --// Events
 local addInventoryPanel = uiEvents:WaitForChild("AddInventoryPanel")

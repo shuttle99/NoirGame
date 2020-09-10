@@ -90,6 +90,14 @@ function inventory:Init()
         tab.MouseButton1Click:Connect(function()
             tabFuncs[tab.Name]()
         end)
+        tab.MouseEnter:Connect(function()
+            local tabTween = TweenService:Create(tab, TweenInfo.new(0.5), {TextSize = 43})
+            tabTween:Play()
+        end)
+        tab.MouseLeave:Connect(function()
+            local tabTween = TweenService:Create(tab, TweenInfo.new(0.5), {TextSize = 40})
+            tabTween:Play()
+        end)
     end
 
     local function toggleGolden(frame, enabled, category)
@@ -114,7 +122,7 @@ function inventory:Init()
             toggleGolden(self.ui.GunsFrame.GoldCheck, true, "Gun") 
         end
     end))
-    
+
     self._maid:GiveTask(self.ui.SpraysFrame.GoldCheck.MouseButton1Click:Connect(function()
         if self.plrData.GoldenGun.Value == true then 
             toggleGolden(self.ui.SpraysFrame.GoldCheck, false, "Spray") 
@@ -177,6 +185,21 @@ function inventory:Disable()
     self:Derender()
 end
 
+local function enableTween(button)
+    button.MouseEnter:Connect(function()
+        local tween = TweenService:Create(button, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {BackgroundTransparency = .9})
+        local viewportTween = TweenService:Create(button.ViewportFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.fromScale(1.15, 1.15), Position = UDim2.fromScale(-0.075, -0.075)})
+        tween:Play()
+        viewportTween:Play()
+    end)
+    button.MouseLeave:Connect(function()
+        local tween = TweenService:Create(button, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {BackgroundTransparency = .7})
+        local viewportTween = TweenService:Create(button.ViewportFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.fromScale(1, 1), Position = UDim2.fromScale(0, 0)})
+        tween:Play()
+        viewportTween:Play()
+    end)
+end
+
 function inventory:ShowKnives()
     knives.Visible = true
     guns.Visible = false
@@ -192,6 +215,7 @@ function inventory:ShowKnives()
                     equippedKnifeFrame = viewport.new(itemToEquip, self.ui:WaitForChild("KnivesFrame").ItemFrame, true)
                 end
             end)
+            enableTween(button)
         end
     end
 end
@@ -211,6 +235,7 @@ function inventory:ShowSprays()
                     equippedSprayFrame = viewport.new(itemToEquip, self.ui:WaitForChild("SpraysFrame").ItemFrame, true)
                 end
             end)
+            enableTween(button)
         end
     end
 end
@@ -230,6 +255,7 @@ function inventory:ShowGuns()
                     equippedGunFrame = viewport.new(itemToEquip, self.ui:WaitForChild("GunsFrame").ItemFrame, true)
                 end
             end)
+            enableTween(button)
         end
     end
 end

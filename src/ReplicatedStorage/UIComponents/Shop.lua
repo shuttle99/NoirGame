@@ -79,11 +79,26 @@ function shop.new(plr)
 
     self:Init()
 
+    --// Gamepass purchase handler
     for _, item in pairs(gamepasses:GetChildren()) do
         if item:IsA("Frame") then
             if MarketplaceService:UserOwnsGamePassAsync(plr.UserId, item.GamepassID.Value) then
                 item:Destroy()
             else
+                --// Show description on hovering
+                item:WaitForChild("PurchaseButton").MouseEnter:Connect(function()
+                    local tween = TweenService:Create(item:WaitForChild("Description"), TweenInfo.new(0.5, Enum.EasingStyle.Back), {BackgroundTransparency = 0.5, TextTransparency = 0})
+                    local purchaseSizeTween = TweenService:Create(item.PurchaseButton, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.fromOffset(210, 60)})
+                    tween:Play()
+                    purchaseSizeTween:Play()
+                end)
+                item:WaitForChild("PurchaseButton").MouseLeave:Connect(function()
+                    local tween = TweenService:Create(item:WaitForChild("Description"), TweenInfo.new(0.5, Enum.EasingStyle.Back), {BackgroundTransparency = 1, TextTransparency = 1})
+                    local purchaseSizeTween = TweenService:Create(item.PurchaseButton, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.fromOffset(200, 50)})
+                    purchaseSizeTween:Play()
+                    tween:Play()
+                end)
+                --// Handle purchase
                 item:WaitForChild("PurchaseButton").MouseButton1Click:Connect(function()
                     MarketplaceService:PromptGamePassPurchase(plr, item.GamepassID.Value)
                 end)
@@ -111,6 +126,18 @@ function shop.new(plr)
     end)
 
     for itemName, itemPanel in pairs(shopPanels) do
+        itemPanel.MouseEnter:Connect(function()
+            local tween = TweenService:Create(itemPanel, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {BackgroundTransparency = .9})
+            local viewportTween = TweenService:Create(itemPanel.ViewportFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.fromScale(1.15, 1.15), Position = UDim2.fromScale(-0.075, -0.075)})
+            tween:Play()
+            viewportTween:Play()
+        end)
+        itemPanel.MouseLeave:Connect(function()
+            local tween = TweenService:Create(itemPanel, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {BackgroundTransparency = .7})
+            local viewportTween = TweenService:Create(itemPanel.ViewportFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.fromScale(1, 1), Position = UDim2.fromScale(0, 0)})
+            tween:Play()
+            viewportTween:Play()
+        end)
         itemPanel.MouseButton1Click:Connect(function()
             --// Check for gamepass tag, if so prompt purchase not purchase screen
             for i, category in pairs(storeContainer) do
@@ -139,6 +166,25 @@ function shop.new(plr)
                             purchasePage.InfoFrame.PurchaseButton.Text = "Purchase"
                             tabs[i]()
                             connection:Disconnect()
+                        end)
+
+                        purchasePage.BackButton.MouseEnter:Connect(function()
+                            local backTween = TweenService:Create(purchasePage.BackButton, TweenInfo.new(0.5), {BackgroundTransparency = 0, TextColor3 = Color3.fromRGB(114, 114, 114)})
+                            backTween:Play()
+                        end)
+                        purchasePage.BackButton.MouseLeave:Connect(function()
+                            local backTween = TweenService:Create(purchasePage.BackButton, TweenInfo.new(0.5), {BackgroundTransparency = 1, TextColor3 = Color3.fromRGB(255, 255, 255)})
+                            backTween:Play()
+                        end)
+
+                        purchasePage.InfoFrame.PurchaseButton.MouseEnter:Connect(function()
+                            local purchaseTween = TweenService:Create(purchasePage.InfoFrame.PurchaseButton, TweenInfo.new(0.5), {BackgroundTransparency = 0, TextColor3 = Color3.fromRGB(255, 255, 255)})
+                            purchaseTween:Play()
+                        end)
+
+                        purchasePage.InfoFrame.PurchaseButton.MouseLeave:Connect(function()
+                            local purchaseTween = TweenService:Create(purchasePage.InfoFrame.PurchaseButton, TweenInfo.new(0.5), {BackgroundTransparency = 0.6, TextColor3 = Color3.fromRGB(255, 255, 255)})
+                            purchaseTween:Play()
                         end)
 
                         --// Handle clicks on the purchase PurchasePage
@@ -176,6 +222,14 @@ function shop:Init()
                     shopPanels[item] =  newPanel
                 end
             end
+            tab.MouseEnter:Connect(function()
+                local tabTween = TweenService:Create(tab, TweenInfo.new(0.5), {TextSize = 43, BackgroundTransparency = 0, TextColor3 = Color3.fromRGB(114, 114, 114)})
+                tabTween:Play()
+            end)
+            tab.MouseLeave:Connect(function()
+                local tabTween = TweenService:Create(tab, TweenInfo.new(0.5), {TextSize = 40, BackgroundTransparency = 1, TextColor3 = Color3.fromRGB(255, 255, 255)})
+                tabTween:Play()
+            end)
             tab.MouseButton1Click:Connect(function()
                 tabs[tab.Name]()
             end)
@@ -341,6 +395,17 @@ function shop:Enable()
     end
 end
 
+local function tweenOver(frame, direction)
+    if direction == "in" then
+        frame.Position = UDim2.fromScale(1,0)
+        local tween = TweenService:Create(frame, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {Position = UDim2.fromScale(0, 0)})
+        tween:Play()
+    else
+        local tween = TweenService:Create(frame, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = UDim2.fromScale(-1, 0)})
+        tween:Play()
+    end
+end
+
 --// Show the knives shop menu
 function shop:ShowKnives()
     local data = HttpService:JSONDecode(repData.Knives.Value)
@@ -349,13 +414,18 @@ function shop:ShowKnives()
             shopPanels[item]:Destroy()
         end
     end
-    knives.Visible = true
+    --[[knives.Visible = true
     guns.Visible = false
     gamepasses.Visible = false
-    sprays.Visible = false
+    sprays.Visible = false]]
     if #knives:GetChildren() == 2 then
         knives.EmptyLabel.Visible = true
     end
+    knives.Visible = true
+    tweenOver(gamepasses)
+    tweenOver(sprays)
+    tweenOver(guns)
+    tweenOver(knives, "in")
 end
 
 --// Show the gun shop menu
@@ -366,10 +436,15 @@ function shop:ShowGuns()
             shopPanels[item]:Destroy()
         end
     end
-    knives.Visible = false
+    --[[knives.Visible = false
     guns.Visible = true
     gamepasses.Visible = false
-    sprays.Visible = false
+    sprays.Visible = false]]
+    guns.Visible = true
+    tweenOver(knives)
+    tweenOver(gamepasses)
+    tweenOver(sprays)
+    tweenOver(guns, "in")
 
     if #guns:GetChildren() == 2 then
         guns.EmptyLabel.Visible = true
@@ -378,10 +453,17 @@ end
 
 --// Show the gamepass shop menu
 function shop:ShowGamepasses()
-    knives.Visible = false
+    --[[knives.Visible = false
     guns.Visible = false
     gamepasses.Visible = true
-    sprays.Visible = false
+    sprays.Visible = false]]
+
+    gamepasses.Visible = true
+    tweenOver(knives)
+    tweenOver(guns)
+    tweenOver(sprays)
+    tweenOver(gamepasses, "in")
+
     if #gamepasses:GetChildren() == 2 then
         gamepasses.EmptyLabel.Visible = true
     end
@@ -395,10 +477,16 @@ function shop:ShowSprays()
             shopPanels[item]:Destroy()
         end
     end
-    knives.Visible = false
+    --[[knives.Visible = false
     guns.Visible = false
     gamepasses.Visible = false
+    sprays.Visible = true]]
     sprays.Visible = true
+    tweenOver(knives)
+    tweenOver(gamepasses)
+    tweenOver(guns)
+    tweenOver(sprays, "in")
+
     if #sprays:GetChildren() == 2 then
         sprays.EmptyLabel.Visible = true
     end
