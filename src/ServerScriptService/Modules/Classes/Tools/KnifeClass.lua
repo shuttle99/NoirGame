@@ -72,15 +72,11 @@ function knifeClass:Activate()
 			rayParams.FilterDescendantsInstances = {self.plr.Character, self.item}
 			
 			local origin = self.plr.Character.HumanoidRootPart
-			local result = workspace:Raycast(origin.Position, origin.CFrame.LookVector * 5, rayParams)
+			local result = workspace:Raycast(origin.Position, origin.CFrame.LookVector * 100, rayParams)
 
 			if result then
 				if result.Instance.Parent:FindFirstChild("Humanoid") then
-					local animKillTime = Scheduler.new(animTable[anim].length/3)
-					animKillTime:Start()
-					self._maid:GiveTask(animKillTime.Ended:Connect(function()
-						result.Instance.Parent.Humanoid.Health = 0
-					end))
+					result.Instance.Parent.Humanoid.Health = -100
 				end
 			end
 			wait(animTable[anim].length)

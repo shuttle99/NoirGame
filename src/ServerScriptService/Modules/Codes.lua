@@ -55,6 +55,9 @@ local codesTable = {
     end,
     ["TRUST"] = function(plr)
         statIncrementer:GiveCoins(300, plr)
+    end,
+    ["MADA"] = function(plr)
+        statIncrementer:GiveCoins(1000, plr)
     end
 }
 
