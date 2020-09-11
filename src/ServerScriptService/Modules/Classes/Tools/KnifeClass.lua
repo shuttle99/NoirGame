@@ -12,6 +12,10 @@ local shared = replicatedStorage:WaitForChild("Shared")
 local data = require(game.ServerScriptService.Modules.Init)
 local statIncrementer = require(game.ServerScriptService.Modules.StatIncrementer)
 local maid = require(shared:WaitForChild("Maid"))
+local draw = require(shared:WaitForChild("Draw"))
+
+--//Testing event
+local testingEvent = Instance.new("RemoteEvent", game.ReplicatedStorage)
 
 function knifeClass.new(plr)
 	local self = setmetatable({
@@ -46,6 +50,7 @@ end
 function knifeClass:Activate()
 	print("Activation")
 	self.item.Parent = self.plr.Backpack
+	testingEvent:FireClient(self.plr, self.item)
 	local char = self.plr.Character or self.plr.CharacterAdded:Wait()
 
 	local animTable = {char.Humanoid:LoadAnimation(self.item:WaitForChild("HitAnim")), char.Humanoid:LoadAnimation(self.item.HitAnim2)}
@@ -67,16 +72,26 @@ function knifeClass:Activate()
 		if not self.debounce then
 			self.debounce = true
 			animTable[anim]:Play()
-			connection = self.item.Handle.Touched:Connect(function(hit)
-				if hit.Parent:FindFirstChild("Humanoid") and hit.Parent.Name ~= self.plr.Name then
-					if hit.Parent.Humanoid.Health > 0 then
-						self.item.Handle:FindFirstChild("Hit" .. sound):Play()
-						hit.Parent.Humanoid.Health = 0
-						statIncrementer:GiveCoins(10, self.plr)
-						connection:Disconnect()
+			
+			--// Set raycast parameters
+			local rayParams = RaycastParams.new()
+			rayParams.FilterType = Enum.RaycastFilterType.Blacklist
+			rayParams.FilterDescendantsInstances = {self.plr.Character, self.item}
+
+			--// Raycast
+			local result = workspace:Raycast(self.plr.Character.HumanoidRootPart.Position, self.plr.Character.HumanoidRootPart.CFrame.LookVector * 5, rayParams)
+			draw.vector(self.plr.Character.HumanoidRootPart.Position, self.plr.Character.HumanoidRootPart.CFrame.LookVector * 5, Color3.new(255, 255, 255), workspace.Rays, .35, .35)
+			
+			print(self.plr.Character.HumanoidRootPart.Position)
+
+			--// Validate
+			if result then
+				if result.Instance then
+					if result.Instance.Parent:FindFirstChild("Humanoid") then
+						result.Instance.Parent.Humanoid.Health = -100
 					end
 				end
-			end)
+			end
 			wait(animTable[anim].length)
 			anim = anim == 1 and 2 or 1
 			sound = sound == 1 and 2 or sound == 2 and 3 or sound == 3 and 1

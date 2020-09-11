@@ -12,7 +12,6 @@ local shared = replicatedStorage:WaitForChild("Shared")
 
 --// Events
 local gunActivation = events:WaitForChild("GunActivation")
-local rayClear = events:WaitForChild("RayClear")
 
 --// Variables
 local plr = game.Players.LocalPlayer
@@ -63,4 +62,10 @@ gunActivation.OnClientEvent:Connect(function(item, event)
 		--plr.CameraMode = Enum.CameraMode.Classic
 		_maid.RenderChar = nil
 	end))
+end)
+
+game.ReplicatedStorage:WaitForChild("RemoteEvent").OnClientEvent:Connect(function(item)
+	item.Activated:Connect(function()
+		
+	end)
 end)
