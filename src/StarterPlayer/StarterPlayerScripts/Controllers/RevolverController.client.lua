@@ -12,6 +12,7 @@ local shared = replicatedStorage:WaitForChild("Shared")
 
 --// Events
 local gunActivation = events:WaitForChild("GunActivation")
+local rayClear = events:WaitForChild("RayClear")
 
 --// Variables
 local plr = game.Players.LocalPlayer
@@ -25,7 +26,6 @@ local Draw = require(shared:WaitForChild("Draw"))
 --// Maid init
 local _maid = maid.new()
 
---// Event handlers
 gunActivation.OnClientEvent:Connect(function(item, event)
 	_maid:GiveTask(plr.CharacterRemoving:Connect(function()
 		item:Destroy()
