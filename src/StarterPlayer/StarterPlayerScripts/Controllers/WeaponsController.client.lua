@@ -12,6 +12,8 @@ local shared = replicatedStorage:WaitForChild("Shared")
 
 --// Events
 local gunActivation = events:WaitForChild("GunActivation")
+local meleeHitEvent = events:WaitForChild("MeleeHitEvent")
+local meleeEvent = events:WaitForChild("MeleeEvent")
 
 --// Variables
 local plr = game.Players.LocalPlayer
@@ -25,6 +27,7 @@ local Draw = require(shared:WaitForChild("Draw"))
 --// Maid init
 local _maid = maid.new()
 
+--// Gun event handler
 gunActivation.OnClientEvent:Connect(function(item, event)
 	_maid:GiveTask(plr.CharacterRemoving:Connect(function()
 		item:Destroy()
@@ -47,7 +50,7 @@ gunActivation.OnClientEvent:Connect(function(item, event)
 						event:FireServer(result.Instance)
 					end
 					--// Vector visualization
-				Draw.vector(plr.Character.HumanoidRootPart.Position, (result.Position - plr.Character.HumanoidRootPart.Position), Color3.new(255, 255, 255), workspace.Rays, .35, .35)
+					Draw.vector(plr.Character.HumanoidRootPart.Position, (result.Position - plr.Character.HumanoidRootPart.Position), Color3.new(255, 255, 255), workspace.Rays, .35, .35)
 				wait(.1)
 				game.Workspace.Rays:ClearAllChildren()
 			end
@@ -64,8 +67,21 @@ gunActivation.OnClientEvent:Connect(function(item, event)
 	end))
 end)
 
-game.ReplicatedStorage:WaitForChild("RemoteEvent").OnClientEvent:Connect(function(item)
+--// Melee handler
+meleeEvent.OnClientEvent:Connect(function(item)
 	item.Activated:Connect(function()
-		
+		local rayParams = RaycastParams.new()
+		rayParams.FilterType = Enum.RaycastFilterType.Blacklist
+		rayParams.FilterDescendantsInstances = {plr.Character, item}
+
+		--// Raycast
+		local result = workspace:Raycast(plr.Character.HumanoidRootPart.Position, plr.Character.HumanoidRootPart.CFrame.LookVector * 5, rayParams)
+		if result then
+			if result.Instance then
+				if result.Instance.Parent:FindFirstChild("Humanoid") then
+					meleeHitEvent:FireServer(result.Instance)
+				end
+			end
+		end
 	end)
 end)
