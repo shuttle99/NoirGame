@@ -27,6 +27,7 @@ local Maid = require(shared:WaitForChild("Maid"))
 local Scheduler = require(shared:WaitForChild("Scheduler"))
 local StatIncrementer = require(modules:WaitForChild("StatIncrementer"))
 local Proximity = require(modules:WaitForChild("ProximityDetection"))
+local ChanceHandler = require(modules:WaitForChild("ChanceHandler"))
 
 --// Variables
 local random = Random.new()
@@ -87,6 +88,7 @@ function original.new(players, roundTime)
 	end
 
 	self._maid.PlayerLeft = game.Players.PlayerRemoving:Connect(function(plr)
+		ChanceHandler:RemovePlayer(plr)
 		if #game.Players:GetPlayers() - 1 < 4 then
 			self._roundEnded:Fire()
 			self._maid:Destroy()

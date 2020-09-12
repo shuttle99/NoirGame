@@ -11,18 +11,24 @@ local Modules = ServerScriptService:WaitForChild("Modules")
 local Events = ReplicatedStorage:WaitForChild("Events")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local UIComponents = ReplicatedStorage:WaitForChild("UIComponents")
-local UIEvents=  UIComponents:WaitForChild("UIEvents")
+local UIEvents = UIComponents:WaitForChild("UIEvents")
 
 --// Modules
 local gamepasses = require(Modules:WaitForChild("Gamepasses"))
 local ds = require(Modules:WaitForChild("Init"))
 local scheduler = require(Shared:WaitForChild("Scheduler"))
+local ChanceHandler = require(Modules:WaitForChild("ChanceHandler"))
 
 --// Events
 local TogglePlayerInGame = Events:WaitForChild("TogglePlayerInGame")
 
 function PlayerHandler:RegisterPlayer(player)
 	local dataObj = ds.new(player)
+	ChanceHandler:RegisterPlayerChance(player)
+
+	--// Print
+	print(ChanceHandler:QueryChance(player, "Murderer"))
+
     table.insert(PlayerHandler.PlayerList, player)
 
     BadgeService:AwardBadge(player.UserId, 2124573793)
@@ -53,7 +59,7 @@ function PlayerHandler:RegisterPlayer(player)
 	dataObj.Level:OnUpdate(function(val)
 		levelStat.Value = val
 	end)
-
+ 
 	dataObj.Cash:OnUpdate(function(val)
 		cashStat.Value = val
 	end)
@@ -66,9 +72,11 @@ function PlayerHandler:RegisterPlayer(player)
 end
 
 function PlayerHandler:TogglePlayer(player)
-    if table.find(PlayerHandler.PlayerList, player) then
+	if table.find(PlayerHandler.PlayerList, player) then
+		ChanceHandler:MarkPlayerIneligble(player)
         table.remove(PlayerHandler.PlayerList, table.find(PlayerHandler.PlayerList, player))
-    else
+	else
+		ChanceHandler:MarkPlayerEligble(player)
         table.insert(PlayerHandler.PlayerList, player)
     end
 end
