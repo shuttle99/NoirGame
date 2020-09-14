@@ -1,6 +1,7 @@
 --// Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
+local DataStoreService = game:GetService("DataStoreService")
 
 --// Folders
 local shared = ReplicatedStorage.Shared
@@ -13,6 +14,7 @@ local storeContainer = require(shared.StoreContainer)
 local dataProfile = require(modules.Init)
 local codes = require(modules.Codes)
 local devProducts = require(modules.DevProducts)
+local timeHandler = require(modules.TimeHandler)
 
 --// Events
 local purchaseItem = events.ItemPurchase
@@ -79,3 +81,15 @@ purchaseDevProduct.OnServerEvent:Connect(function(plr, id)
 end)
 
 itemOwned.OnServerInvoke = checkForItem
+
+--// Make datastore to hold daily store data
+local dailyStoreData = DataStoreService:GetDataStore("DailyStoreData")
+
+local dailyCheck = coroutine.create(function()
+    while wait(10) do
+        --// Invoke os.date
+        print(timeHandler:CheckDayChanged())
+    end
+end)
+
+coroutine.resume(dailyCheck)
