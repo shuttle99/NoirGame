@@ -10,8 +10,6 @@ local BadgeService = game:GetService("BadgeService")
 local Modules = ServerScriptService:WaitForChild("Modules")
 local Events = ReplicatedStorage:WaitForChild("Events")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
-local UIComponents = ReplicatedStorage:WaitForChild("UIComponents")
-local UIEvents = UIComponents:WaitForChild("UIEvents")
 
 --// Modules
 local gamepasses = require(Modules:WaitForChild("Gamepasses"))
@@ -53,9 +51,6 @@ function PlayerHandler:RegisterPlayer(player)
 	ticketStat.Value = dataObj.Tickets:Get()
 	ticketStat.Parent = leaderstats
 
-	dataObj.Tickets:OnUpdate(function(val)
-	end)
-
 	dataObj.Level:OnUpdate(function(val)
 		levelStat.Value = val
 	end)
@@ -69,6 +64,13 @@ function PlayerHandler:RegisterPlayer(player)
 	visitTimer.Ended:Connect(function()
 		dataObj.Visits:Increment(1)
 	end)
+
+	--// Check if player is in vector three group
+	local GROUP_ID = 6273742
+
+	if player:IsInGroup(GROUP_ID) then
+		print("Player is in group.")
+	end
 end
 
 function PlayerHandler:TogglePlayer(player)

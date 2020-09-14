@@ -28,6 +28,7 @@ local Scheduler = require(shared:WaitForChild("Scheduler"))
 local StatIncrementer = require(modules:WaitForChild("StatIncrementer"))
 local Proximity = require(modules:WaitForChild("ProximityDetection"))
 local ChanceHandler = require(modules:WaitForChild("ChanceHandler"))
+local Data = require(modules:WaitForChild("Init"))
 
 --// Variables
 local random = Random.new()
@@ -376,9 +377,15 @@ function original:CheckDeath(player)
 		end
 	end
 	if playerRole == "Murderer" then
+		for _, person in pairs(self.allButMurderer) do
+			local plrData = Data:Get(person) or Data.new(person)
+			plrData.Wins:Increment(1)
+		end
 		self:EndRound("InnocentsWin") -- Win condition 2
 	else
 		if #self.allButMurderer == 0 then
+			local murdererData = Data:Get(self.murderer.plr) or Data.new(self.murderer.plr)
+			murdererData.Wins:Increment(1)
 			self:EndRound("MurdererWins")
 		end
 	end

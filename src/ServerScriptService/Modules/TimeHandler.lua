@@ -4,16 +4,30 @@
 
 local TimeHandler = {}
 
+--// Services
+local ServerScriptService = game:GetService("ServerScriptService")
+
+--// Folders
+local Modules = ServerScriptService:WaitForChild("Modules")
+
+--// Modules
+local DailyRewards = require(Modules:WaitForChild("DailyRewards"))
+
 --// Constants
 TimeHandler.initDate = os.date("%j")
 
---// Event connections
+--// Module functions
 function TimeHandler:CheckDayChanged()
     --// Check is the date changed
-    local isDateChanged = os.date("%j") ~= TimeHandler.dofilenitDate
+    local isDateChanged = os.date("%j") ~= TimeHandler.initDate
 
     --// Cache the new date
     TimeHandler.initDate = os.date("%j")
+
+    --// Reset player's daily reward eligibility
+    if isDateChanged then
+        DailyRewards:ResetEligibility()
+    end
 
     --// Return true if day changed, false otherwise
     return isDateChanged

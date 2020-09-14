@@ -19,5 +19,6 @@ return {
 	GoldenKnife = false,
 	GoldenGun = false,
 
-	Visits = 0
+	Visits = 0,
+	CanRedeemDailyReward = true
 }
