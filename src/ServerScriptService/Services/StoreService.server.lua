@@ -85,10 +85,13 @@ itemOwned.OnServerInvoke = checkForItem
 --// Make datastore to hold daily store data
 local dailyStoreData = DataStoreService:GetDataStore("DailyStoreData")
 
+--// Check if a new day has come every 10 seconds
 local dailyCheck = coroutine.create(function()
     while wait(10) do
-        --// Invoke os.date
-        print(timeHandler:CheckDayChanged())
+        --// Get item table
+        local itemStore = dailyStoreData:GetAsync("Table")
+        --// Print out current items for the day
+        print(itemStore[timeHandler.initDate])
     end
 end)
 

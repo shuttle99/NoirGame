@@ -5,15 +5,15 @@
 local TimeHandler = {}
 
 --// Constants
-local initDate = os.date("%j")
+TimeHandler.initDate = os.date("%j")
 
 --// Event connections
 function TimeHandler:CheckDayChanged()
     --// Check is the date changed
-    local isDateChanged = os.date("%j") ~= initDate
+    local isDateChanged = os.date("%j") ~= TimeHandler.dofilenitDate
 
     --// Cache the new date
-    initDate = os.date("%j")
+    TimeHandler.initDate = os.date("%j")
 
     --// Return true if day changed, false otherwise
     return isDateChanged
