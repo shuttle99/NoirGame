@@ -27,7 +27,7 @@ function PlayerHandler:RegisterPlayer(player)
 	ChanceHandler:RegisterPlayerChance(player)
 
 	--// Print
-	print(ChanceHandler:QueryChance(player, "Murderer"))
+	print(ChanceHandler:QueryPlayer(player, "Murderer"))
 
     table.insert(PlayerHandler.PlayerList, player)
 

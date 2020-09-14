@@ -1,11 +1,14 @@
 local ChanceHandler = {}
 local random = Random.new()
 
-ChanceHandler.IneligblePlayers = {}
+ChanceHandler.IneligiblePlayers = {}
+ChanceHandler["MurdererChance"] = {}
+ChanceHandler["VigilanteChance"] = {}
+ChanceHandler["VandalChance"] = {}
 
 --// Concatinate string to reference table
 local function chanceOf(role)
-    return role .. "Chances"
+    return role .. "Chance"
 end
 
 --// Give a new player their chance value
@@ -21,8 +24,8 @@ function ChanceHandler:RemovePlayer(player)
     ChanceHandler["VigilanteChance"][player] = nil
     ChanceHandler["VandalChance"][player] = nil
 
-    if table.find(ChanceHandler.IneligblePlayers, player) then
-        table.remove(table.find(ChanceHandler.IneligblePlayers, player))
+    if table.find(ChanceHandler.IneligiblePlayers, player) then
+        table.remove(table.find(ChanceHandler.IneligiblePlayers, player))
     end
 end
 
@@ -33,12 +36,12 @@ end
 
 --// Increase player's chances
 function ChanceHandler:IncreasePlayerChance(player, role, value)
-    return ChanceHandler[chanceOf(role)][player] += value
+    ChanceHandler[chanceOf(role)][player] += value
 end
 
 --// Set a player's chance for role
 function ChanceHandler:SetPlayerChance(player, role, value)
-    return ChanceHandler[chanceOf(role)][player] = value
+    ChanceHandler[chanceOf(role)][player] = value
 end
 
 --// Returns the chance table for corresponding role
@@ -50,9 +53,9 @@ end
 function ChanceHandler:QueryPlayer(player, role)
     --// Table of chances for specific plyaer
     local roleTable = {
-        ["Murderer"] = ChanceHandler.MurdererChances[player],
-        ["Vigilante"] = ChanceHandler.VigilanteChances[player],
-        ["Vandal"] = ChanceHandler.VandalChances[player]
+        ["Murderer"] = ChanceHandler["MurdererChance"][player],
+        ["Vigilante"] = ChanceHandler["VigilanteChance"][player],
+        ["Vandal"] = ChanceHandler["VandalChance"][player]
     }
 
     --// If role specified, return its chance, otherwise return chance of all 3 roles
@@ -61,13 +64,13 @@ end
 
 --// Mark player as ineligible for choosing
 function ChanceHandler:MarkPlayerIneligible(player)
-    table.insert(ChanceHandler.IneligblePlayers, player)
+    table.insert(ChanceHandler.IneligiblePlayers, player)
 end
 
 --// Mark player as eligible for choosing
-function ChanceHandler:MarkPlayerEligble(player)
-    if table.find(ChanceHandler.IneligblePlayers, player) then
-        table.remove(ChanceHandler.IneligiblePlayers, player)
+function ChanceHandler:MarkPlayerEligible(player)
+    if table.find(ChanceHandler.IneligiblePlayers, player) then
+        table.remove(ChanceHandler.IneligiblePlayers, table.find(ChanceHandler.IneligiblePlayers, player))
     end
 end
 
@@ -79,7 +82,7 @@ function ChanceHandler:GetHighestChance(role)
     
     --// Get highest number in table
     for player, chance in pairs(ChanceHandler[chanceOf(role)]) do
-        if not table.find(ChanceHandler.IneligblePlayers) then
+        if not table.find(ChanceHandler.IneligiblePlayers, player) then
             if chance > highestValue then
                 tieTable = {}
                 highestValue = chance
@@ -91,14 +94,15 @@ function ChanceHandler:GetHighestChance(role)
         end
     end
 
+    --// If multiple players have the same chance, choose a random one
     if #tieTable >= 2 then
-        highestPlayer = tieTable[Random:NextInteger(1, #tieTable)]
+        highestPlayer = tieTable[random:NextInteger(1, #tieTable)]
         highestValue = ChanceHandler[chanceOf(role)][highestPlayer]
     end
 
-    --// Make player ineligble for the duration
-    ChanceHandler:MarkPlayerIneligble(highestPlayer)
-    ChanceHandler:ResetChance(highestPlayer)
+    --// Make player ineligible for the duration
+    ChanceHandler:MarkPlayerIneligible(highestPlayer)
+    ChanceHandler:ResetPlayerChance(highestPlayer, role)
     return highestPlayer
 end
 

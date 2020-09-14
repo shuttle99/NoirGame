@@ -11,6 +11,7 @@ local modules = ServerScriptService:WaitForChild("Modules")
 
 --// Modules
 local statIncrementer = require(modules:WaitForChild("StatIncrementer"))
+local chanceHandler = require(modules:WaitForChild("ChanceHandler"))
 
 -- Data store for tracking purchases that were successfully processed
 local purchaseHistoryStore = DataStoreService:GetDataStore("PurchaseHistory")
@@ -21,7 +22,35 @@ local products = {
     [1082626880] = function(plr)
         statIncrementer:GiveCoins(800, plr)
         return "Transaction Completed"
-    end
+	end,
+	
+	--// Guarantee murderer for next round
+	["guaranteeMurderer"] = function(plr)
+		chanceHandler:SetPlayerChance(plr, "Murderer", 10000000000)
+		return "Transaction Completed"
+	end,
+	--// Guarantee vigilante for next round
+	["guaranteeVigilante"] = function(plr)
+		chanceHandler:SetPlayerChance(plr, "Vigilante", 10000000000)
+		return "Transaction Completed"
+	end,
+	--// Guarantee vandal for next round
+	["guaranteeVandal"] = function(plr)
+		chanceHandler:SetPlayerChance(plr, "Vandal", 10000000000)
+		return "Transaction Completed"
+	end,
+	--// Increment murderer chance
+	["incrementMurderer"] = function(plr)
+		chanceHandler:IncreasePlayerChance(plr, "Murderer", 5)
+	end,
+	--// Increment Vigilante chance
+	["incrementVigilante"] = function(plr)
+		chanceHandler:IncreasePlayerChance(plr, "Vigilante", 5)
+	end,
+	--// Increment Vandal chance
+	["incrementVandal"] = function(plr)
+		chanceHandler:IncreasePlayerChance(plr, "Vandal", 5)
+	end
 }
 
 --// Local functions

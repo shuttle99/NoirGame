@@ -14,10 +14,17 @@ local addInventoryPanel = uiEvents.AddInventoryPanel
 
 --// Modules
 local dataProfile = require(modules.Init)
+local ChanceHandler = require(modules.ChanceHandler)
 
 --// Events
 local giveTag = events:WaitForChild("GiveTag")
 local gamepassPurchase = events:WaitForChild("GamepassPurchase")
+
+local function makeTag(name, plr)
+    local value = Instance.new("BoolValue")
+    value.Name = name
+    value.Parent = plr
+end
 
 local function checkForItem(plr, item)
     local plrDataStore = dataProfile:Get(plr)
@@ -60,26 +67,20 @@ local passTable = {
     --// Golden pass from previous game
     [10505111] = function(plr)
         --// Init the user's dataProfile
-        local goldenValue = Instance.new("BoolValue")
-        goldenValue.Name = "Golden"
-        goldenValue.Parent = plr
+       makeTag("Golden", plr)
     end,
 
     --// Current build version of the golden pass
     [11292412] = function(plr)
         --// Init the user's dataProfile
-        local goldenValue = Instance.new("BoolValue")
-        goldenValue.Name = "Golden"
-        goldenValue.Parent = plr
+        makeTag("Golden", plr)
     end,
 
     --// VIP from current game
     [10544262] = function(plr)
         if not plr:FindFirstChild("VIP") then
             giveItem("FuturisticKunai", "Knives",plr)
-            local vipValue = Instance.new("BoolValue")
-            vipValue.Name = "VIP"
-            vipValue.Parent = plr
+            makeTag("VIP", plr)
         end
     end,
 
@@ -87,10 +88,23 @@ local passTable = {
     [11292444] = function(plr)
         if not plr:FindFirstChild("VIP") then
             giveItem("FuturisticKunai", "Knives",plr)
-            local vipValue = Instance.new("BoolValue")
-            vipValue.Name = "VIP"
-            vipValue.Parent = plr
+            makeTag("VIP", plr)
         end
+    end,
+
+    --// Double Murderer Chance
+    [""] = function(plr)
+        makeTag("DoubleMurderer", plr)
+    end,
+
+    --// Double Vandal chance
+    ["filler"] = function(plr)
+        makeTag("DoubleVandal", plr)
+    end,
+
+    --// Double Vigilante chance
+    ["filler2"] = function(plr)
+        makeTag("DoubleVigilante", plr)
     end
 }
 

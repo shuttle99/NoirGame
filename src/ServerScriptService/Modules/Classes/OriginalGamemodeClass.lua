@@ -54,9 +54,9 @@ function original.new(players, roundTime)
 		timer = Scheduler.new(roundTime),
 		players = {},
 
-		murderer = Murderer.new(table.remove(cachedPlayers, random:NextInteger(1, #cachedPlayers))),
-		vigilante = Vigilante.new(table.remove(cachedPlayers, random:NextInteger(1, #cachedPlayers))),
-		vandal = Vandal.new(table.remove(cachedPlayers, random:NextInteger(1, #cachedPlayers))),
+		murderer = Murderer.new(table.remove(cachedPlayers, table.find(cachedPlayers, ChanceHandler:GetHighestChance("Murderer")))),
+		vigilante = Vigilante.new(table.remove(cachedPlayers, table.find(cachedPlayers, ChanceHandler:GetHighestChance("Vigilante")))),
+		vandal = Vandal.new(table.remove(cachedPlayers, table.find(cachedPlayers, ChanceHandler:GetHighestChance("Vandal")))),
 		innocents = {},
 		roles = {},
 		allButMurderer = {},
@@ -67,6 +67,10 @@ function original.new(players, roundTime)
 		_roundEnded = Instance.new("BindableEvent")
 	}, original)
 
+	ChanceHandler:MarkPlayerEligible(self.murderer.plr)
+	ChanceHandler:MarkPlayerEligible(self.vigilante.plr)
+	ChanceHandler:MarkPlayerEligible(self.vandal.plr)
+
 	self.roles[self.murderer.plr] = "Murderer"
 	self.roles[self.vigilante.plr] = "Vigilante"
 	self.roles[self.vandal.plr] = "Vandal"
@@ -74,6 +78,10 @@ function original.new(players, roundTime)
 	for _, player in pairs(cachedPlayers) do
 		table.insert(self.innocents, Innocent.new(player))
 		self.roles[player] = "Innocent"
+
+		--// Increase chance in random role
+		local roles = {"Murderer", "Vigilante", "Vandal"}
+		ChanceHandler:IncreasePlayerChance(player, roles[random:NextInteger(1, #roles)], 1)
 	end
 
 	for _, player in pairs(players) do
