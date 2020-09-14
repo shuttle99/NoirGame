@@ -22,10 +22,10 @@ local products = {
     [1082626880] = function(plr)
         statIncrementer:GiveCoins(800, plr)
         return "Transaction Completed"
-	end,
+	end
 	
 	--// Guarantee murderer for next round
-	["guaranteeMurderer"] = function(plr)
+	--[[["guaranteeMurderer"] = function(plr)
 		chanceHandler:SetPlayerChance(plr, "Murderer", 10000000000)
 		return "Transaction Completed"
 	end,
@@ -50,7 +50,7 @@ local products = {
 	--// Increment Vandal chance
 	["incrementVandal"] = function(plr)
 		chanceHandler:IncreasePlayerChance(plr, "Vandal", 5)
-	end
+	end]]
 }
 
 --// Local functions

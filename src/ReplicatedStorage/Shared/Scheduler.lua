@@ -44,7 +44,6 @@ function Scheduler.new(targetTime)
 	return self
 end
 
-
 --//Begins counting for appointment
 function Scheduler:Start()
 	self._Maid:GiveTask(RunService.Stepped:Connect(function(_, step)

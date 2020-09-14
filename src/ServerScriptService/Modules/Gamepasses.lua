@@ -90,10 +90,10 @@ local passTable = {
             giveItem("FuturisticKunai", "Knives",plr)
             makeTag("VIP", plr)
         end
-    end,
+    end
 
     --// Double Murderer Chance
-    [""] = function(plr)
+    --[[[""] = function(plr)
         makeTag("DoubleMurderer", plr)
     end,
 
@@ -105,7 +105,7 @@ local passTable = {
     --// Double Vigilante chance
     ["filler2"] = function(plr)
         makeTag("DoubleVigilante", plr)
-    end
+    end]]
 }
 
 MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(plr, id, successful)
