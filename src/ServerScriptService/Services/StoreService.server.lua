@@ -82,8 +82,6 @@ end)
 
 itemOwned.OnServerInvoke = checkForItem
 
---[[ Don't use until front-end and skins are implemented
-
 --// Make datastore to hold daily store data
 local dailyStoreData = DataStoreService:GetDataStore("DailyStoreData")
 
@@ -105,5 +103,3 @@ local dailyCheck = coroutine.create(function()
 end)
 
 coroutine.resume(dailyCheck)
-
-]]
