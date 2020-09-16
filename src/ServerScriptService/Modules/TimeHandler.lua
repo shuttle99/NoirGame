@@ -12,6 +12,7 @@ local Modules = ServerScriptService:WaitForChild("Modules")
 
 --// Modules
 local DailyRewards = require(Modules:WaitForChild("DailyRewards"))
+local Data = require(Modules:WaitForChild("Init"))
 
 --// Constants
 TimeHandler.initDate = os.date("%j")
@@ -22,12 +23,18 @@ function TimeHandler:CheckDayChanged()
     local isDateChanged = os.date("%j") ~= TimeHandler.initDate
     --// Cache the new date
     TimeHandler.initDate = os.date("%j")
-    --// Reset player's daily reward eligibility
-    if isDateChanged then
-        DailyRewards:ResetEligibility()
-    end
+
     --// Return true if day changed, false otherwise
     return isDateChanged
+end
+
+function TimeHandler:ComparePlayerJoin(player)
+    local plrData = Data:Get(player) or Data.new(player)
+    if TimeHandler.initDate ~= plrData.VisitDay:Get() then
+        return true
+    else
+        return false
+    end
 end
 
 return TimeHandler

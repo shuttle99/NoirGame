@@ -20,5 +20,5 @@ return {
 	GoldenGun = false,
 
 	Visits = 0,
-	CanRedeemDailyReward = true
+	VisitDay = os.date("%j")
 }

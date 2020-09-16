@@ -13,17 +13,26 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 
 --// Modules
 local gamepasses = require(Modules:WaitForChild("Gamepasses"))
+print("1")
 local ds = require(Modules:WaitForChild("Init"))
+print("2")
 local scheduler = require(Shared:WaitForChild("Scheduler"))
+print("3")
 local ChanceHandler = require(Modules:WaitForChild("ChanceHandler"))
+print("4")
+local dailyRewards = require(Modules:WaitForChild("DailyRewards"))
+print("5")
 
 --// Events
 local TogglePlayerInGame = Events:WaitForChild("TogglePlayerInGame")
 
+print("H")
+
 function PlayerHandler:RegisterPlayer(player)
 	local dataObj = ds.new(player)
 	ChanceHandler:RegisterPlayerChance(player)
-
+	dailyRewards:GiveReward(player)
+	dataObj.VisitDay:Set(os.date("%j"))
 	--// Print
 	print(ChanceHandler:QueryPlayer(player, "Murderer"))
 
