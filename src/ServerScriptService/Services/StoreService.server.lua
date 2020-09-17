@@ -7,7 +7,6 @@ local DataStoreService = game:GetService("DataStoreService")
 local shared = ReplicatedStorage.Shared
 local events  = ReplicatedStorage.Events
 local modules = ServerScriptService.Modules
-local classes = modules.Classes
 
 --// Modules
 local storeContainer = require(shared.StoreContainer)

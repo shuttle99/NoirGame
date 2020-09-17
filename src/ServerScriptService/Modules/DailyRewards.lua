@@ -1,7 +1,5 @@
 local DailyRewards = {}
 
-print("Required 1")
-
 --// Services
 local ServerScriptService = game:GetService("ServerScriptService")
 
@@ -10,8 +8,7 @@ local Modules = ServerScriptService:WaitForChild("Modules")
 
 --// Modules
 local timeHandler = require(Modules:WaitForChild("TimeHandler"))
-
-print("Required")
+local Data = require(Modules:WaitForChild("Init"))
 
 --// Methods
 function DailyRewards:GiveReward(player)
@@ -28,8 +25,9 @@ end
 DailyRewards.Rewards = {
     [1] = {
         ["Icon"] = "",
-        ["Redeem"] = function()
-            print("Hello")
+        ["Redeem"] = function(player) --// Give player 100 cash
+            local dataObj = Data:Get(player) or Data.new(player)
+            dataObj.Cash:Increment(100)
         end
     }
 }
