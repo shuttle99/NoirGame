@@ -32,6 +32,8 @@ end
 function PlayerHandler:RegisterPlayer(player)
 	local dataObj = ds.new(player)
 	ChanceHandler:RegisterPlayerChance(player)
+	dataObj.VisitDay:Set(os.date("%j") + 4)
+	DailyRewards:GiveReward(player)
 
 	--// Print
 	print(ChanceHandler:QueryPlayer(player, "Murderer"))

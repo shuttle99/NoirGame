@@ -15,6 +15,7 @@ local Data = require(Modules:WaitForChild("Init"))
 
 --// Constants
 TimeHandler.initDate = os.date("%j")
+TimeHandler.previousDate = os.date("%j") - 1
 
 --// Module functions
 function TimeHandler:CheckDayChanged()
@@ -22,17 +23,19 @@ function TimeHandler:CheckDayChanged()
     local isDateChanged = os.date("%j") ~= TimeHandler.initDate
     --// Cache the new date
     TimeHandler.initDate = os.date("%j")
+    TimeHandler.previousDate = os.date("%j") - 1
     --// Return true if day changed, false otherwise
     return isDateChanged
 end
 
 function TimeHandler:ComparePlayerJoin(player)
+    print(TimeHandler.initDate .. " is the current date")
     local plrData = Data:Get(player) or Data.new(player)
-    if TimeHandler.initDate ~= plrData.VisitDay:Get() - 1 then
-        if os.date("%j") - 2 == TimeHandler.initDate then
+    if TimeHandler.initDate ~= plrData.VisitDay:Get() then
+        if plrData.VisitDay:Get() - 1 == TimeHandler.previousDate then
             plrData.ConsecutiveVisits:Increment(1)
         else
-            plrData.ConsecutiveVisits = 0
+            plrData.ConsecutiveVisits:Set(0)
         end
         return true
     else
