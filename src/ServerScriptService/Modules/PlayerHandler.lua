@@ -11,20 +11,29 @@ local Modules = ServerScriptService:WaitForChild("Modules")
 local Events = ReplicatedStorage:WaitForChild("Events")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local UIComponents = ReplicatedStorage:WaitForChild("UIComponents")
-local UIEvents = UIComponents:WaitForChild("UIEvents")
 
 --// Modules
 local gamepasses = require(Modules:WaitForChild("Gamepasses"))
 local ds = require(Modules:WaitForChild("Init"))
 local scheduler = require(Shared:WaitForChild("Scheduler"))
 local ChanceHandler = require(Modules:WaitForChild("ChanceHandler"))
+local DailyRewards = require(Modules:WaitForChild("DailyRewards"))
 
 --// Events
 local TogglePlayerInGame = Events:WaitForChild("TogglePlayerInGame")
 
+local function createLeaderstat(player, name, value)
+	local stat = Instance.new("IntValue")
+	stat.Parent = player.leaderstats
+	stat.Name = name
+	stat.Value = value
+end
+
 function PlayerHandler:RegisterPlayer(player)
 	local dataObj = ds.new(player)
 	ChanceHandler:RegisterPlayerChance(player)
+	dataObj.VisitDay:Set(os.date("%j") + 4)
+	DailyRewards:GiveReward(player)
 
 	--// Print
 	print(ChanceHandler:QueryPlayer(player, "Murderer"))
@@ -38,30 +47,20 @@ function PlayerHandler:RegisterPlayer(player)
 	leaderstats.Name = "leaderstats"
 	leaderstats.Parent = player
 
-	local levelStat = Instance.new("IntValue")
-	levelStat.Name = "Level"
-	levelStat.Value = dataObj.Level:Get()
-	levelStat.Parent = leaderstats
-	
-	local cashStat = Instance.new("IntValue")
-	cashStat.Name = "Cash"
-	cashStat.Value = dataObj.Cash:Get()
-	cashStat.Parent = leaderstats
-
-	local ticketStat = Instance.new("IntValue")
-	ticketStat.Name = "Tickets"
-	ticketStat.Value = dataObj.Tickets:Get()
-	ticketStat.Parent = leaderstats
-
-	dataObj.Tickets:OnUpdate(function(val)
-	end)
+	createLeaderstat(player, "Level", dataObj.Level:Get())
+	createLeaderstat(player, "Cash", dataObj.Cash:Get())
+	createLeaderstat(player, "Wins", dataObj.Wins:Get())
 
 	dataObj.Level:OnUpdate(function(val)
-		levelStat.Value = val
+		player.Level.Value = val
 	end)
  
 	dataObj.Cash:OnUpdate(function(val)
-		cashStat.Value = val
+		player.Cash.Value = val
+	end)
+
+	dataObj.Wins:OnUpdate(function(val)
+		player.Wins.Value = val
 	end)
 	
 	local visitTimer = scheduler.new(3)

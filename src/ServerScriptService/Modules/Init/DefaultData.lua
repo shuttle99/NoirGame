@@ -19,5 +19,7 @@ return {
 	GoldenKnife = false,
 	GoldenGun = false,
 
-	Visits = 0
+	Visits = 0,
+	VisitDay = os.date("%j"),
+	ConsecutiveVisits = 0
 }
