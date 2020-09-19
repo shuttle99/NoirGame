@@ -102,14 +102,36 @@ function inventory:Init()
 
     local function toggleGolden(frame, enabled, category)
         if enabled then
-            toggleGold:InvokeServer(enabled, category)
             if self.plr:FindFirstChild("Golden") then
                 frame.Text = "X"
             end
-        else
             toggleGold:InvokeServer(enabled, category)
+        else
             if self.plr:FindFirstChild("Golden") then
                 frame.Text = ""
+            end
+            toggleGold:InvokeServer(enabled, category)
+        end
+    end
+
+    for _, element in pairs(self.ui:GetChildren()) do
+        if element.Name == "GunsFrame" then
+            if self.plrData.GoldenGun.Value == true then
+                element.GoldCheck.Text = "X"
+            else
+                element.GoldCheck.Text = ""
+            end
+        elseif element.Name == "SpraysFrame" then
+            if self.plrData.GoldenSpray.Value == true then
+                element.GoldCheck.Text = "X"
+            else
+                element.GoldCheck.Text = ""
+            end
+        elseif element.Name == "KnivesFrame" then
+            if self.plrData.GoldenKnife.Value == true then
+                element.GoldCheck.Text = "X"
+            else
+                element.GoldCheck.Text = ""
             end
         end
     end
@@ -118,7 +140,7 @@ function inventory:Init()
     self._maid:GiveTask(self.ui.GunsFrame.GoldCheck.MouseButton1Click:Connect(function()
         if self.plrData.GoldenGun.Value == true then 
             toggleGolden(self.ui.GunsFrame.GoldCheck, false, "Gun") 
-        else 
+        else
             toggleGolden(self.ui.GunsFrame.GoldCheck, true, "Gun") 
         end
     end))
