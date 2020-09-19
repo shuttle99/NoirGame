@@ -20,7 +20,6 @@ local disableShop = uiEvents:WaitForChild("BindedShopDisable")
 --// Camera
 local camera = workspace.CurrentCamera
 
-
 function spectate.new(plr, plrList)
     local self = setmetatable({
         plr = plr,
@@ -144,9 +143,10 @@ function spectate:Destroy()
 end
 
 function spectate:RemovePlayer(plrToRemove)
+    print("Removing spectator")
     --// If player leaves then they are nil so fix this
     if plrToRemove ~= nil then
-        if self.plrList[self.iterator].Name == plrToRemove.Name then
+        if self.plrList[self.iterator].Name == plrToRemove then
             if self.iterator + 1 > #self.plrList then
                 self.iterator = 1
             else
@@ -158,7 +158,7 @@ function spectate:RemovePlayer(plrToRemove)
         end
         
         for i, v in pairs(self.plrList) do
-            if v.Name == plrToRemove.Name then
+            if v.Name == plrToRemove then
                 table.remove(self.plrList, i)
             end
         end

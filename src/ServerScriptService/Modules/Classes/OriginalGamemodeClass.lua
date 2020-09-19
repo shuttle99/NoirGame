@@ -350,7 +350,7 @@ function original:CheckDeath(player)
 	clearInventory(player)
 	Proximity:DisablePlayer(player)
 	self:Spectate(player)
-	EventTable["UpdateSpectate"]:FireAllClients(player)
+	EventTable["UpdateSpectate"]:FireAllClients(player.Name)
 	EventTable["ToggleVisibility"]:FireClient(player, self.murderer.plr, true)
 	local playerRole
 	if table.find(self.allButMurderer, player) then

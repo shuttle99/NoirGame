@@ -32,11 +32,8 @@ end
 function PlayerHandler:RegisterPlayer(player)
 	local dataObj = ds.new(player)
 	ChanceHandler:RegisterPlayerChance(player)
-	dataObj.VisitDay:Set(os.date("%j") + 4)
-	DailyRewards:GiveReward(player)
-
-	--// Print
-	print(ChanceHandler:QueryPlayer(player, "Murderer"))
+	dataObj.VisitDay:Set(os.date("%j"))
+	--// Add give reward
 
     table.insert(PlayerHandler.PlayerList, player)
 
@@ -52,15 +49,15 @@ function PlayerHandler:RegisterPlayer(player)
 	createLeaderstat(player, "Wins", dataObj.Wins:Get())
 
 	dataObj.Level:OnUpdate(function(val)
-		player.Level.Value = val
+		player.leaderstats.Level.Value = val
 	end)
  
 	dataObj.Cash:OnUpdate(function(val)
-		player.Cash.Value = val
+		player.leaderstats.Cash.Value = val
 	end)
 
 	dataObj.Wins:OnUpdate(function(val)
-		player.Wins.Value = val
+		player.leaderstats.Wins.Value = val
 	end)
 	
 	local visitTimer = scheduler.new(3)
