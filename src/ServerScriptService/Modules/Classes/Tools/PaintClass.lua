@@ -22,6 +22,7 @@ local toggleHints = uiEvents:WaitForChild("ToggleHints")
 local sprayEffects = require(modules.SprayEffects)
 local data = require(modules:WaitForChild("Init"))
 local maid = require(shared.Maid)
+local RotatedRegion3 = require(shared.RotatedRegion3)
 
 --// Local Functions
 local function GetTouchingParts(part)
@@ -88,35 +89,21 @@ function paintClass:Activate()
 			spray:Play()
 			local humCFrame = self.plr.Character.HumanoidRootPart.CFrame
 			local lookVector = humCFrame.LookVector
-            local part = Instance.new("Part")
-            part.Anchored = true
-            part.CanCollide = false
-            part.CFrame = CFrame.new(humCFrame.Position + lookVector * 5)
-            part.Size = Vector3.new(15,10,15)
-            part.Parent = workspace
-            part.Transparency = 1
-            self.item.Handle.EmitFrom:FindFirstChildOfClass("ParticleEmitter").Enabled = true
-			for _, v in pairs(GetTouchingParts(part)) do
-				if v ~= nil then    
-					if v.Parent:FindFirstChild("Humanoid") and v.Name == "HumanoidRootPart" then
-						--Check if murderer
-						for _, x in pairs(v.Parent:GetChildren()) do
-							if x.Name ~= "HumanoidRootPart" and x:IsA("BasePart") then
-								if x.Parent.Name == self.murderer.Value then
-									local murdererChar = x.Parent
-									sprayEffects[self.dataObj["EquippedSpray"]:Get()](murdererChar)
-									local sprayModel = game.ReplicatedStorage.ItemModels:FindFirstChild(self.dataObj["EquippedSpray"]:Get())
-									murdererChar.Revealed.Value = true
-									toggleHints:FireClient(self.plr, "UseSprayPaint", false)
-									part:Destroy()
-									toggleVisibility:FireAllClients(game.Players:GetPlayerFromCharacter(murdererChar), true)
-								end
-							end
-						end
+			
+			local region = RotatedRegion3.new(CFrame.new(humCFrame.Position + lookVector * 5), 5)
+			for _, part in pairs(region:FindPartsInRegion3()) do
+				if part.Parent:FindFirstChild("Humanoid") then
+					if part.Parent.Name == self.murderer.Value then
+						local murdererChar = part.Parent
+						toggleVisibility:FireAllClients(game.Players:FindFirstChild(murdererChar.Name), true)
+						part.Parent.Revealed.Value = true
+						sprayEffects[self.dataObj["EquippedSpray"]:Get()](murdererChar)
+						toggleHints:FireClient(self.plr, "UseSprayPaint", false)
+						region = nil
 					end
 				end
 			end
-			part:Destroy()
+
 			self._maid:GiveTask(spray.Stopped:Connect(function()
 				self.item.Handle.EmitFrom:FindFirstChildOfClass("ParticleEmitter").Enabled = false
 			end))
