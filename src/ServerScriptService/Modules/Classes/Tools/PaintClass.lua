@@ -103,7 +103,6 @@ function paintClass:Activate()
 					end
 				end
 			end
-
 			self._maid:GiveTask(spray.Stopped:Connect(function()
 				self.item.Handle.EmitFrom:FindFirstChildOfClass("ParticleEmitter").Enabled = false
 			end))
