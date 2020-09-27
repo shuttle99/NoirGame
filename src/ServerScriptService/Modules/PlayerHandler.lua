@@ -32,9 +32,9 @@ end
 function PlayerHandler:RegisterPlayer(player)
 	local dataObj = ds.new(player)
 	ChanceHandler:RegisterPlayerChance(player)
-	dataObj.VisitDay:Set(os.date("%j"))
 	--// Add give reward
-
+	--DailyRewards:GiveReward(player)
+	dataObj.VisitDay:Set(os.date("%j"))
     table.insert(PlayerHandler.PlayerList, player)
 
     BadgeService:AwardBadge(player.UserId, 2124573793)

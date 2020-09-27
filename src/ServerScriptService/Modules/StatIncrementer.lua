@@ -81,7 +81,7 @@ toggleGold.OnServerInvoke = function(plr, enabled, category)
             plrDataStore["Golden" .. category]:Set(enabled)
             return true
         else 
-            MarketplaceService:PromptGamePassPurchase(plr, 10505111) 
+            MarketplaceService:PromptGamePassPurchase(plr, 10505111)
             return false
         end
     end

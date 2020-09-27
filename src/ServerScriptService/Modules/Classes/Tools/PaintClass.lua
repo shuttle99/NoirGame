@@ -24,14 +24,6 @@ local data = require(modules:WaitForChild("Init"))
 local maid = require(shared.Maid)
 local RotatedRegion3 = require(shared.RotatedRegion3)
 
---// Local Functions
-local function GetTouchingParts(part)
-	local connection = part.Touched:Connect(function() end)
-	local results = part:GetTouchingParts()
-	connection:Disconnect()
-	return results
-end
-
 function paintClass.new(plr)
 	local self = setmetatable({
 		plr = plr,
