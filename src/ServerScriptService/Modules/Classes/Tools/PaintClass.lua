@@ -67,7 +67,7 @@ function paintClass:Activate()
 		equip:Play()
 		equip.Stopped:Wait()
 		idle:Play()
-	end))
+end))
 	
 	self._maid:GiveTask(self.item.Unequipped:Connect(function()
 		equip:Stop()
@@ -82,7 +82,7 @@ function paintClass:Activate()
 			local humCFrame = self.plr.Character.HumanoidRootPart.CFrame
 			local lookVector = humCFrame.LookVector
 			
-			local region = RotatedRegion3.new(CFrame.new(humCFrame.Position + lookVector * 5), 5)
+			local region = RotatedRegion3.new(CFrame.new(humCFrame.Position + lookVector * 7), 7)
 			for _, part in pairs(region:FindPartsInRegion3()) do
 				if part.Parent:FindFirstChild("Humanoid") then
 					if part.Parent.Name == self.murderer.Value then

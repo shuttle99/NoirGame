@@ -5,6 +5,7 @@ shop.__index = shop
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
+local DataStoreService = game:GetService("DataStoreService")
 local MarketplaceService = game:GetService("MarketplaceService")
 
 --// Folders
@@ -19,6 +20,8 @@ local maid = require(shared:WaitForChild("Maid"))
 --// Events
 local queryStoreData = events:WaitForChild("QueryStoreData")
 local gamepassPurchase = events:WaitForChild("GamepassPurchase")
+local shopChange = events:WaitForChild("ShopChanged")
+local requestDailyStore = events:WaitForChild("RequestDailyStore")
 
 --// Globals
 local knives
@@ -55,6 +58,7 @@ local invPanel = script.Parent:WaitForChild("InventoryPanel")
 --// Panels table
 local shopPanels = {}
 
+--// Constructor
 function shop.new(plr)
     local self = setmetatable({
         plr = plr,
@@ -70,7 +74,10 @@ function shop.new(plr)
         _maid = maid.new()
     }, shop)
 
+    --// Get player's replicated data folder
     repData = ReplicatedStorage:WaitForChild("ReplicatedData"):WaitForChild(self.plr.UserId)
+
+    --// Set variables for accessing pages of shop
     knives = self.ui.ShopFrame.ShopBG.Knives
     guns = self.ui.ShopFrame.ShopBG.Guns
     sprays = self.ui.ShopFrame.ShopBG.Sprays
@@ -106,18 +113,18 @@ function shop.new(plr)
         end
     end
 
+    --// If the player owns all gamepasses, display empty label
     gamepasses.ChildRemoved:Connect(function()
         if #gamepasses:GetChildren() == 2 then
             gamepasses.EmptyLabel.Visible = true
         end
     end)
 
+    --// Fires when gamepass is purchased
     gamepassPurchase.OnClientEvent:Connect(function(id)
-        print("Purchase")
         for _, item in pairs(gamepasses:GetChildren()) do
+            --// Remove gamepass from table when purchased
             if item:FindFirstChild("GamepassID") then
-                print(id)
-                print(item.GamepassID.Value)
                 if tostring(item.GamepassID.Value) == tostring(id) then
                     item:Destroy()
                 end
@@ -125,24 +132,31 @@ function shop.new(plr)
         end
     end)
 
+    --// Handle visual effects for item panels
     for itemName, itemPanel in pairs(shopPanels) do
+        --// Tween viewport frame when hovered over
         itemPanel.MouseEnter:Connect(function()
             local tween = TweenService:Create(itemPanel, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {BackgroundTransparency = .9})
             local viewportTween = TweenService:Create(itemPanel.ViewportFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.fromScale(1.15, 1.15), Position = UDim2.fromScale(-0.075, -0.075)})
             tween:Play()
             viewportTween:Play()
         end)
+        --// Restore position when player's mosue leaves
         itemPanel.MouseLeave:Connect(function()
             local tween = TweenService:Create(itemPanel, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {BackgroundTransparency = .7})
             local viewportTween = TweenService:Create(itemPanel.ViewportFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.fromScale(1, 1), Position = UDim2.fromScale(0, 0)})
             tween:Play()
             viewportTween:Play()
         end)
+
+        --// Fires when a player clicks an item in the shop
         itemPanel.MouseButton1Click:Connect(function()
             --// Check for gamepass tag, if so prompt purchase not purchase screen
             for i, category in pairs(storeContainer) do
                 if category[itemName] then
+                    --// Check if the item is not purchaseable, if it isn't, don't show it
                     if not category[itemName].Gamepass then
+                        --// Stop rendering the current viewport in purchase page to prevent showing both items
                         if shopItemViewport then
                             shopItemViewport:Derender()
                         end
@@ -168,6 +182,7 @@ function shop.new(plr)
                             connection:Disconnect()
                         end)
 
+                        --// Handle visual effects for player hovering over back button
                         purchasePage.BackButton.MouseEnter:Connect(function()
                             local backTween = TweenService:Create(purchasePage.BackButton, TweenInfo.new(0.5), {BackgroundTransparency = 0, TextColor3 = Color3.fromRGB(114, 114, 114)})
                             backTween:Play()
@@ -176,12 +191,11 @@ function shop.new(plr)
                             local backTween = TweenService:Create(purchasePage.BackButton, TweenInfo.new(0.5), {BackgroundTransparency = 1, TextColor3 = Color3.fromRGB(255, 255, 255)})
                             backTween:Play()
                         end)
-
+                        --// Handle purchase button visual effects
                         purchasePage.InfoFrame.PurchaseButton.MouseEnter:Connect(function()
                             local purchaseTween = TweenService:Create(purchasePage.InfoFrame.PurchaseButton, TweenInfo.new(0.5), {BackgroundTransparency = 0, TextColor3 = Color3.fromRGB(255, 255, 255)})
                             purchaseTween:Play()
                         end)
-
                         purchasePage.InfoFrame.PurchaseButton.MouseLeave:Connect(function()
                             local purchaseTween = TweenService:Create(purchasePage.InfoFrame.PurchaseButton, TweenInfo.new(0.5), {BackgroundTransparency = 0.6, TextColor3 = Color3.fromRGB(255, 255, 255)})
                             purchaseTween:Play()
@@ -189,17 +203,21 @@ function shop.new(plr)
 
                         --// Handle clicks on the purchase PurchasePage
                         connection = purchasePage.InfoFrame.PurchaseButton.MouseButton1Click:Connect(function()
+                            --// Check that player successfully purchased item
                             if events.ItemPurchase:InvokeServer(i, itemName) then
+                                --// Make inventory panel
                                 local clonePanel = invPanel:Clone()
                                 clonePanel.Parent = self.plr.PlayerGui.GameUI.InventoryFrame.InventoryBG[i]
                                 viewport.new(itemModels[itemName], clonePanel.ViewportFrame, true)
+                                --// Set text to item purchased!
                                 purchasePage.InfoFrame.PurchaseButton.Text = "Item Purchased!"
                             else
+                                --// If they can't afford it, ask user to purchase cash
                                 self._toggleCashPurchase:Fire(self.plr, true)
                             end
                         end)
-                    --// Item requires gamepasses
                     else
+                        --// Item requires gamepasses
                         MarketplaceService:PromptGamePassPurchase(plr, category[itemName].Gamepass)
                     end
                 end
@@ -209,9 +227,9 @@ function shop.new(plr)
     return self
 end
 
---// USE A MAID IN UR CODE TO MANAGE MEMORY LEAKS
 --// Initialize the icons and viewports for the shop when player joins
 function shop:Init()
+    --// Render the elements of each shop page
     for _, tab in pairs(footer:GetChildren()) do
         if tab:IsA("TextButton") then
             if tab.Name ~= "Gamepasses" then
@@ -222,6 +240,7 @@ function shop:Init()
                     shopPanels[item] =  newPanel
                 end
             end
+            --// Handle visual
             tab.MouseEnter:Connect(function()
                 local tabTween = TweenService:Create(tab, TweenInfo.new(0.5), {TextSize = 43, BackgroundTransparency = 0, TextColor3 = Color3.fromRGB(114, 114, 114)})
                 tabTween:Play()
@@ -230,12 +249,29 @@ function shop:Init()
                 local tabTween = TweenService:Create(tab, TweenInfo.new(0.5), {TextSize = 40, BackgroundTransparency = 1, TextColor3 = Color3.fromRGB(255, 255, 255)})
                 tabTween:Play()
             end)
+            --// Show the corresponding tab when a footer button is clicked
             tab.MouseButton1Click:Connect(function()
                 tabs[tab.Name]()
             end)
         end
     end
+ 
+    --// Get datastore of current day
+    local function getDailyStoreData()
+        return requestDailyStore:InvokeServer()
+    end
 
+    --[[Implement icons for daily store when jasper sends assets]]--
+
+    --// Show the first data for the daily shop when player joins
+    print(getDailyStoreData()[os.date("%j")])
+
+    --// Handle the daily shop reset
+    shopChange.OnClientEvent:Connect(function()
+        print(getDailyStoreData()[os.date("%j")])
+    end)
+
+    --// Set the ui parent to the player and enable it
     self.ui.Parent = self.plr.PlayerGui
     self:Enable()
 end
@@ -243,10 +279,10 @@ end
 --// Make the shop visible and play animation
 function shop:Render()
     if not self.debounce then
-
         --// Set currency to player's amount
         self.ui.ShopFrame.Currency:WaitForChild("Cash").Amount.Text = self.replicatedData:WaitForChild("Cash").Value
 
+        --// Tween in the cash purchase element when rendered
         for _, element in pairs(self.ui.ShopFrame.Currency.Cash:GetChildren()) do
             local elementTween
             if element:IsA("TextButton") then
@@ -261,30 +297,41 @@ function shop:Render()
             end
         end
 
+        --// Set the cash page's text when the user's cash amount changes
         self._maid:GiveTask(self.replicatedData.Cash.Changed:Connect(function()
             self.ui.ShopFrame.Currency.Cash.Amount.Text = self.replicatedData.Cash.Value
         end))
 
+        --// If a user clicks the + button on the cash page, they are prompted with the dev products screen
         self._maid:GiveTask(self.ui.ShopFrame.Currency.Cash.BuyMore.MouseButton1Click:Connect(function()
             self._toggleCashPurchase:Fire(self.plr, true)
         end))
 
+        --// Show the footer
         self.ui.ShopFrame.Footer.Visible = true
+        --// Set debounce for opening the shop
         self.debounce = true
+        --// Hide players
         for _, player in pairs(game.Players:GetPlayers()) do
             local char = player.Character or player.CharacterAdded:Wait()
             char.Parent = game.ReplicatedStorage
         end
-
+        --// Show the UI and set it to open
         self.ui.Enabled = true
         self.open = true
+
+        --// Tween camera to proper view
         local cameraTween = TweenService:Create(camera, TweenInfo.new(.5), {CFrame = CFrame.new(game.Workspace.StoreCamPart.Position, game.Workspace.Store.Position)})
         fovTween = TweenService:Create(camera, TweenInfo.new(.5), {FieldOfView = 32})
         cameraTween:Play()
         camera.CameraType = Enum.CameraType.Scriptable
         camera.Focus = game.Workspace.Store.CFrame
         cameraTween.Completed:Wait()
+
+        --// Tween FOV to zoom it
         fovTween:Play()
+
+        --// Tween in the beams
         for _, v in pairs(game.Workspace.Store:GetChildren()) do
             if v.Name == "Beam" then
                 v.Enabled = true
@@ -293,6 +340,7 @@ function shop:Render()
             end
         end
 
+        --// Tween in UI elements of shop
         local frameTween = TweenService:Create(self.ui.ShopFrame, TweenInfo.new(.5), {BackgroundTransparency = 0.8})
         local headerTween = TweenService:Create(self.ui.ShopFrame.Header, TweenInfo.new(.5), {TextTransparency = 0})
         frameTween:Play()
@@ -304,10 +352,13 @@ function shop:Render()
             end
         end
 
+        --// Show knives page by default
         self:ShowKnives()
+        --// Wait for everything to tween in
         headerTween.Completed:Wait()
+        --// Allow the user to close the shop
         self.debounce = false
-
+        
         while self.open do
             --// Hide players here in future
             for _, player in pairs(game.Players:GetPlayers()) do
@@ -320,11 +371,13 @@ function shop:Render()
             local tapeATween = TweenService:Create(tapeA, TweenInfo.new(.1), {Orientation = tapeA.Orientation + Vector3.new(0,0,8)})
             local tapeBTween = TweenService:Create(tapeB, TweenInfo.new(.1), {Orientation = tapeB.Orientation + Vector3.new(0,0,5)})
             local beamInfluence = random:NextNumber(0, .45)
+            --// Set the beams to flicker
             for _, beam in pairs(game.Workspace.Store:GetChildren()) do
                 if beam.Name == "Beam" then
                     beam.LightInfluence = beamInfluence
                 end
             end
+            --// Rotate the tape parts
             tapeATween:Play()
             tapeBTween:Play()
             tapeBTween.Completed:Wait()
@@ -335,17 +388,20 @@ end
 --// Plays the animation to to hide the shop
 function shop:Derender()
     self.open = false
+    --// Show characters again
     for _, player in pairs(game.Players:GetPlayers()) do
         local char = player.Character or player.CharacterAdded:Wait()
         char.Parent = workspace
     end
-
+    --// Disable the beams
     for _, v in pairs(game.Workspace.Store:GetChildren()) do
         if v.Name == "Beam" then
             v.Enabled = false
         end
     end
+    --// Hide purchase page if user has it open
     self.ui.ShopFrame.PurchasePage.Visible = false
+    --// Hide UI elements
     self.ui.ShopFrame.BackgroundTransparency = 1
     self.ui.ShopFrame.Header.TextTransparency = 1
     for _, element in pairs(self.ui.ShopFrame.Footer:GetChildren()) do
@@ -353,12 +409,16 @@ function shop:Derender()
             element.TextTransparency = 1
         end
     end
+    --// Reset camera view and field of view
     camera.CameraType = Enum.CameraType.Custom
     local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
     camera.CameraSubject = character:WaitForChild("Humanoid")
     camera.FieldOfView = 70
+    --// Disable the UI
     self.ui.Enabled = false
+    --// Hide all pages
     self:HidePages()
+    --// Allow the user to open the UI once again
     self.debounce = false
 end
 
@@ -373,7 +433,6 @@ function shop:Disable()
         if fovTween then
             fovTween:Cancel()
         end
-        --camera.FieldOfView = 70
     end
 end
 
@@ -385,12 +444,9 @@ function shop:Enable()
         self._maid:GiveTask(self.openButton.MouseButton1Click:Connect(function()
             if self.open and not self.debounce then
                 self:Derender()
-                --connection:Disconnect()
             else
                 self:Render()
-                --connection:Disconnect()
             end
-            --connection:Disconnect()
         end))
     end
 end
@@ -408,23 +464,25 @@ end
 
 --// Show the knives shop menu
 function shop:ShowKnives()
+    --// Convert string table into normal dictionary
     local data = HttpService:JSONDecode(repData.Knives.Value)
+    --// Destroy any knives acquired between the last time the player opened the shop
     for _, item in pairs(data) do
         if shopPanels[item] then
             shopPanels[item]:Destroy()
         end
     end
-    --[[knives.Visible = true
-    guns.Visible = false
-    gamepasses.Visible = false
-    sprays.Visible = false]]
+    --// If player owns all knives show the empty label
     if #knives:GetChildren() == 2 then
         knives.EmptyLabel.Visible = true
     end
+    --// Show knives page
     knives.Visible = true
+    --// Tween away all other pages
     tweenOver(gamepasses)
     tweenOver(sprays)
     tweenOver(guns)
+    --// Tween in knives page
     tweenOver(knives, "in")
 end
 
@@ -436,10 +494,7 @@ function shop:ShowGuns()
             shopPanels[item]:Destroy()
         end
     end
-    --[[knives.Visible = false
-    guns.Visible = true
-    gamepasses.Visible = false
-    sprays.Visible = false]]
+
     guns.Visible = true
     tweenOver(knives)
     tweenOver(gamepasses)
@@ -453,11 +508,6 @@ end
 
 --// Show the gamepass shop menu
 function shop:ShowGamepasses()
-    --[[knives.Visible = false
-    guns.Visible = false
-    gamepasses.Visible = true
-    sprays.Visible = false]]
-
     gamepasses.Visible = true
     tweenOver(knives)
     tweenOver(guns)
@@ -477,10 +527,7 @@ function shop:ShowSprays()
             shopPanels[item]:Destroy()
         end
     end
-    --[[knives.Visible = false
-    guns.Visible = false
-    gamepasses.Visible = false
-    sprays.Visible = true]]
+
     sprays.Visible = true
     tweenOver(knives)
     tweenOver(gamepasses)

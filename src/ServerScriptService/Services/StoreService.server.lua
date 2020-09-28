@@ -20,6 +20,8 @@ local purchaseItem = events.ItemPurchase
 local itemOwned = events.CheckForItemOwned
 local redeemCode = events.RedeemCode
 local purchaseDevProduct = events.PurchaseDevProduct
+local shopChange = events.ShopChanged
+local requestDailyStore = events.RequestDailyStore
 
 function checkForItem(plr, item)
     local plrDataStore = dataProfile:Get(plr)
@@ -91,14 +93,16 @@ local dailyCheck = coroutine.create(function()
     --// Print out current items for the day
     print(itemStore[timeHandler.initDate])
 
-    while wait(10) do
-        --// Get item table
-        itemStore = dailyStoreData:GetAsync("Table")
+    while wait(60) do
         --// If the day changes, print the new item table
         if timeHandler:CheckDayChanged() then
-            print(itemStore[timeHandler.initDate])
+            shopChange:FireAllClients()
         end
     end
 end)
+
+requestDailyStore.OnServerInvoke = function()
+    return dailyStoreData:GetAsync("Table")
+end
 
 coroutine.resume(dailyCheck)

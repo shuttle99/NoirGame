@@ -29,6 +29,7 @@ local StatIncrementer = require(modules:WaitForChild("StatIncrementer"))
 local Proximity = require(modules:WaitForChild("ProximityDetection"))
 local ChanceHandler = require(modules:WaitForChild("ChanceHandler"))
 local Data = require(modules:WaitForChild("Init"))
+local RecordPlayer = require(classes.Tools:FindFirstChild("RecordPlayer"))
 
 --// Variables
 local random = Random.new()
@@ -123,7 +124,7 @@ function original:TeleportPlayer(player)
 	local map = maps:FindFirstChildOfClass("Folder")
 	local spawns = map.Spawns:GetChildren()
 	local character = player.Character or player.CharacterAdded:Wait()
-	local spawn = spawns[random:NextInteger(1, # spawns)]
+	local spawn = spawns[random:NextInteger(1, #spawns)]
 	character.HumanoidRootPart.CFrame = CFrame.new(spawn.Position + Vector3.new(0, 3, 0))
 	EventTable["FixFOV"]:FireAllClients()
 	spawn:Destroy()
@@ -137,7 +138,7 @@ function original:DisableUI()
 	EventTable["TogglePlayersRemaining"]:FireAllClients(true, #self.allButMurderer)
 	EventTable["Desaturate"]:FireAllClients(true)
 end
-
+--CHEEKY THIS IS BAD CODE FIX IT IDIOT
 function original:EnableUI()
 	EventTable["EnableInventory"]:FireAllClients()
 	EventTable["EnableShop"]:FireAllClients()
@@ -152,8 +153,8 @@ function original:EnableUI()
 	EventTable["RageEffect"]:FireAllClients(false)
 end
 
+--// Prepare players and load them into the map
 function original:PrepareRound()
-
 	--// Call loading UI
 	EventTable["LoadEvent"]:FireAllClients(true)
 	
@@ -200,6 +201,7 @@ function original:PrepareRound()
 	end))
 end
 
+--// Players enter game
 function original:StartRound()
 	--// Start the timer
 	self.timer:Start()

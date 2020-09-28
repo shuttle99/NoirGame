@@ -24,6 +24,7 @@ storeContainer:Init()
 
 --// Initialize player when they join
 Players.PlayerAdded:Connect(function(player)
+    UIEvents.Desaturate:FireClient(player, true)
     playerHandler:RegisterPlayer(player)
 
     player.CharacterAdded:Connect(function(char)

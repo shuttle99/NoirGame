@@ -90,7 +90,6 @@ end
 
 --// If player joins and round is in progress, then turn on the spectate
 game.Players.PlayerAdded:Connect(function(player)
-    UIEvents.Desaturate:FireClient(player, true)
     if round then
         round:Spectate(player)
     end

@@ -105,7 +105,12 @@ local passTable = {
     --// Double Vigilante chance
     ["filler2"] = function(plr)
         makeTag("DoubleVigilante", plr)
-    end]]
+    end,
+    
+    ["RecordPlayer"] = function(plr)
+        makeTag("RecordPlayer")
+    end
+    ]]
 }
 
 MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(plr, id, successful)

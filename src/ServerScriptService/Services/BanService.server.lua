@@ -1,9 +1,11 @@
 local Players = game:GetService("Players")
+local DataStoreService = game:GetService("DataStoreService")
 
-local bannedPlrs = {173259012, 635030720, 113389871}
+local banDatastore = DataStoreService:GetDataStore("Bans")
 
 game.Players.PlayerAdded:Connect(function(plr)
-    for _, id in pairs(bannedPlrs) do
+    local store = banDatastore:GetAsync("IDTable")
+    for _, id in pairs(store) do
         if id == plr.UserId then
             plr:Kick("Ur banned.")
         end

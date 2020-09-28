@@ -320,11 +320,13 @@ rageEffect.OnClientEvent:Connect(function(visible)
 	local camTween
 	local effect = Lighting.RageEffect
 	if visible then
+		effect.Enabled = true
 		effectTween = TweenService:Create(effect, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Contrast = 0.3, TintColor = Color3.fromRGB(255,94,94)})
 		camTween = TweenService:Create(game.Workspace.CurrentCamera,TweenInfo.new(0.5, Enum.EasingStyle.Back), {FieldOfView = 90})
 	else
 		camTween = TweenService:Create(game.Workspace.CurrentCamera,TweenInfo.new(0.5, Enum.EasingStyle.Back), {FieldOfView = 70})
 		effectTween = TweenService:Create(effect, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Contrast = 0, TintColor = Color3.fromRGB(255, 255, 255)})
+		effect.Enabled = false
 	end
 	effectTween:Play()
 	camTween:Play()
@@ -349,5 +351,13 @@ end)
 local desaturate = uiEvents:WaitForChild("Desaturate")
 
 desaturate.OnClientEvent:Connect(function(visible)
+	print("Desaturated")
 	Lighting.Desaturate.Enabled = visible
 end)
+
+--// Client invokes
+local getText = events:WaitForChild("ReturnText")
+
+getText.OnClientInvoke = function()
+	return plrUI.SoundUI.SongChoice.SongEntered.Text
+end
